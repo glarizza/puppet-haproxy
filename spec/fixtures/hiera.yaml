@@ -1,0 +1,8 @@
+---
+:hierarchy:
+    - %{hostname}
+    - common
+:backends:
+    - yaml
+:yaml:
+    :datadir: '/etc/puppet/modules/haproxy/spec/fixtures/hieradb'

@@ -62,14 +62,29 @@ class haproxy (
 ) inherits haproxy::data {
   include concat::setup
 
+  $default = { use_defaults => true }
+  $haproxy = hiera_hash('haproxy', $default)
+
+  if $haproxy['use_defaults'] == true {
+    $enable_real = $enable
+    $haproxy_global_options_real = $haproxy_global_options
+    $haproxy_defaults_options_real = $haproxy_defaults_options
+  }
+  else {
+    $enable_real = $haproxy['enable']
+    $haproxy_global_options_real = $haproxy['global_options']
+    $haproxy_defaults_options_real = $haproxy['defaults_options']
+    create_resources(haproxy::config, $haproxy['configs'])
+  }
+
   package { 'haproxy':
-    ensure => $enable ? {
+    ensure => $enable_real ? {
       true  => present,
       false => absent,
     },
     name => 'haproxy',
   }
-  
+
   if $enable {
     concat { '/etc/haproxy/haproxy.cfg':
       owner   => '0',
@@ -95,11 +110,11 @@ class haproxy (
   }
 
   service { 'haproxy':
-    ensure => $enable ? {
+    ensure => $enable_real ? {
       true  => running,
       false => stopped,
     },
-    enable => $enable ? {
+    enable => $enable_real ? {
       true  => true,
       false => false,
     },
