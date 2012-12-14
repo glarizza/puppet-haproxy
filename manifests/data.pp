@@ -6,7 +6,7 @@
 #
 class haproxy::data {
   case $osfamily {
-    Redhat: {
+    'Debian', 'Redhat': {
       $haproxy_global_options   = { 'log'     => "${::ipaddress} local0",
                                     'chroot'  => '/var/lib/haproxy',
                                     'pidfile' => '/var/run/haproxy.pid',
