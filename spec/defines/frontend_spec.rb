@@ -14,7 +14,7 @@ describe 'haproxy::frontend' do
     it { should contain_concat__fragment('croy_frontend_block').with(
       'order'   => '10-croy-00',
       'target'  => '/etc/haproxy/haproxy.cfg',
-      'content' => "\nfrontend croy\n  bind 1.1.1.1:18140\n  option  tcplog\n",
+      'content' => "\nfrontend croy\n  bind 1.1.1.1:18140\n  option  tcplog\n"
     ) }
   end
   context "when an array of ports is provided" do
@@ -24,7 +24,7 @@ describe 'haproxy::frontend' do
         :ipaddress => '23.23.23.23',
         :ports     => [
           '80',
-          '443',
+          '443'
         ]
       }
     end
