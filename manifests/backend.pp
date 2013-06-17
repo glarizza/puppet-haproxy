@@ -63,7 +63,7 @@ define haproxy::backend (
 
   # Template uses: $name, $ipaddress, $ports, $options
   concat::fragment { "${name}_backend_block":
-    order   => "40-${name}-00",
+    order   => "20-${name}-00",
     target  => '/etc/haproxy/haproxy.cfg',
     content => template('haproxy/haproxy_backend_block.erb'),
   }
