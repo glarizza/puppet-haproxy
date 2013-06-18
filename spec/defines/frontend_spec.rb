@@ -12,7 +12,7 @@ describe 'haproxy::frontend' do
     end
 
     it { should contain_concat__fragment('croy_frontend_block').with(
-      'order'   => '10-croy-00',
+      'order'   => '15-croy-00',
       'target'  => '/etc/haproxy/haproxy.cfg',
       'content' => "\nfrontend croy\n  bind 1.1.1.1:18140\n  option  tcplog\n"
     ) }
@@ -30,7 +30,7 @@ describe 'haproxy::frontend' do
     end
 
     it { should contain_concat__fragment('apache_frontend_block').with(
-      'order'   => '10-apache-00',
+      'order'   => '15-apache-00',
       'target'  => '/etc/haproxy/haproxy.cfg',
       'content' => "\nfrontend apache\n  bind 23.23.23.23:80\n  bind 23.23.23.23:443\n  option  tcplog\n"
     ) }
@@ -45,7 +45,7 @@ describe 'haproxy::frontend' do
     end
 
     it { should contain_concat__fragment('apache_frontend_block').with(
-      'order'   => '10-apache-00',
+      'order'   => '15-apache-00',
       'target'  => '/etc/haproxy/haproxy.cfg',
       'content' => "\nfrontend apache\n  bind 23.23.23.23:80\n  bind 23.23.23.23:443\n  option  tcplog\n"
     ) }
