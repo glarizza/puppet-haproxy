@@ -30,6 +30,11 @@
 # [*package_name*]
 #   The package name to install containing haproxy.  Defaults to <code>'haproxy'</code>
 #
+#[*restart_command*]
+#   Command to use when restarting the on config changes.
+#    Passed directly as the <code>'restart'</code> parameter to the service resource.
+#    Defaults to undef i.e. whatever the service default is.
+#
 # === Examples
 #
 #  class { 'haproxy':
@@ -66,7 +71,8 @@ class haproxy (
   $enable           = true,
   $global_options   = $haproxy::params::global_options,
   $defaults_options = $haproxy::params::defaults_options,
-  $package_name     = 'haproxy'
+  $package_name     = 'haproxy',
+  $restart_command  = undef
 ) inherits haproxy::params {
   include concat::setup
 
@@ -148,6 +154,7 @@ class haproxy (
       hasrestart => true,
       hasstatus  => true,
       require    => $deps,
+      restart    => $restart_command,
     }
   }
 }
