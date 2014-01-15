@@ -17,7 +17,7 @@ describe 'haproxy', :type => :class do
           let(:params) do
             {'enable' => true}
           end
-          it { should include_class('concat::setup') }
+          it { should contain_class('concat::setup') }
           it 'should install the haproxy package' do
             subject.should contain_package('haproxy').with(
               'ensure' => 'present'
@@ -93,7 +93,7 @@ describe 'haproxy', :type => :class do
               'manage_service' => false,
             }
           end
-          it { should include_class('concat::setup') }
+          it { should contain_class('concat::setup') }
           it 'should install the haproxy package' do
             subject.should contain_package('haproxy').with(
               'ensure' => 'present'
