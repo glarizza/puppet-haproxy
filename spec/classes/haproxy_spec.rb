@@ -103,6 +103,22 @@ describe 'haproxy', :type => :class do
             subject.should_not contain_service('haproxy')
           end
         end
+        context "on #{osfamily} when specifying a restart_command" do
+          let(:facts) do
+            { :osfamily => osfamily }.merge default_facts
+          end
+          let(:params) do
+            {
+              'restart_command' => '/etc/init.d/haproxy reload',
+              'manage_service'  => true,
+            }
+          end
+          it 'should set the haproxy package' do
+            subject.should contain_service('haproxy').with(
+              'restart' => '/etc/init.d/haproxy reload'
+            )
+          end
+        end
       end
     end
     describe 'for OS-specific configuration' do
