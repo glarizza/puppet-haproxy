@@ -15,7 +15,11 @@ describe 'haproxy', :type => :class do
             { :osfamily => osfamily }.merge default_facts
           end
           let(:params) do
-            {'enable' => true}
+            {
+              'service_ensure' => 'running',
+              'package_ensure' => 'present',
+              'service_manage' => true
+            }
           end
           it { should contain_class('concat::setup') }
           it 'should install the haproxy package' do
@@ -28,11 +32,7 @@ describe 'haproxy', :type => :class do
               'ensure'     => 'running',
               'enable'     => 'true',
               'hasrestart' => 'true',
-              'hasstatus'  => 'true',
-              'require'    => [
-                'Concat[/etc/haproxy/haproxy.cfg]',
-                'File[/var/lib/haproxy]'
-              ]
+              'hasstatus'  => 'true'
             )
           end
           it 'should set up /etc/haproxy/haproxy.cfg as a concat resource' do
@@ -89,8 +89,9 @@ describe 'haproxy', :type => :class do
           end
           let(:params) do
             {
-              'enable'         => true,
-              'manage_service' => false,
+              'service_ensure' => true,
+              'package_ensure' => 'present',
+              'service_manage' => false
             }
           end
           it { should contain_class('concat::setup') }
@@ -102,6 +103,53 @@ describe 'haproxy', :type => :class do
           it 'should not manage the haproxy service' do
             subject.should_not contain_service('haproxy')
           end
+          it 'should set up /etc/haproxy/haproxy.cfg as a concat resource' do
+            subject.should contain_concat('/etc/haproxy/haproxy.cfg').with(
+              'owner' => '0',
+              'group' => '0',
+              'mode'  => '0644'
+            )
+          end
+          it 'should manage the chroot directory' do
+            subject.should contain_file('/var/lib/haproxy').with(
+              'ensure' => 'directory'
+            )
+          end
+          it 'should contain a header concat fragment' do
+            subject.should contain_concat__fragment('00-header').with(
+              'target'  => '/etc/haproxy/haproxy.cfg',
+              'order'   => '01',
+              'content' => "# This file managed by Puppet\n"
+            )
+          end
+          it 'should contain a haproxy-base concat fragment' do
+            subject.should contain_concat__fragment('haproxy-base').with(
+              'target'  => '/etc/haproxy/haproxy.cfg',
+              'order'   => '10'
+            )
+          end
+          describe 'Base concat fragment contents' do
+            let(:contents) { param_value(subject, 'concat::fragment', 'haproxy-base', 'content').split("\n") }
+            it 'should contain global and defaults sections' do
+              contents.should include('global')
+              contents.should include('defaults')
+            end
+            it 'should log to an ip address for local0' do
+              contents.should be_any { |match| match =~ /  log  \d+(\.\d+){3} local0/ }
+            end
+            it 'should specify the default chroot' do
+              contents.should include('  chroot  /var/lib/haproxy')
+            end
+            it 'should specify the correct user' do
+              contents.should include('  user  haproxy')
+            end
+            it 'should specify the correct group' do
+              contents.should include('  group  haproxy')
+            end
+            it 'should specify the correct pidfile' do
+              contents.should include('  pidfile  /var/run/haproxy.pid')
+            end
+          end
         end
         context "on #{osfamily} when specifying a restart_command" do
           let(:facts) do
@@ -110,7 +158,7 @@ describe 'haproxy', :type => :class do
           let(:params) do
             {
               'restart_command' => '/etc/init.d/haproxy reload',
-              'manage_service'  => true,
+              'service_manage'  => true
             }
           end
           it 'should set the haproxy package' do
@@ -127,10 +175,7 @@ describe 'haproxy', :type => :class do
           { :osfamily => 'Debian' }.merge default_facts
         end
         it 'should manage haproxy service defaults' do
-          subject.should contain_file('/etc/default/haproxy').with(
-            'before'  => 'Service[haproxy]',
-            'require' => 'Package[haproxy]'
-          )
+          subject.should contain_file('/etc/default/haproxy')
           verify_contents(subject, '/etc/default/haproxy', ['ENABLED=1'])
         end
       end

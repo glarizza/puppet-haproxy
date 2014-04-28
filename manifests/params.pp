@@ -7,6 +7,7 @@
 class haproxy::params {
   case $osfamily {
     'Archlinux', 'Debian', 'Redhat': {
+      $package_name     = 'haproxy'
       $global_options   = {
         'log'     => "${::ipaddress} local0",
         'chroot'  => '/var/lib/haproxy',
