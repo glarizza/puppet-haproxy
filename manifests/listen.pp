@@ -38,6 +38,10 @@
 #   A hash of options that are inserted into the listening service
 #    configuration block.
 #
+# [*bind_options*]
+#   An array of options to be specified after the bind declaration in the 
+#    listening serivce's configuration block.
+#
 # [*collect_exported*]
 #   Boolean, default 'true'. True means 'collect exported @@balancermember resources'
 #    (for the case when every balancermember node exports itself), false means
@@ -77,7 +81,8 @@ define haproxy::listen (
       'ssl-hello-chk'
     ],
     'balance' => 'roundrobin'
-  }
+  },
+  $bind_options     = ''
 ) {
 
   # Template uses: $name, $ipaddress, $ports, $options
