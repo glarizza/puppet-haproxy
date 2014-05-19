@@ -39,7 +39,7 @@
 #    configuration block.
 #
 # [*bind_options*]
-#   An array of options to be specified after the bind declaration in the 
+#   An array of options to be specified after the bind declaration in the
 #    listening serivce's configuration block.
 #
 # [*collect_exported*]
