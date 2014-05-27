@@ -70,6 +70,12 @@ which is serving loadbalanced traffic. the `listening_service` attribute will
 associate it with `haproxy::listen` directives on the haproxy node.
 `ipaddresses` and `ports` will be assigned to the member to be contacted on. If an array of `ipaddresses` and `server_names` are provided then they will be added to the config in lock-step.
 
+Configuring haproxy daemon userlist
+-----------------------------------
+
+One `haproxy::userlist` defined resource should be defined for each HAProxy userlist.
+The users and groups for the userlist are supplied to the resource via an array.
+
 Dependencies
 ------------
 
