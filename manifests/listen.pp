@@ -93,7 +93,7 @@ define haproxy::listen (
   }
 
   if $collect_exported {
-    Haproxy::Balancermember <<| listening_service == $name |>>
+    haproxy::balancermember::collect_exported { $name: }
   }
   # else: the resources have been created and they introduced their
   # concat fragments. We don't have to do anything about them.
