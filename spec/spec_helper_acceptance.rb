@@ -9,7 +9,7 @@ unless ENV['RS_PROVISION'] == 'no' or ENV['BEAKER_provision'] == 'no'
     install_puppet
   end
   hosts.each do |host|
-    on hosts, "mkdir -p #{host['distmoduledir']}"
+    on host, "mkdir -p #{host['distmoduledir']}"
   end
 end
 
