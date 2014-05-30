@@ -44,7 +44,9 @@ describe 'haproxy', :type => :class do
           end
           it 'should manage the chroot directory' do
             subject.should contain_file('/var/lib/haproxy').with(
-              'ensure' => 'directory'
+              'ensure' => 'directory',
+              'owner'  => 'haproxy',
+              'group'  => 'haproxy'
             )
           end
           it 'should contain a header concat fragment' do
