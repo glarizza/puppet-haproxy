@@ -34,7 +34,7 @@ define haproxy::userlist (
 
   # Template usse $name, $users, $groups
   concat::fragment { "${name}_userlist_block":
-    order   => "10-${name}-00",
+    order   => "12-${name}-00",
     target  => '/etc/haproxy/haproxy.cfg',
     content => template('haproxy/haproxy_userlist_block.erb'),
   }
