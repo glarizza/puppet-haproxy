@@ -169,6 +169,19 @@ describe 'haproxy', :type => :class do
             )
           end
         end
+        context "on #{osfamily} when specifying custom content" do
+          let(:facts) do
+            { :osfamily => osfamily }.merge default_facts
+          end
+          let(:params) do
+            { 'custom_fragment' => "listen stats :9090\n  mode http\n  stats uri /\n  stats auth puppet:puppet\n" }
+          end
+          it 'should set the haproxy package' do
+            subject.should contain_concat__fragment('haproxy-base').with_content(
+              /listen stats :9090\n  mode http\n  stats uri \/\n  stats auth puppet:puppet\n/
+            )
+          end
+        end
       end
     end
     describe 'for OS-specific configuration' do
