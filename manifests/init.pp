@@ -41,6 +41,13 @@
 #    Passed directly as the <code>'restart'</code> parameter to the service resource.
 #    Defaults to undef i.e. whatever the service default is.
 #
+#[*custom_fragment*]
+#  Allows arbitrary HAProxy configuration to be passed through to support
+#  additional configuration not available via parameters, or to short-circute
+#  the defined resources such as haproxy::listen when an operater would rather
+#  just write plain configuration. Accepts a string (ie, output from the
+#  template() function). Defaults to undef
+#
 # === Examples
 #
 #  class { 'haproxy':
@@ -79,6 +86,7 @@ class haproxy (
   $global_options   = $haproxy::params::global_options,
   $defaults_options = $haproxy::params::defaults_options,
   $restart_command  = undef,
+  $custom_fragment  = undef,
 
   # Deprecated
   $manage_service   = undef,
