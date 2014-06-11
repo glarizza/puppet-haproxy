@@ -29,6 +29,10 @@
 #   The mode of operation for the frontend service. Valid values are undef,
 #    'tcp', 'http', and 'health'.
 #
+# [*bind_options*]
+#   An array of options to be specified after the bind declaration in the
+#    bind's configuration block.
+#
 # [*options*]
 #   A hash of options that are inserted into the frontend service
 #    configuration block.
@@ -38,11 +42,12 @@
 #  Exporting the resource for a balancer member:
 #
 #  haproxy::frontend { 'puppet00':
-#    ipaddress => $::ipaddress,
-#    ports     => '18140',
-#    mode      => 'tcp',
-#    options   => {
-#      'option'  => [
+#    ipaddress    => $::ipaddress,
+#    ports        => '18140',
+#    mode         => 'tcp',
+#    bind_options => 'accept-proxy',
+#    options      => {
+#      'option'   => [
 #        'tcplog',
 #        'accept-invalid-http-request',
 #      ],
@@ -59,6 +64,7 @@ define haproxy::frontend (
   $ports,
   $ipaddress        = [$::ipaddress],
   $mode             = undef,
+  $bind_options     = undef,
   $collect_exported = true,
   $options          = {
     'option'  => [
