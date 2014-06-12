@@ -1,15 +1,8 @@
-# == Define: haproxy::balancermember::collect_exported
-#
-# Defined type used to collect haproxy::balancermember exported resource
-#
-# === Parameters
-#
-# None
-#
-# === Examples
-#
-# haproxy::balancermember::collect_exported { 'SomeService': }
-#
+# Private define
 define haproxy::balancermember::collect_exported {
-    Haproxy::Balancermember <<| listening_service == $name |>>
+  if $caller_module_name != $module_name {
+    fail("Use of private class ${name} by ${caller_module_name}")
+  }
+
+  Haproxy::Balancermember <<| listening_service == $name |>>
 }
