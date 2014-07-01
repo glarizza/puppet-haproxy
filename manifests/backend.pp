@@ -60,6 +60,10 @@ define haproxy::backend (
   }
 ) {
 
+  if defined(Haproxy::Listen[$name]) {
+    fail("An haproxy::listen resource was discovered with the same name (${name}) which is not supported")
+  }
+
   # Template uses: $name, $ipaddress, $ports, $options
   concat::fragment { "${name}_backend_block":
     order   => "20-${name}-00",

@@ -85,6 +85,10 @@ define haproxy::listen (
   $bind_options     = ''
 ) {
 
+  if defined(Haproxy::Backend[$name]) {
+    fail("An haproxy::backend resource was discovered with the same name (${name}) which is not supported")
+  }
+
   # Template uses: $name, $ipaddress, $ports, $options
   concat::fragment { "${name}_listen_block":
     order   => "20-${name}-00",
