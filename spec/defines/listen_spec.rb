@@ -17,6 +17,7 @@ describe 'haproxy::listen' do
       'content' => "\nlisten croy\n  bind 1.1.1.1:18140 \n  balance  roundrobin\n  option  tcplog\n  option  ssl-hello-chk\n"
     ) }
   end
+  # C9940
   context "when an array of ports is provided" do
     let(:params) do
       {
@@ -35,6 +36,7 @@ describe 'haproxy::listen' do
       'content' => "\nlisten apache\n  bind 23.23.23.23:80 \n  bind 23.23.23.23:443 \n  balance  roundrobin\n  option  tcplog\n  option  ssl-hello-chk\n"
     ) }
   end
+  # C9940
   context "when a comma-separated list of ports is provided" do
     let(:params) do
       {
@@ -49,6 +51,109 @@ describe 'haproxy::listen' do
       'target'  => '/etc/haproxy/haproxy.cfg',
       'content' => "\nlisten apache\n  bind 23.23.23.23:80 \n  bind 23.23.23.23:443 \n  balance  roundrobin\n  option  tcplog\n  option  ssl-hello-chk\n"
     ) }
+  end
+  # C9962
+  context "when empty list of ports is provided" do
+    let(:params) do
+      {
+        :name      => 'apache',
+        :ipaddress => '23.23.23.23',
+        :ports     => [],
+      }
+    end
+
+    it { should contain_concat__fragment('apache_listen_block').with(
+      'order'   => '20-apache-00',
+      'target'  => '/etc/haproxy/haproxy.cfg',
+      'content' => "\nlisten apache\n  balance  roundrobin\n  option  tcplog\n  option  ssl-hello-chk\n"
+    ) }
+  end
+  # C9963
+  context "when a port is provided greater than 65535" do
+    let(:params) do
+      {
+        :name      => 'apache',
+        :ipaddress => '23.23.23.23',
+        :ports     => '80443'
+      }
+    end
+
+    it 'should raise error' do
+      expect { subject }.to raise_error Puppet::Error, /outside of range/
+    end
+  end
+  # C9974
+  context "when an invalid ipv4 address is passed" do
+    let(:params) do
+      {
+        :name      => 'apache',
+        :ipaddress => '2323.23.23',
+        :ports     => '80'
+      }
+    end
+
+    it 'should raise error' do
+      expect { subject }.to raise_error Puppet::Error, /Invalid IP address/
+    end
+  end
+  # C9977
+  context "when a valid hostname is passed" do
+    let(:params) do
+      {
+        :name      => 'apache',
+        :ipaddress => 'some-hostname',
+        :ports     => '80'
+      }
+    end
+
+    it { should contain_concat__fragment('apache_listen_block').with(
+      'order'   => '20-apache-00',
+      'target'  => '/etc/haproxy/haproxy.cfg',
+      'content' => "\nlisten apache\n  bind some-hostname:80 \n  balance  roundrobin\n  option  tcplog\n  option  ssl-hello-chk\n"
+    ) }
+  end
+  context "when a * is passed for ip address" do
+    let(:params) do
+      {
+        :name      => 'apache',
+        :ipaddress => '*',
+        :ports     => '80'
+      }
+    end
+
+    it { should contain_concat__fragment('apache_listen_block').with(
+      'order'   => '20-apache-00',
+      'target'  => '/etc/haproxy/haproxy.cfg',
+      'content' => "\nlisten apache\n  bind *:80 \n  balance  roundrobin\n  option  tcplog\n  option  ssl-hello-chk\n"
+    ) }
+  end
+  # C9977
+  context "when an invalid hostname is passed" do
+    let(:params) do
+      {
+        :name      => 'apache',
+        :ipaddress => '$some_hostname',
+        :ports     => '80'
+      }
+    end
+
+    it 'should raise error' do
+      expect { subject }.to raise_error Puppet::Error, /Invalid IP address/
+    end
+  end
+  # C9974
+  context "when an invalid ipv6 address is passed" do
+    let(:params) do
+      {
+        :name      => 'apache',
+        :ipaddress => ':::6',
+        :ports     => '80'
+      }
+    end
+
+    it 'should raise error' do
+      expect { subject }.to raise_error Puppet::Error, /Invalid IP address/
+    end
   end
   context "when bind options are provided" do
     let(:params) do
