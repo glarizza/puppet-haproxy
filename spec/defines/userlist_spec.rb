@@ -26,5 +26,4 @@ describe 'haproxy::userlist' do
     ) }
 
   end
-
 end

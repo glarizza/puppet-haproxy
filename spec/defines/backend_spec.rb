@@ -18,8 +18,21 @@ describe 'haproxy::backend' do
     ) }
   end
 
+  # C9953
+  context "when a listen is created with the same name" do
+    let(:pre_condition) do
+      "haproxy::listen { 'apache': ports => '443', }"
+    end
+    let(:params) do
+      {
+        :name      => 'apache',
+      }
+    end
 
+    it 'should raise error' do
+      expect { subject }.to raise_error Puppet::Error, /discovered with the same name/
+    end
+  end
 
+  # C9956 WONTFIX
 end
-
-

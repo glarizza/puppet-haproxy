@@ -64,6 +64,7 @@ describe 'haproxy', :type => :class do
           end
           describe 'Base concat fragment contents' do
             let(:contents) { param_value(subject, 'concat::fragment', 'haproxy-base', 'content').split("\n") }
+            # C9936 C9937
             it 'should contain global and defaults sections' do
               contents.should include('global')
               contents.should include('defaults')
@@ -169,6 +170,7 @@ describe 'haproxy', :type => :class do
             )
           end
         end
+        # C9938
         context "on #{osfamily} when specifying custom content" do
           let(:facts) do
             { :osfamily => osfamily }.merge default_facts

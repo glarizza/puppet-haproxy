@@ -125,9 +125,17 @@ class haproxy (
     $_service_manage = $service_manage
   }
 
-  anchor { 'haproxy::begin': }
-  -> class { 'haproxy::install': }
-  -> class { 'haproxy::config': }
-  ~> class { 'haproxy::service': }
-  -> anchor { 'haproxy::end': }
+  if $_package_ensure == 'absent' or $_package_ensure == 'purged' {
+    anchor { 'haproxy::begin': }
+    ~> class { 'haproxy::service': }
+    -> class { 'haproxy::config': }
+    -> class { 'haproxy::install': }
+    -> anchor { 'haproxy::end': }
+  } else {
+    anchor { 'haproxy::begin': }
+    -> class { 'haproxy::install': }
+    -> class { 'haproxy::config': }
+    ~> class { 'haproxy::service': }
+    -> anchor { 'haproxy::end': }
+  }
 }
