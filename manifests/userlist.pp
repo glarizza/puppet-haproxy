@@ -1,7 +1,7 @@
 # == Define Resource Type: haproxy::userlist
 #
 # This type will set up a userlist configuration block inside the haproxy.cfg
-#  file on an haproxy load balancer. 
+#  file on an haproxy load balancer.
 #
 # See http://cbonte.github.io/haproxy-dconv/configuration-1.4.html#3.4 for more info
 #
