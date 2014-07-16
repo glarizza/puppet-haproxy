@@ -1,67 +1,74 @@
 {
-    "name": "puppetlabs-haproxy",
-    "version": "0.5.1",
-    "source": "https://github.com/puppetlabs/puppetlabs-haproxy",
-    "author": "Puppet Labs",
-    "license": "Apache-2.0",
-    "project_page": "https://github.com/puppetlabs/puppetlabs-haproxy",
-    "summary": "Puppet module for HAProxy",
-    "operatingsystem_support": [
-      {
-        "operatingsystem": "RedHat",
-        "operatingsystemrelease": [
-          "5",
-          "6"
-        ]
-      },
-      {
-        "operatingsystem": "CentOS",
-        "operatingsystemrelease": [
-          "5",
-          "6"
-        ]
-      },
-      {
-        "operatingsystem": "OracleLinux",
-        "operatingsystemrelease": [
-          "5",
-          "6"
-        ]
-      },
-      {
-        "operatingsystem": "Scientific",
-        "operatingsystemrelease": [
-          "5",
-          "6"
-        ]
-      },
-      {
-        "operatingsystem": "Debian",
-        "operatingsystemrelease": [
-          "6",
-          "7"
-        ]
-      },
-      {
-        "operatingsystem": "Ubuntu",
-        "operatingsystemrelease": [
-          "10.04",
-          "12.04"
-        ]
-      }
-    ],
-    "requirements": [
-      { "name": "pe", "version_requirement": ">= 3.2.0 < 3.4.0" },
-      { "name": "puppet", "version_requirement": "3.x" }
-    ],
-    "dependencies": [
-      {
-        "name": "puppetlabs/stdlib",
-        "version_requirement": ">= 2.4.0"
-      },
-      {
-        "name": "puppetlabs/concat",
-        "version_requirement": ">= 1.0.0"
-      }
-    ]
+  "name": "puppetlabs-haproxy",
+  "version": "0.5.1",
+  "author": "Puppet Labs",
+  "summary": "Puppet module for HAProxy",
+  "license": "Apache-2.0",
+  "source": "https://github.com/puppetlabs/puppetlabs-haproxy",
+  "project_page": "https://github.com/puppetlabs/puppetlabs-haproxy",
+  "issues_url": "https://github.com/puppetlabs/puppetlabs-haproxy/issues",
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "5",
+        "6"
+      ]
+    },
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "5",
+        "6"
+      ]
+    },
+    {
+      "operatingsystem": "OracleLinux",
+      "operatingsystemrelease": [
+        "5",
+        "6"
+      ]
+    },
+    {
+      "operatingsystem": "Scientific",
+      "operatingsystemrelease": [
+        "5",
+        "6"
+      ]
+    },
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "10.04",
+        "12.04"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "name": "pe",
+      "version_requirement": ">= 3.2.0 < 3.4.0"
+    },
+    {
+      "name": "puppet",
+      "version_requirement": "3.x"
+    }
+  ],
+  "dependencies": [
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 2.4.0"
+    },
+    {
+      "name": "puppetlabs/concat",
+      "version_requirement": ">= 1.0.0"
+    }
+  ]
 }
