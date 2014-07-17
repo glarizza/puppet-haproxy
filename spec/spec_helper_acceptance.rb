@@ -1,6 +1,6 @@
 require 'beaker-rspec'
 
-UNSUPPORTED_PLATFORMS = []
+UNSUPPORTED_PLATFORMS = ['Suse','windows','AIX','Solaris']
 
 unless ENV['RS_PROVISION'] == 'no' or ENV['BEAKER_provision'] == 'no'
   if hosts.first.is_pe?
