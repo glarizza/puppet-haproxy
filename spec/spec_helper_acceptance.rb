@@ -10,6 +10,7 @@ unless ENV['RS_PROVISION'] == 'no' or ENV['BEAKER_provision'] == 'no'
   end
   hosts.each do |host|
     on host, "mkdir -p #{host['distmoduledir']}"
+    on host, "touch #{host['hieraconf']}"
   end
 end
 
@@ -27,7 +28,6 @@ RSpec.configure do |c|
     hosts.each do |host|
       on host, puppet('module','install','puppetlabs-stdlib'), { :acceptable_exit_codes => [0,1] }
       on host, puppet('module','install','puppetlabs-concat'), { :acceptable_exit_codes => [0,1] }
-      on host, '/bin/touch /etc/puppet/hiera.yaml'
     end
   end
 end
