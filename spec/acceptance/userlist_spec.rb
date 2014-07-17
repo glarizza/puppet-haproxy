@@ -1,6 +1,7 @@
 require 'spec_helper_acceptance'
 
-describe "userlist define", :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
+# lucid ships with haproxy 1.3 which does not have userlist support by default
+describe "userlist define", :unless => (UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) or (fact('lsbdistcodename') == 'lucid')) do
   it 'should be able to configure the listen with puppet' do
     # C9966 C9970
     pp = <<-EOS
@@ -11,7 +12,10 @@ describe "userlist define", :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfa
           'test2 insecure-password elgato',
           '',
         ],
-        groups => ['g1 users test1','']
+        groups => [
+          'g1 users test1',
+          '',
+        ]
       }
 
       haproxy::listen { 'app00':
@@ -48,8 +52,11 @@ describe "userlist define", :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfa
   end
 
   # C9957
-  it "should auth as user" do
+  it "test1 should auth as user" do
     shell('curl http://test1:elgato@localhost:5555').stdout.chomp.should eq('Response on 5556')
+  end
+  it "test2 should auth as user" do
+    shell('curl http://test2:elgato@localhost:5555').stdout.chomp.should eq('Response on 5556')
   end
 
   # C9958

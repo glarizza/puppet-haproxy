@@ -33,9 +33,15 @@ describe "configuring haproxy", :unless => UNSUPPORTED_PLATFORMS.include?(fact('
   describe "configuring haproxy load balancing" do
     before :all do
       pp = <<-EOS
-        package { 'nc': ensure => present, }
+        $netcat = $::osfamily ? {
+          'RedHat' => 'nc',
+          'Debian' => 'netcat-openbsd',
+        }
+        package { $netcat: ensure => present, }
         package { 'screen': ensure => present, }
-        service { 'iptables': ensure => stopped, }
+        if $::osfamily == 'RedHat' {
+          service { 'iptables': ensure => stopped, }
+        }
       EOS
       apply_manifest(pp, :catch_failures => true)
 
@@ -43,7 +49,7 @@ describe "configuring haproxy", :unless => UNSUPPORTED_PLATFORMS.include?(fact('
         shell(%{echo 'while :; do echo "HTTP/1.1 200 OK\r\n\r\nResponse on #{port}" | nc -l #{port} ; done' > /root/script-#{port}.sh})
         shell(%{/usr/bin/screen -dmS script-#{port} sh /root/script-#{port}.sh})
         sleep 1
-        shell(%{netstat -tnl|grep ':#{port}\\s'})
+        shell(%{netstat -tnl|grep ':#{port}'})
       end
     end
 
