@@ -41,7 +41,7 @@ This module configures proxy servers and manages the configuration of backend me
 
 The quickest way to get up and running using the haproxy module is to install and configure a basic HAProxy server that is listening on port 8140 and balanced against two nodes.
 
-```
+```puppet
 node 'haproxy-server' {
   class { 'haproxy': }
   haproxy::listen { 'puppet00':
@@ -72,7 +72,7 @@ node 'haproxy-server' {
 
 The main [`haproxy` class](#class-haproxy) has many options for configuring your HAProxy server. 
 
-```
+```puppet
 class { 'haproxy':
   global_options   => {
     'log'     => "${::ipaddress} local0",
@@ -107,7 +107,7 @@ class { 'haproxy':
 
 To export the resource for a balancermember and collect it on a single HAProxy load balancer server:
 
-```
+```puppet
 haproxy::listen { 'puppet00':
   ipaddress => $::ipaddress,
   ports     => '18140',
@@ -126,7 +126,7 @@ haproxy::listen { 'puppet00':
 
 First, export the resource for a balancer member.
 
-```
+```puppet
 @@haproxy::balancermember { 'haproxy':
   listening_service => 'puppet00',
   ports             => '8140',
@@ -144,7 +144,7 @@ Haproxy::Balancermember <<| listening_service == 'puppet00' |>>
 
 Then, create the resource for multiple balancer members at once (this assumes a single-pass installation of HAProxy without requiring a first pass to export the resources, and is intended for situations where you know the members in advance).
 
-```
+```puppet
 haproxy::balancermember { 'haproxy':
   listening_service => 'puppet00',
   ports             => '8140',
@@ -157,7 +157,7 @@ haproxy::balancermember { 'haproxy':
 
 Install and configure an HAProxy server listening on port 8140 and balanced against all collected nodes. This HAProxy uses storeconfigs to collect and realize balancermember servers on a load balancer server.
 
-```
+```puppet
 node 'haproxy-server' {
   class { 'haproxy': }
   haproxy::listen { 'puppet00':
@@ -306,7 +306,7 @@ Sets the ports to listen on for the address specified in `ipaddress`. Accepts a 
 
 To route traffic from port 8140 to all balancermembers added to a backend with the title 'puppet_backend00', 
 
-```
+```puppet
 haproxy::frontend { 'puppet00':
   ipaddress     => $::ipaddress,
   ports         => '18140',
