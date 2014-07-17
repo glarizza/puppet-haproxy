@@ -37,11 +37,12 @@ describe "listen define", :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfami
         ipaddress => $::ipaddress_lo,
         ports     => '5555',
         mode      => 'http',
+        options   => { 'option' => 'httpchk', },
       }
       haproxy::balancermember { 'port 5556':
         listening_service => 'app00',
         ports             => '5556',
-        options           => ['check','downinter 500'],
+        options           => 'check',
       }
       haproxy::balancermember { 'port 5557':
         listening_service => 'app00',
