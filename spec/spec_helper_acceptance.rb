@@ -28,6 +28,13 @@ RSpec.configure do |c|
     hosts.each do |host|
       on host, puppet('module','install','puppetlabs-stdlib'), { :acceptable_exit_codes => [0,1] }
       on host, puppet('module','install','puppetlabs-concat'), { :acceptable_exit_codes => [0,1] }
+      if fact('operatingsystem') == 'Debian'
+        on host, puppet('module','install','puppetlabs-apt'), { :acceptable_exit_codes => [0,1] }
+        apply_manifest('
+          include apt
+          include apt::backports
+        ')
+      end
     end
   end
 end
