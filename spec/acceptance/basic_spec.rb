@@ -81,25 +81,6 @@ describe "configuring haproxy", :unless => UNSUPPORTED_PLATFORMS.include?(fact('
     end
   end
 
-  describe 'dependency requirements' do
-    # C9712
-    describe 'without concat' do
-      before :all do shell("mv $(puppet apply --color=false -e 'notice(get_module_path(\"concat\"))'|grep concat|cut -d ' ' -f 3) /tmp") end
-      after  :all do shell("mv /tmp/concat #{hosts.first[:distmoduledir]}") end
-      it 'should fail' do
-        apply_manifest(%{class { 'haproxy': }}, :expect_failures => true)
-      end
-    end
-    # C9712
-    describe 'without stdlib' do
-      before :all do shell("mv $(puppet apply --color=false -e 'notice(get_module_path(\"stdlib\"))'|grep stdlib|cut -d ' ' -f 3) /tmp") end
-      after  :all do shell("mv /tmp/stdlib #{hosts.first[:distmoduledir]}") end
-      it 'should fail' do
-        apply_manifest(%{class { 'haproxy': }}, :expect_failures => true)
-      end
-    end
-  end
-
   # C9934
   describe "uninstalling haproxy" do
     it 'removes it' do
