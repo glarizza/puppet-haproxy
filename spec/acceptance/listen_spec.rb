@@ -51,9 +51,11 @@ describe "listen define", :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfami
       }
     EOS
     apply_manifest(pp, :catch_failures => true)
+    apply_manifest(pp, :catch_changes  => true)
   end
 
-  it "should do a curl against the LB to make sure it gets a response from each port" do
+  it "should do a curl against the LB to make sure it only gets a response from the active port" do
+    sleep(10)
     shell('curl localhost:5555').stdout.chomp.should match(/Response on 5556/)
     shell('curl localhost:5555').stdout.chomp.should match(/Response on 5556/)
   end
