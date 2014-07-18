@@ -1,6 +1,6 @@
 require 'beaker-rspec'
 
-UNSUPPORTED_PLATFORMS = ['Suse','windows','AIX','Solaris']
+UNSUPPORTED_PLATFORMS = ['Darwin', 'Suse','windows','AIX','Solaris']
 
 unless ENV['RS_PROVISION'] == 'no' or ENV['BEAKER_provision'] == 'no'
   if hosts.first.is_pe?
@@ -10,7 +10,8 @@ unless ENV['RS_PROVISION'] == 'no' or ENV['BEAKER_provision'] == 'no'
   end
   hosts.each do |host|
     on host, "mkdir -p #{host['distmoduledir']}"
-    on host, "touch #{host['hieraconf']}"
+    # Windows doesn't have a hieraconf variable
+    on host, "touch #{host['hieraconf']}" if fact('osfamily') != 'windows'
   end
 end
 
