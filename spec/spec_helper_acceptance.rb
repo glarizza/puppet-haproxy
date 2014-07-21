@@ -29,6 +29,9 @@ RSpec.configure do |c|
     hosts.each do |host|
       on host, puppet('module','install','puppetlabs-stdlib'), { :acceptable_exit_codes => [0,1] }
       on host, puppet('module','install','puppetlabs-concat'), { :acceptable_exit_codes => [0,1] }
+      if fact('osfamily') == 'RedHat'
+        on host, puppet('module','install','stahnma/epel'), { :acceptable_exit_codes => [0,1] }
+      end
       if fact('operatingsystem') == 'Debian'
         on host, puppet('module','install','puppetlabs-apt'), { :acceptable_exit_codes => [0,1] }
         apply_manifest(%{
@@ -47,6 +50,7 @@ RSpec.configure do |c|
         package { $netcat: ensure => present, }
         package { 'screen': ensure => present, }
         if $::osfamily == 'RedHat' {
+          class { 'epel': }
           service { 'iptables': ensure => stopped, }
           exec { 'setenforce Permissive':
             path   => ['/bin','/usr/bin','/sbin','/usr/sbin'],
