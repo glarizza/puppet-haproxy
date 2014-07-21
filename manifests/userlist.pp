@@ -7,7 +7,7 @@
 #
 # === Requirement/Dependencies:
 #
-# Currently requires the ripienaar/concat module on the Puppet Forge
+# Currently requires the puppetlabs/concat module on the Puppet Forge
 #
 # === Parameters
 #
