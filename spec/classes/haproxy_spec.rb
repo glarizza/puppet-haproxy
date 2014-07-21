@@ -205,7 +205,7 @@ describe 'haproxy', :type => :class do
   end
   context 'on unsupported operatingsystems' do
     let(:facts) do
-      { :osfamily => 'RainbowUnicorn' }.merge default_facts
+      { :osfamily => 'windows' }.merge default_facts
     end
     it do
       expect {
