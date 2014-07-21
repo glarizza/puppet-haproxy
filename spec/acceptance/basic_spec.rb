@@ -32,25 +32,6 @@ describe "configuring haproxy", :unless => UNSUPPORTED_PLATFORMS.include?(fact('
 
   describe "configuring haproxy load balancing" do
     before :all do
-      pp = <<-EOS
-        $netcat = $::osfamily ? {
-          'RedHat' => 'nc',
-          'Debian' => 'netcat-openbsd',
-        }
-        package { $netcat: ensure => present, }
-        package { 'screen': ensure => present, }
-        if $::osfamily == 'RedHat' {
-          service { 'iptables': ensure => stopped, }
-        }
-      EOS
-      apply_manifest(pp, :catch_failures => true)
-
-      ['5556','5557'].each do |port|
-        shell(%{echo 'while :; do echo "HTTP/1.1 200 OK\r\n\r\nResponse on #{port}" | nc -l #{port} ; done' > /root/script-#{port}.sh})
-        shell(%{/usr/bin/screen -dmS script-#{port} sh /root/script-#{port}.sh})
-        sleep 1
-        shell(%{netstat -tnl|grep ':#{port}'})
-      end
     end
 
     describe "multiple ports" do
@@ -60,12 +41,9 @@ describe "configuring haproxy", :unless => UNSUPPORTED_PLATFORMS.include?(fact('
         haproxy::listen { 'stats':
           ipaddress => '127.0.0.1',
           ports     => ['9090','9091'],
-          options   => {
-            'mode'  => 'http',
-            'stats' => ['uri /','auth puppet:puppet'],
-          },
+          mode      => 'http',
+          options   => { 'stats' => ['uri /','auth puppet:puppet'], },
         }
-        haproxy::listen { 'test00': ports => '80',}
         EOS
         apply_manifest(pp, :catch_failures => true)
       end
