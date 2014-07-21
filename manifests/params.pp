@@ -5,7 +5,7 @@
 #  extended by changing package names and configuration file paths.
 #
 class haproxy::params {
-  case $osfamily {
+  case $::osfamily {
     'Archlinux', 'Debian', 'Redhat': {
       $package_name     = 'haproxy'
       $global_options   = {
@@ -34,6 +34,6 @@ class haproxy::params {
         'maxconn' => '8000'
       }
     }
-    default: { fail("The $::osfamily operating system is not supported with the haproxy module") }
+    default: { fail("The ${::osfamily} operating system is not supported with the haproxy module") }
   }
 }
