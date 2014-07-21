@@ -1,8 +1,26 @@
-##2014-07-15 - Release 0.5.1
+##2014-07-21 - Supported Release 1.0.0
 ###Summary
+This supported release is the first stable release of haproxy! The updates to
+this release allow you to customize pretty much everything that HAProxy has to
+offer (that we could find at least).
 
-This release merely updates metadata.json so the module can be uninstalled and
-upgraded via the puppet module command.
+####Features
+- Brand new readme
+- Add haproxy::userlist defined resource for managing users
+- Add haproxy::frontend::bind_options parameter
+- Add haproxy::custom_fragment parameter for arbitrary configuration
+- Add compatibility with more recent operating system releases
+
+####Bugfixes
+- Check for listen/backend with the same names to avoid misordering
+- Removed warnings when storeconfigs is not being used
+- Passing lint
+- Fix chroot ownership for global user/group
+- Fix ability to uninstall haproxy
+- Fix some linting issues
+- Add beaker-rspec tests
+- Increase unit test coverage
+- Fix balancermember server lines with multiple ports
 
 2014-05-28 - Version 0.5.0
 

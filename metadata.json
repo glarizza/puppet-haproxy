@@ -1,6 +1,6 @@
 {
   "name": "puppetlabs-haproxy",
-  "version": "0.5.1",
+  "version": "1.0.0",
   "author": "Puppet Labs",
   "summary": "Puppet module for HAProxy",
   "license": "Apache-2.0",
