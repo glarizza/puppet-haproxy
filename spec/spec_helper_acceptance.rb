@@ -39,7 +39,7 @@ RSpec.configure do |c|
           include apt::backports
         })
       end
-      if ! UNSUPPORTED_PLATFORMS.include(fact('osfamily'))
+      if ! UNSUPPORTED_PLATFORMS.include?(fact('osfamily'))
         pp = <<-EOS
           $netcat = $::osfamily ? {
             'RedHat' => $::operatingsystemmajrelease ? {
