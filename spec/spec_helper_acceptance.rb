@@ -39,36 +39,38 @@ RSpec.configure do |c|
           include apt::backports
         })
       end
-      pp = <<-EOS
-        $netcat = $::osfamily ? {
-          'RedHat' => $::operatingsystemmajrelease ? {
-            '7'     => 'nmap-ncat',
-            default => 'nc',
-          },
-          'Debian' => 'netcat-openbsd',
-        }
-        package { $netcat: ensure => present, }
-        package { 'screen': ensure => present, }
-        if $::osfamily == 'RedHat' {
-          class { 'epel': }
-          service { 'iptables': ensure => stopped, }
-          exec { 'setenforce Permissive':
-            path   => ['/bin','/usr/bin','/sbin','/usr/sbin'],
-            onlyif => 'getenforce | grep Enforcing',
+      if ! UNSUPPORTED_PLATFORMS.include(fact('osfamily'))
+        pp = <<-EOS
+          $netcat = $::osfamily ? {
+            'RedHat' => $::operatingsystemmajrelease ? {
+              '7'     => 'nmap-ncat',
+              default => 'nc',
+            },
+            'Debian' => 'netcat-openbsd',
           }
-          if $::operatingsystemmajrelease == '7' {
-            # For `netstat` for serverspec
-            package { 'net-tools': ensure => present, }
+          package { $netcat: ensure => present, }
+          package { 'screen': ensure => present, }
+          if $::osfamily == 'RedHat' {
+            class { 'epel': }
+            service { 'iptables': ensure => stopped, }
+            exec { 'setenforce Permissive':
+              path   => ['/bin','/usr/bin','/sbin','/usr/sbin'],
+              onlyif => 'getenforce | grep Enforcing',
+            }
+            if $::operatingsystemmajrelease == '7' {
+              # For `netstat` for serverspec
+              package { 'net-tools': ensure => present, }
+            }
           }
-        }
-      EOS
-      apply_manifest(pp, :catch_failures => true)
+        EOS
+        apply_manifest(pp, :catch_failures => true)
 
-      ['5556','5557'].each do |port|
-        shell(%{echo 'while :; do echo "HTTP/1.1 200 OK\r\n\r\nResponse on #{port}" | nc -l #{port} ; done' > /root/script-#{port}.sh})
-        shell(%{/usr/bin/screen -dmS script-#{port} sh /root/script-#{port}.sh})
-        sleep 1
-        shell(%{netstat -tnl|grep ':#{port}'})
+        ['5556','5557'].each do |port|
+          shell(%{echo 'while :; do echo "HTTP/1.1 200 OK\r\n\r\nResponse on #{port}" | nc -l #{port} ; done' > /root/script-#{port}.sh})
+          shell(%{/usr/bin/screen -dmS script-#{port} sh /root/script-#{port}.sh})
+          sleep 1
+          shell(%{netstat -tnl|grep ':#{port}'})
+        end
       end
     end
   end
