@@ -88,7 +88,7 @@
 #
 define haproxy::balancermember (
   $listening_service,
-  $ports,
+  $ports        = undef,
   $server_names = $::hostname,
   $ipaddresses  = $::ipaddress,
   $ensure       = 'present',
