@@ -28,7 +28,7 @@
 
 ##Overview
 
-The haproxy module provides the ability to install, configure, and manage HAProxy. 
+The haproxy module provides the ability to install, configure, and manage HAProxy.
 
 ##Module Description
 
@@ -121,6 +121,28 @@ haproxy::listen { 'puppet00':
   },
 }
 ```
+###Configuring multi-network daemon listener
+
+One might have more advanced needs for the listen block, then use the `$bind` parameter:
+
+```puppet
+haproxy::listen { 'puppet00':
+  mode    => 'tcp',
+  options => {
+    'option'  => [
+      'tcplog',
+      'ssl-hello-chk',
+    ],
+    'balance' => 'roundrobin',
+  },
+  bind    => {
+    '10.0.0.1:443'      => ['ssl', 'crt', 'puppetlabs.com'],
+    '168.12.12.12:80'   => [],
+    '192.168.122.42:80' => []
+  },
+}
+```
+Note: `$ports` or `$ipaddress` and `$bind` are mutually exclusive
 
 ###Configuring HAProxy load-balanced member nodes
 
@@ -285,7 +307,10 @@ This type sets up a frontend service configuration block in haproxy.cfg. The HAP
 **Parameters**
 
 #####`bind_options`
-Lists an array of options to be specified after the bind declaration in the bind's configuration block.
+Lists an array of options to be specified after the bind declaration in the bind's configuration block. **Deprecated**: This parameter is being deprecated in favor of $bind
+
+#####`bind`
+A hash of ipaddress:port, with the haproxy bind options the address will have in the listening service's configuration block.
 
 #####`ipaddress`
 Specifies the IP address the proxy binds to. No value, '\*', and '0.0.0.0' mean that the proxy listens to all valid addresses on the system.
@@ -333,7 +358,10 @@ Using storeconfigs, you can export the `haproxy::balancermember` resources on al
 **Parameters:**
 
 #####`bind_options`
-Sets the options to be specified after the bind declaration in the listening service's configuration block. Displays as an array. 
+Sets the options to be specified after the bind declaration in the listening service's configuration block. Displays as an array. **Deprecated**: This parameter is being deprecated in favor of $bind
+
+#####`bind`
+A hash of ipaddress:port, with the haproxy bind options the address will have in the listening service's configuration block.
 
 #####`collect_exported`
 Enables exported resources from `haproxy::balancermember` to be collected, serving as a form of autodiscovery. Displays as a Boolean and defaults to 'true'. 

@@ -27,8 +27,13 @@
 #    hyphenated port ranges.
 #
 # [*ipaddress*]
-#   The ip address the proxy binds to. Empty addresses, '*', and '0.0.0.0'
-#    mean that the proxy listens to all valid addresses on the system.
+#   The ip address the proxy binds to.
+#    Empty addresses, '*', and '0.0.0.0' mean that the proxy listens
+#    to all valid addresses on the system.
+#
+# [*bind*]
+#   Set of ip addresses, port and bind options
+#   $bind = { '10.0.0.1:80' => ['ssl', 'crt', '/path/to/my/crt.pem'] }
 #
 # [*mode*]
 #   The mode of operation for the listening service. Valid values are undef,
@@ -39,8 +44,8 @@
 #    configuration block.
 #
 # [*bind_options*]
-#   An array of options to be specified after the bind declaration in the
-#    listening serivce's configuration block.
+#   (Deprecated) An array of options to be specified after the bind declaration
+#    in the listening serivce's configuration block.
 #
 # [*collect_exported*]
 #   Boolean, default 'true'. True means 'collect exported @@balancermember resources'
@@ -71,19 +76,34 @@
 # Gary Larizza <gary@puppetlabs.com>
 #
 define haproxy::listen (
-  $ports,
-  $ipaddress        = [$::ipaddress],
-  $mode             = undef,
-  $collect_exported = true,
-  $options          = {
+  $ports                        = undef,
+  $ipaddress                    = [$::ipaddress],
+  $bind                         = undef,
+  $mode                         = undef,
+  $collect_exported             = true,
+  $options                      = {
     'option'  => [
       'tcplog',
       'ssl-hello-chk'
     ],
     'balance' => 'roundrobin'
   },
-  $bind_options     = ''
+  # Deprecated
+  $bind_options                 = '',
 ) {
+
+  if $ports and $bind {
+    fail('The use of $ports and $bind is mutually exclusive, please choose either one')
+  }
+  if $ipaddress and $bind {
+    fail('The use of $ipaddress and $bind is mutually exclusive, please choose either one')
+  }
+  if $bind_options {
+    warning('The $bind_options parameter is deprecated; please use $bind instead')
+  }
+  if $bind {
+    validate_hash($bind)
+  }
 
   if defined(Haproxy::Backend[$name]) {
     fail("An haproxy::backend resource was discovered with the same name (${name}) which is not supported")

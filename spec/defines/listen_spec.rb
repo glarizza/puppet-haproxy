@@ -127,6 +127,34 @@ describe 'haproxy::listen' do
       'content' => "\nlisten apache\n  bind *:80 \n  balance  roundrobin\n  option  tcplog\n  option  ssl-hello-chk\n"
     ) }
   end
+  context "when a bind parameter hash is passed" do
+    let(:params) do
+      {
+        :name      => 'apache',
+        :ipaddress => '',
+        :bind      => {'10.0.0.1:333' => ['ssl', 'crt', 'public.puppetlabs.com'], '192.168.122.1:8082' => []},
+      }
+    end
+
+    it { should contain_concat__fragment('apache_listen_block').with(
+      'order'   => '20-apache-00',
+      'target'  => '/etc/haproxy/haproxy.cfg',
+      'content' => "\nlisten apache\n  bind 10.0.0.1:333 ssl crt public.puppetlabs.com\n  bind 192.168.122.1:8082 \n  balance  roundrobin\n  option  tcplog\n  option  ssl-hello-chk\n"
+    ) }
+  end
+  context "when a ports parameter and a bind parameter are passed" do
+    let(:params) do
+      {
+        :name  => 'apache',
+        :bind  => {'192.168.0.1:80' => ['ssl']},
+        :ports => '80'
+      }
+    end
+
+    it 'should raise error' do
+      expect { subject }.to raise_error Puppet::Error, /mutually exclusive/
+    end
+  end
   # C9977
   context "when an invalid hostname is passed" do
     let(:params) do

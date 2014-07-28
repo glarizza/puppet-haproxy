@@ -21,17 +21,22 @@
 #    comma-separated string or an array of strings which may be ports or
 #    hyphenated port ranges.
 #
+# [*bind*]
+#   Set of ip addresses, port and bind options
+#   $bind = { '10.0.0.1:80' => ['ssl', 'crt', '/path/to/my/crt.pem'] }
+#
 # [*ipaddress*]
-#   The ip address the proxy binds to. Empty addresses, '*', and '0.0.0.0'
-#    mean that the proxy listens to all valid addresses on the system.
+#   The ip address the proxy binds to.
+#    Empty addresses, '*', and '0.0.0.0' mean that the proxy listens
+#    to all valid addresses on the system.
 #
 # [*mode*]
 #   The mode of operation for the frontend service. Valid values are undef,
 #    'tcp', 'http', and 'health'.
 #
 # [*bind_options*]
-#   An array of options to be specified after the bind declaration in the
-#    bind's configuration block.
+#   (Deprecated) An array of options to be specified after the bind declaration
+#    in the listening serivce's configuration block.
 #
 # [*options*]
 #   A hash of options that are inserted into the frontend service
@@ -61,18 +66,32 @@
 # Gary Larizza <gary@puppetlabs.com>
 #
 define haproxy::frontend (
-  $ports,
+  $ports            = undef,
   $ipaddress        = [$::ipaddress],
+  $bind             = undef,
   $mode             = undef,
-  $bind_options     = undef,
   $collect_exported = true,
   $options          = {
     'option'  => [
       'tcplog',
     ],
-  }
+  },
+  # Deprecated
+  $bind_options     = '',
 ) {
 
+  if $ports and $bind {
+    fail('The use of $ports and $bind is mutually exclusive, please choose either one')
+  }
+  if $ipaddress and $bind {
+    fail('The use of $ipaddress and $bind is mutually exclusive, please choose either one')
+  }
+  if $bind_options {
+    warning('The $bind_options parameter is deprecated; please use $bind instead')
+  }
+  if $bind {
+    validate_hash($bind)
+  }
   # Template uses: $name, $ipaddress, $ports, $options
   concat::fragment { "${name}_frontend_block":
     order   => "15-${name}-00",
