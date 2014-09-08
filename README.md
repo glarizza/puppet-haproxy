@@ -20,6 +20,8 @@
         * [Defined type: haproxy::frontend](#defined-type-haproxyfrontend)
         * [Defined type: haproxy::listen](#defined-type-haproxylisten)
         * [Defined Type: haproxy::userlist](#define-type-haproxyuserlist)
+        * [Defined Type: haproxy::peers](#define-type-haproxypeers)
+        * [Defined Type: haproxy::peer](#define-type-haproxypeer)
 5. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
     * [Public classes and defined types](#public-classes-and-defined-types)
     * [Private classes and defined types](#private-classes-and-defined-types)
@@ -371,6 +373,38 @@ An array of users in the userlist. See http://cbonte.github.io/haproxy-dconv/con
 #####`groups`
 An array of groups in the userlist. See http://cbonte.github.io/haproxy-dconv/configuration-1.4.html#3.4-group
 
+
+####Defined Type: `haproxy::peers`
+
+This type will set up a peers entry in /etc/haproxy/haproxy.cfg on the load balancer. This setting is required to share the current state of HAproxy with other HAproxy in High available configurations.
+
+** parameters **
+
+#####`name`
+Sets the peers' name. Generally it will be the namevar of the defined resource type. This value appears right after the 'peers' statement in haproxy.cfg
+
+
+####Defined Type: `haproxy::peer`
+
+This type will set up a peer entry inside the peers configuration block in /etc/haproxy/haproxy.cfg on the load balancer. Currently, it has the ability to specify the instance name, ip address, ports and server_names.
+
+Automatic discovery of peer nodes may be implemented by exporting the peer resource for all HAProxy balancer servers that are configured in the same HA block and then collecting them on all load balancers.
+
+**Parameters:**
+
+#####`peers_name`
+Specifies the peer in which this load balancer needs to be added.
+
+#####`server_names`
+Sets the name of the peer server in the peers configuration block. Defaults to the hostname. Can be an array. If this parameter is specified as an array, it must be the same length as the [`ipaddresses`](#ipaddresses) parameter's array. A peer is created for each pair of `server\_names` and `ipaddresses` in the array.
+
+#####`ipaddresses`
+Specifies the IP address used to contact the peer member server. Can be an array. If this parameter is specified as an array it must be the same length as the [`server\_names`](#server_names) parameter's array. A peer is created for each pair of address and server_name.
+
+#####`ports`
+Sets the port on which the peer is going to share the state.
+
+
 ##Reference
 
 ###Public classes and defined types
@@ -381,6 +415,8 @@ An array of groups in the userlist. See http://cbonte.github.io/haproxy-dconv/co
 * Define `haproxy::backend`: Creates a backend entry in the config
 * Define `haproxy::balancermember`: Creates server entries for listen or backend blocks.
 * Define `haproxy::userlist`: Creates a userlist entry in the config
+* Define `haproxy::peers`: Creates a peers entry in the config
+* Define `haproxy::peer`: Creates server entries for ha configuration inside peers.
 
 ###Private classes and defined types
 
@@ -389,6 +425,7 @@ An array of groups in the userlist. See http://cbonte.github.io/haproxy-dconv/co
 * Class `haproxy::config`: Configures haproxy.cfg.
 * Class `haproxy::service`: Manages service.
 * Define `haproxy::balancermember::collect_exported`: Collects exported balancermembers
+* Define `haproxy::peer::collect_exported`: Collects exported peers
 
 ##Limitations
 
