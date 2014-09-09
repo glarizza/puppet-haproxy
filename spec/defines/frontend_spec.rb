@@ -111,6 +111,19 @@ describe 'haproxy::frontend' do
     end
   end
   # C9949
+  context "when a ports parameter and a bind parameter are passed" do
+    let(:params) do
+      {
+        :name  => 'apache',
+        :bind  => {'192.168.0.1:80' => ['ssl']},
+        :ports => '80'
+      }
+    end
+
+    it 'should raise error' do
+      expect { subject }.to raise_error Puppet::Error, /mutually exclusive/
+    end
+  end
   context "when multiple IPs are provided" do
     let(:params) do
       {
