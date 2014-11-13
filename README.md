@@ -238,7 +238,7 @@ Specifies the title of the resource. The `name` is arbitrary and only utilized i
 An array of options to be specified after the server declaration in the listening service's configuration block.
 
 #####`ports`
-Sets the ports on which the balancer member will accept connections from the load balancer. Must be an array. If you use an array in `server\_names` and `ipaddresses`, the number of ports specified will multiply the number of balancermembers formed from the IP address and server name pairs.
+Sets the ports on which the balancer member will accept connections from the load balancer. If ports are specified, it must be an array. If you use an array in `server\_names` and `ipaddresses`, the number of ports specified will multiply the number of balancermembers formed from the IP address and server name pairs. If no port is specified, the balancermember will receive the traffic on the same port the frontend receive it (Very useful if used with a frontend with multiple bind ports).
 
 #####`server_names`
 Sets the name of the balancermember server in the listening service's configuration block. Defaults to the hostname. Can be an array. If this parameter is specified as an array, it must be the same length as the [`ipaddresses`](#ipaddresses) parameter's array. A balancermember is created for each pair of `server\_names` and `ipaddresses` in the array.hese pairs will be multiplied, and additional balancermembers created, based on the number of `ports` specified.
