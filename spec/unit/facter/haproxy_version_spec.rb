@@ -19,6 +19,7 @@ describe Facter::Util::Fact do
 
   context "haproxy not present" do
     it do
+      Facter::Util::Resolution.stubs(:exec)
       Facter::Util::Resolution.expects(:which).with("haproxy").returns(false)
       Facter.fact(:haproxy_version).should be_nil
     end
