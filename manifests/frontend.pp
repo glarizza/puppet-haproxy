@@ -67,7 +67,7 @@
 #
 define haproxy::frontend (
   $ports            = undef,
-  $ipaddress        = [$::ipaddress],
+  $ipaddress        = undef,
   $bind             = undef,
   $mode             = undef,
   $collect_exported = true,
