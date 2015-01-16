@@ -7,6 +7,7 @@ describe 'haproxy::frontend' do
     let(:params) do
       {
         :name  => 'croy',
+        :ipaddress => '1.1.1.1',
         :ports => '18140'
       }
     end
@@ -143,6 +144,7 @@ describe 'haproxy::frontend' do
     let(:params) do
       {
         :name         => 'apache',
+        :ipaddress    => '1.1.1.1',
         :ports        => ['80','8080'],
         :bind_options => [ 'the options', 'go here' ]
       }

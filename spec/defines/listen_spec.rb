@@ -7,6 +7,7 @@ describe 'haproxy::listen' do
     let(:params) do
       {
         :name  => 'croy',
+        :ipaddress => '1.1.1.1',
         :ports => '18140'
       }
     end
@@ -187,6 +188,7 @@ describe 'haproxy::listen' do
     let(:params) do
       {
         :name         => 'apache',
+        :ipaddress    => '1.1.1.1',
         :ports        => '80',
         :bind_options => [ 'the options', 'go here' ]
       }
