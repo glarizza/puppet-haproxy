@@ -1,8 +1,15 @@
 require 'spec_helper'
 
 describe 'haproxy::userlist' do
+  let(:pre_condition) { 'include haproxy' }
   let(:title) { 'admins' }
-  let(:facts) {{ :ipaddress => '1.1.1.1' }}
+  let(:facts) do
+    {
+      :ipaddress      => '1.1.1.1',
+      :osfamily       => 'Redhat',
+      :concat_basedir => '/dne',
+    }
+  end
 
   context "when users and groups are passed" do
     let (:params) do

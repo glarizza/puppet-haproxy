@@ -1,11 +1,14 @@
 require 'spec_helper'
 
 describe 'haproxy::balancermember' do
+  let(:pre_condition) { 'include haproxy' }
   let(:title) { 'tyler' }
   let(:facts) do
     {
-      :ipaddress => '1.1.1.1',
-      :hostname  => 'dero'
+      :ipaddress      => '1.1.1.1',
+      :hostname       => 'dero',
+      :osfamily       => 'Redhat',
+      :concat_basedir => '/dne',
     }
   end
 
