@@ -172,5 +172,19 @@ describe 'haproxy::frontend' do
     ) }
   end
 
+  context "when bind options are provided and no ip" do
+    let(:params) do
+      {
+        :name  => 'apache',
+        :bind  => {'1.1.1.1:80' => []},
+      }
+    end
+    it { should contain_concat__fragment('apache_frontend_block').with(
+      'order'   => '15-apache-00',
+      'target'  => '/etc/haproxy/haproxy.cfg',
+      'content' => "\nfrontend apache\n  bind 1.1.1.1:80 \n  option  tcplog\n"
+    ) }
+  end
+
   # C9950 C9951 C9952 WONTFIX
 end

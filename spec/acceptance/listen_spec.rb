@@ -88,4 +88,16 @@ describe "listen define", :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfami
     shell('curl localhost:5555').stdout.chomp.should match(/Response on 5556/)
   end
 
+  it 'having no address set but setting bind' do
+    pp = <<-EOS
+      class { 'haproxy': }
+        haproxy::listen { 'app0':
+        bind =>
+          { '127.0.0.1:5555' => [] }
+          ,
+        }
+    EOS
+    apply_manifest(pp, :catch_failures => true)
+  end
+
 end
