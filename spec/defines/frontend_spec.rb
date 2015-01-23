@@ -7,6 +7,7 @@ describe 'haproxy::frontend' do
     let(:params) do
       {
         :name  => 'croy',
+        :ipaddress => '1.1.1.1',
         :ports => '18140'
       }
     end
@@ -143,6 +144,7 @@ describe 'haproxy::frontend' do
     let(:params) do
       {
         :name         => 'apache',
+        :ipaddress    => '1.1.1.1',
         :ports        => ['80','8080'],
         :bind_options => [ 'the options', 'go here' ]
       }
@@ -167,6 +169,20 @@ describe 'haproxy::frontend' do
       'order'   => '15-apache-00',
       'target'  => '/etc/haproxy/haproxy.cfg',
       'content' => "\nfrontend apache\n  bind 23.23.23.23:80 \n  bind 23.23.23.23:443 \n  option  tcplog\n"
+    ) }
+  end
+
+  context "when bind options are provided and no ip" do
+    let(:params) do
+      {
+        :name  => 'apache',
+        :bind  => {'1.1.1.1:80' => []},
+      }
+    end
+    it { should contain_concat__fragment('apache_frontend_block').with(
+      'order'   => '15-apache-00',
+      'target'  => '/etc/haproxy/haproxy.cfg',
+      'content' => "\nfrontend apache\n  bind 1.1.1.1:80 \n  option  tcplog\n"
     ) }
   end
 

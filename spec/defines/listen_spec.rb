@@ -7,6 +7,7 @@ describe 'haproxy::listen' do
     let(:params) do
       {
         :name  => 'croy',
+        :ipaddress => '1.1.1.1',
         :ports => '18140'
       }
     end
@@ -187,6 +188,7 @@ describe 'haproxy::listen' do
     let(:params) do
       {
         :name         => 'apache',
+        :ipaddress    => '1.1.1.1',
         :ports        => '80',
         :bind_options => [ 'the options', 'go here' ]
       }
@@ -198,4 +200,19 @@ describe 'haproxy::listen' do
       'content' => "\nlisten apache\n  bind 1.1.1.1:80 the options go here\n  balance  roundrobin\n  option  tcplog\n  option  ssl-hello-chk\n"
     ) }
   end
+  context "when bind options are provided and no ip" do
+    let(:params) do
+      {
+        :name => 'apache',
+        :bind => { '1.1.1.1:80' => [] },
+      }
+    end
+
+    it { should contain_concat__fragment('apache_listen_block').with(
+      'order'   => '20-apache-00',
+      'target'  => '/etc/haproxy/haproxy.cfg',
+      'content' => "\nlisten apache\n  bind 1.1.1.1:80 \n  balance  roundrobin\n  option  tcplog\n  option  ssl-hello-chk\n"
+    ) }
+  end
+
 end
