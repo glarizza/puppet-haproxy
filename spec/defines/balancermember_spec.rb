@@ -114,4 +114,21 @@ describe 'haproxy::balancermember' do
       'content' => "  server server01 192.168.56.200:18140 check\n  server server01 192.168.56.200:18150 check\n  server server02 192.168.56.201:18140 check\n  server server02 192.168.56.201:18150 check\n"
     ) }
   end
+  context 'with multiple servers and no port' do
+    let(:params) do
+      {
+        :name              => 'tyler',
+        :listening_service => 'croy',
+        :server_names      => ['server01', 'server02'],
+        :ipaddresses       => ['192.168.56.200', '192.168.56.201'],
+        :options           => ['check']
+      }
+    end
+
+    it { should contain_concat__fragment('croy_balancermember_tyler').with(
+      'order'   => '20-croy-01-tyler',
+      'target'  => '/etc/haproxy/haproxy.cfg',
+      'content' => "  server server01 192.168.56.200 check\n  server server02 192.168.56.201 check\n"
+    ) }
+  end
 end
