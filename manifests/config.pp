@@ -24,11 +24,11 @@ class haproxy::config inherits haproxy {
     content => template('haproxy/haproxy-base.cfg.erb'),
   }
 
-  if $global_options['chroot'] {
-    file { $global_options['chroot']:
+  if $haproxy::global_options['chroot'] {
+    file { $haproxy::global_options['chroot']:
       ensure => directory,
-      owner  => $global_options['user'],
-      group  => $global_options['group'],
+      owner  => $haproxy::global_options['user'],
+      group  => $haproxy::global_options['group'],
     }
   }
 }
