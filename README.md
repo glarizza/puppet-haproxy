@@ -32,8 +32,8 @@ The haproxy module provides the ability to install, configure, and manage HAProx
 
 ##Module Description
 
-HAProxy is a daemon for load-balancing and proxying TCP and HTTP-based services. 
-This module configures proxy servers and manages the configuration of backend member servers. 
+HAProxy is a daemon for load-balancing and proxying TCP and HTTP-based services.
+This module configures proxy servers and manages the configuration of backend member servers.
 
 ##Setup
 
@@ -70,7 +70,7 @@ node 'haproxy-server' {
 
 ###Configuring haproxy options
 
-The main [`haproxy` class](#class-haproxy) has many options for configuring your HAProxy server. 
+The main [`haproxy` class](#class-haproxy) has many options for configuring your HAProxy server.
 
 ```puppet
 class { 'haproxy':
@@ -136,9 +136,10 @@ haproxy::listen { 'puppet00':
     'balance' => 'roundrobin',
   },
   bind    => {
-    '10.0.0.1:443'      => ['ssl', 'crt', 'puppetlabs.com'],
-    '168.12.12.12:80'   => [],
-    '192.168.122.42:80' => []
+    '10.0.0.1:443'             => ['ssl', 'crt', 'puppetlabs.com'],
+    '168.12.12.12:80'          => [],
+    '192.168.122.42:8000-8100' => ['ssl', 'crt', 'puppetlabs.com'],
+    ':8443,:8444'              => ['ssl', 'crt', 'internal.puppetlabs.com']
   },
 }
 ```
@@ -205,7 +206,7 @@ The resulting HAProxy server will automatically collect configurations from back
 
 ####Class: `haproxy`
 
-This is the main class of the module, guiding the installation and configuration of at least one HAProxy server. 
+This is the main class of the module, guiding the installation and configuration of at least one HAProxy server.
 
 **Parameters:**
 
@@ -267,14 +268,14 @@ Sets the name of the balancermember server in the listening service's configurat
 
 ####Defined Type: `haproxy::backend`
 
-This type sets up a backend service configuration block inside the haproxy.cfg file on an HAProxy load balancer. Each backend service needs one or more load balancer member servers (declared with the [`haproxy::balancermember`](#defined-type-balancermember) defined type). 
+This type sets up a backend service configuration block inside the haproxy.cfg file on an HAProxy load balancer. Each backend service needs one or more load balancer member servers (declared with the [`haproxy::balancermember`](#defined-type-balancermember) defined type).
 
 Using storeconfigs, you can export the `haproxy::balancermember` resources on all load balancer member servers and collect them on a single HAProxy load balancer server.
 
 **Parameters**
 
 #####`name`
-Sets the backend service's name. Generally, it will be the namevar of the defined resource type. This value appears right after the 'backend' statement in haproxy.cfg 
+Sets the backend service's name. Generally, it will be the namevar of the defined resource type. This value appears right after the 'backend' statement in haproxy.cfg
 
 #####`options`
 A hash of options that are inserted into the backend service configuration block.
@@ -310,7 +311,19 @@ This type sets up a frontend service configuration block in haproxy.cfg. The HAP
 Lists an array of options to be specified after the bind declaration in the bind's configuration block. **Deprecated**: This parameter is being deprecated in favor of $bind
 
 #####`bind`
-A hash of ipaddress:port, with the haproxy bind options the address will have in the listening service's configuration block.
+A hash of listening addresses/ports, and a list of parameters that make up the listen service's `bind` lines. This is the most flexible way to configure listening services in a frontend or listen directive. See http://cbonte.github.io/haproxy-dconv/configuration-1.5.html#4.2-bind for details.
+
+The hash keys represent the listening address and port, such as `192.168.122.1:80`, `10.1.1.1:8900-9000`, `:80,:8080` or `/var/run/haproxy-frontend.sock` and the key's value is an array of bind options for that listening address, such as `[ 'ssl', 'crt /etc/ssl/puppetlabs.com.crt', 'no-sslv3' ]`. Example:
+
+```puppet
+bind => {
+  '168.12.12.12:80'                     => [],
+  '192.168.1.10:8080,192.168.1.10:8081' => [],
+  '10.0.0.1:443-453'                    => ['ssl', 'crt', 'puppetlabs.com'],
+  ':8443,:8444'                         => ['ssl', 'crt', 'internal.puppetlabs.com'],
+  '/var/run/haproxy-frontend.sock'      => [ 'user root', 'mode 600', 'accept-proxy' ],
+}
+```
 
 #####`ipaddress`
 Specifies the IP address the proxy binds to. No value, '\*', and '0.0.0.0' mean that the proxy listens to all valid addresses on the system.
@@ -329,7 +342,7 @@ Sets the ports to listen on for the address specified in `ipaddress`. Accepts a 
 
 #####Example
 
-To route traffic from port 8140 to all balancermembers added to a backend with the title 'puppet_backend00', 
+To route traffic from port 8140 to all balancermembers added to a backend with the title 'puppet_backend00',
 
 ```puppet
 haproxy::frontend { 'puppet00':
@@ -351,7 +364,7 @@ haproxy::frontend { 'puppet00':
 
 ####Defined type: `haproxy::listen`
 
-This type sets up a listening service configuration block inside the haproxy.cfg file on an HAProxy load balancer. Each listening service configuration needs one or more load balancer member server (declared with the [`haproxy::balancermember`](#defined-type-balancermember) defined type). 
+This type sets up a listening service configuration block inside the haproxy.cfg file on an HAProxy load balancer. Each listening service configuration needs one or more load balancer member server (declared with the [`haproxy::balancermember`](#defined-type-balancermember) defined type).
 
 Using storeconfigs, you can export the `haproxy::balancermember` resources on all load balancer member servers and  collect them on a single HAProxy load balancer server.
 
@@ -361,10 +374,22 @@ Using storeconfigs, you can export the `haproxy::balancermember` resources on al
 Sets the options to be specified after the bind declaration in the listening service's configuration block. Displays as an array. **Deprecated**: This parameter is being deprecated in favor of $bind
 
 #####`bind`
-A hash of ipaddress:port, with the haproxy bind options the address will have in the listening service's configuration block.
+A hash of listening addresses/ports, and a list of parameters that make up the listen service's `bind` lines. This is the most flexible way to configure listening services in a frontend or listen directive. See http://cbonte.github.io/haproxy-dconv/configuration-1.5.html#4.2-bind for details.
+
+The hash keys represent the listening address and port, such as `192.168.122.1:80`, `10.1.1.1:8900-9000`, `:80,:8080` or `/var/run/haproxy-frontend.sock` and the key's value is an array of bind options for that listening address, such as `[ 'ssl', 'crt /etc/ssl/puppetlabs.com.crt', 'no-sslv3' ]`. Example:
+
+```puppet
+bind => {
+  '168.12.12.12:80'                     => [],
+  '192.168.1.10:8080,192.168.1.10:8081' => [],
+  '10.0.0.1:443-453'                    => ['ssl', 'crt', 'puppetlabs.com'],
+  ':8443,:8444'                         => ['ssl', 'crt', 'internal.puppetlabs.com'],
+  '/var/run/haproxy-frontend.sock'      => [ 'user root', 'mode 600', 'accept-proxy' ],
+}
+```
 
 #####`collect_exported`
-Enables exported resources from `haproxy::balancermember` to be collected, serving as a form of autodiscovery. Displays as a Boolean and defaults to 'true'. 
+Enables exported resources from `haproxy::balancermember` to be collected, serving as a form of autodiscovery. Displays as a Boolean and defaults to 'true'.
 
 The 'true' value means exported balancermember resources, for the case when every balancermember node exports itself, will be collected. Whereas, 'false' means the existing declared balancermember resources will be relied on; this is meant for cases when you know the full set of balancermembers in advance and use `haproxy::balancermember` with array arguments, allowing you to deploy everything in a single run.
 
@@ -420,7 +445,7 @@ An array of groups in the userlist. See http://cbonte.github.io/haproxy-dconv/co
 
 ##Limitations
 
-RedHat and Debian family OSes are officially supported. Tested and built on Ubuntu and CentOS. 
+RedHat and Debian family OSes are officially supported. Tested and built on Ubuntu and CentOS.
 
 ##Development
 
