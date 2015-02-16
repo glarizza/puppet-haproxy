@@ -200,7 +200,7 @@ describe 'haproxy::listen' do
       'content' => "\nlisten apache\n  bind 1.1.1.1:80 the options go here\n  balance  roundrobin\n  option  tcplog\n  option  ssl-hello-chk\n"
     ) }
   end
-  context "when bind options are provided and no ip" do
+  context "when bind parameter is used without ipaddress parameter" do
     let(:params) do
       {
         :name => 'apache',
@@ -212,6 +212,26 @@ describe 'haproxy::listen' do
       'order'   => '20-apache-00',
       'target'  => '/etc/haproxy/haproxy.cfg',
       'content' => "\nlisten apache\n  bind 1.1.1.1:80 \n  balance  roundrobin\n  option  tcplog\n  option  ssl-hello-chk\n"
+    ) }
+  end
+
+  context "when bind parameter is used with more complex address constructs" do
+    let(:params) do
+      {
+        :name  => 'apache',
+        :bind  => {
+          '1.1.1.1:80'                 => [],
+          ':443,:8443'                 => [ 'ssl', 'crt public.puppetlabs.com', 'no-sslv3' ],
+          '2.2.2.2:8000-8010'          => [ 'ssl', 'crt public.puppetlabs.com' ],
+          'fd@${FD_APP1}'              => [],
+          '/var/run/ssl-frontend.sock' => [ 'user root', 'mode 600', 'accept-proxy' ]
+        },
+      }
+    end
+    it { should contain_concat__fragment('apache_listen_block').with(
+      'order'   => '20-apache-00',
+      'target'  => '/etc/haproxy/haproxy.cfg',
+      'content' => "\nlisten apache\n  bind /var/run/ssl-frontend.sock user root mode 600 accept-proxy\n  bind 1.1.1.1:80 \n  bind 2.2.2.2:8000-8010 ssl crt public.puppetlabs.com\n  bind :443,:8443 ssl crt public.puppetlabs.com no-sslv3\n  bind fd@${FD_APP1} \n  balance  roundrobin\n  option  tcplog\n  option  ssl-hello-chk\n"
     ) }
   end
 
