@@ -1,6 +1,7 @@
 define haproxy::peer (
   $peers_name,
   $port,
+  $ensure       = 'present',
   $server_names = $::hostname,
   $ipaddresses  = $::ipaddress,
 ) {
