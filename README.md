@@ -451,6 +451,9 @@ Specifies the peer in which this load balancer needs to be added.
 #####`server_names`
 Sets the name of the peer server in the peers configuration block. Defaults to the hostname. Can be an array. If this parameter is specified as an array, it must be the same length as the [`ipaddresses`](#ipaddresses) parameter's array. A peer is created for each pair of `server\_names` and `ipaddresses` in the array.
 
+####`ensure`
+Whether to add or remove the peer. Defaults to 'present'. Valid values are 'present' and 'absent'.
+
 #####`ipaddresses`
 Specifies the IP address used to contact the peer member server. Can be an array. If this parameter is specified as an array it must be the same length as the [`server\_names`](#server_names) parameter's array. A peer is created for each pair of address and server_name.
 
