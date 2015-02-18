@@ -1,0 +1,15 @@
+define haproxy::peer (
+  $peers_name,
+  $port,
+  $server_names = $::hostname,
+  $ipaddresses  = $::ipaddress,
+) {
+
+  # Templats uses $ipaddresses, $server_name, $ports, $option
+  concat::fragment { "peers-${peers_name}-${name}":
+    order   => "30-peers-01-${peers_name}-${name}",
+    ensure  => $ensure,
+    target  => '/etc/haproxy/haproxy.cfg',
+    content => template('haproxy/haproxy_peer.erb'),
+  }
+}
