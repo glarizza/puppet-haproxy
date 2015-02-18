@@ -87,6 +87,7 @@ class haproxy (
   $defaults_options = $haproxy::params::defaults_options,
   $restart_command  = undef,
   $custom_fragment  = undef,
+  $config_file      = $haproxy::params::config_file,
 
   # Deprecated
   $manage_service   = undef,

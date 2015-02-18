@@ -1,7 +1,14 @@
 require 'spec_helper'
 
 describe 'haproxy::backend' do
-  let(:facts) {{ :ipaddress => '1.1.1.1' }}
+  let(:pre_condition) { 'include haproxy' }
+  let(:facts) do
+    {
+      :ipaddress      => '1.1.1.1',
+      :osfamily       => 'Redhat',
+      :concat_basedir => '/dne',
+    }
+  end
 
   context "when no options are passed" do
     let(:title) { 'bar' }

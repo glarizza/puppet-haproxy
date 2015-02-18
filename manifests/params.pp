@@ -33,6 +33,35 @@ class haproxy::params {
         ],
         'maxconn' => '8000'
       }
+      $config_file      = '/etc/haproxy/haproxy.cfg'
+    }
+    'FreeBSD': {
+      $package_name     = 'haproxy'
+      $global_options   = {
+        'log'     => [
+          '127.0.0.1 local0',
+          '127.0.0.1 local1 notice',
+        ],
+        'chroot'  => '/usr/local/haproxy',
+        'pidfile' => '/var/run/haproxy.pid',
+        'maxconn' => '4096',
+        'daemon'  => '',
+      }
+      $defaults_options = {
+        'log'        => 'global',
+        'mode'       => 'http',
+        'option'     => [
+          'httplog',
+          'dontlognull',
+        ],
+        'retries'    => '3',
+        'redispatch' => '',
+        'maxconn'    => '2000',
+        'contimeout' => '5000',
+        'clitimeout' => '50000',
+        'srvtimeout' => '50000',
+      }
+      $config_file      = '/usr/local/etc/haproxy.conf'
     }
     default: { fail("The ${::osfamily} operating system is not supported with the haproxy module") }
   }

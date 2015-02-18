@@ -100,7 +100,7 @@ define haproxy::balancermember (
   concat::fragment { "${listening_service}_balancermember_${name}":
     ensure  => $ensure,
     order   => "20-${listening_service}-01-${name}",
-    target  => '/etc/haproxy/haproxy.cfg',
+    target  => $::haproxy::config_file,
     content => template('haproxy/haproxy_balancermember.erb'),
   }
 }

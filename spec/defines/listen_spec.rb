@@ -1,8 +1,15 @@
 require 'spec_helper'
 
 describe 'haproxy::listen' do
+  let(:pre_condition) { 'include haproxy' }
   let(:title) { 'tyler' }
-  let(:facts) {{ :ipaddress => '1.1.1.1' }}
+  let(:facts) do
+    {
+      :ipaddress      => '1.1.1.1',
+      :osfamily       => 'Redhat',
+      :concat_basedir => '/dne',
+    }
+  end
   context "when only one port is provided" do
     let(:params) do
       {
