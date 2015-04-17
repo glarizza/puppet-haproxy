@@ -54,9 +54,6 @@
         "12.04",
         "14.04"
       ]
-    },
-    {
-      "operatingsystem": "Gentoo"
     }
   ],
   "requirements": [
