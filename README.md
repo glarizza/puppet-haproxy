@@ -7,6 +7,13 @@
 3. [Setup - The basics of getting started with haproxy](#setup)
     * [Beginning with haproxy](#beginning-with-haproxy)
 4. [Usage - Configuration options and additional functionality](#usage)
+    * [Configure HAProxy options](#configure-haproxy-options)
+    * [Configure HAProxy daemon listener](#configure-haproxy-daemon-listener)
+    * [Configure multi-network daemon listener](#configure-multi-network-daemon-listener)
+    * [Configure HAProxy load-balanced member nodes](#configure-haproxy-load-balanced-member-nodes)
+    * [Configure a load balancer with exported resources](#configure-a-load-balancer-with-exported-resources)
+    * [Set up a frontend service](#set-up-a-frontend-service)
+    * [Set up a backend service](#set-up-a-backend-service)
 5. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
 6. [Limitations - OS compatibility, etc.](#limitations)
 7. [Development - Guide for contributing to the module](#development)
@@ -25,7 +32,7 @@ HAProxy is a daemon for load-balancing and proxying TCP- and HTTP-based services
 
 The quickest way to get up and running using the haproxy module is to install and configure a basic HAProxy server that is listening on port 8140 and balanced against two nodes:
 
-~~~
+~~~puppet
 node 'haproxy-server' {
   class { 'haproxy': }
   haproxy::listen { 'puppet00':
@@ -56,7 +63,7 @@ node 'haproxy-server' {
 
 The main [`haproxy` class](#class-haproxy) has many options for configuring your HAProxy server:
 
-~~~
+~~~puppet
 class { 'haproxy':
   global_options   => {
     'log'     => "${::ipaddress} local0",
@@ -90,7 +97,7 @@ class { 'haproxy':
 
 To export the resource for a balancermember and collect it on a single HAProxy load balancer server:
 
-~~~
+~~~puppet
 haproxy::listen { 'puppet00':
   ipaddress => $::ipaddress,
   ports     => '18140',
@@ -109,7 +116,7 @@ haproxy::listen { 'puppet00':
 
 If you need a more complex configuration for the listen block, use the `$bind` parameter:
 
-~~~
+~~~puppet
 haproxy::listen { 'puppet00':
   mode    => 'tcp',
   options => {
@@ -134,7 +141,7 @@ haproxy::listen { 'puppet00':
 
 First export the resource for a balancermember:
 
-~~~
+~~~puppet
 @@haproxy::balancermember { 'haproxy':
   listening_service => 'puppet00',
   ports             => '8140',
@@ -146,13 +153,13 @@ First export the resource for a balancermember:
 
 Then collect the resource on a load balancer:
 
-~~~
+~~~puppet
 Haproxy::Balancermember <<| listening_service == 'puppet00' |>>
 ~~~
 
 Then create the resource for multiple balancermembers at once:
 
-~~~
+~~~puppet
 haproxy::balancermember { 'haproxy':
   listening_service => 'puppet00',
   ports             => '8140',
@@ -168,7 +175,7 @@ This example assumes a single-pass installation of HAProxy where you know the me
 
 Install and configure an HAProxy service listening on port 8140 and balanced against all collected nodes:
 
-~~~
+~~~puppet
 node 'haproxy-server' {
   class { 'haproxy': }
   haproxy::listen { 'puppet00':
@@ -194,7 +201,7 @@ The resulting HAProxy service uses storeconfigs to collect and realize balancerm
 
 This example routes traffic from port 8140 to all balancermembers added to a backend with the title 'puppet_backend00':
 
-~~~
+~~~puppet
 haproxy::frontend { 'puppet00':
   ipaddress     => $::ipaddress,
   ports         => '18140',
@@ -213,7 +220,7 @@ haproxy::frontend { 'puppet00':
 
 If option order is important, pass an array of hashes to the `options` parameter:
 
-~~~
+~~~puppet
 haproxy::frontend { 'puppet00':
   ipaddress     => $::ipaddress,
   ports         => '18140',
@@ -235,7 +242,7 @@ This adds the frontend options to the configuration block in the same order as t
 
 ###Set up a backend service
 
-~~~
+~~~puppet
 haproxy::backend { 'puppet00':
   options => {
     'option'  => [
@@ -249,7 +256,7 @@ haproxy::backend { 'puppet00':
 
 If option order is important, pass an array of hashes to the `options` parameter:
 
-~~~
+~~~puppet
 haproxy::backend { 'puppet00':
   options => [
     { 'option'  => [
@@ -307,7 +314,7 @@ Main class, includes all other classes.
 
 * `defaults_options`: Configures all the default HAProxy options at once. Valid options: a hash of `option => value` pairs. To set an option multiple times (e.g. multiple 'timeout' or 'stats' values) pass its value as an array. Each element in your array results in a separate instance of the option, on a separate line in haproxy.cfg. Default:
 
-~~~
+~~~puppet
 {
         'log'     => 'global',
         'stats'   => 'enable',
@@ -327,7 +334,7 @@ Main class, includes all other classes.
 
 * `global_options`: Configures all the global HAProxy options at once. Valid options: a hash of `option => value` pairs. To set an option multiple times (e.g. multiple 'timeout' or 'stats' values) pass its value as an array. Each element in your array results in a separate instance of the option, on a separate line in haproxy.cfg. Default:
 
-~~~
+~~~puppet
 {
         'log'     => "${::ipaddress} local0",
         'chroot'  => '/var/lib/haproxy',
@@ -382,7 +389,7 @@ Sets up a backend service configuration block inside haproxy.cfg. Each backend s
 
 * `options`: *Optional.* Adds one or more options to the backend service's configuration block in haproxy.cfg. Valid options: a hash or an array. To control the ordering of these options within the configuration block, supply an array of hashes where each hash contains one 'option => value' pair. Default:
 
-~~~
+~~~puppet
 {
     'option'  => [
       'tcplog',
@@ -422,7 +429,7 @@ For more information, see the [HAProxy Configuration Manual](http://cbonte.githu
 
 * `options`: *Optional.* Adds one or more options to the frontend service's configuration block in haproxy.cfg. Valid options: a hash or an array. To control the ordering of these options within the configuration block, supply an array of hashes where each hash contains one 'option => value' pair. Default:
 
-~~~
+~~~puppet
 {
     'option'  => [
       'tcplog',
