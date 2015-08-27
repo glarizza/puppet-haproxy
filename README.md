@@ -357,6 +357,8 @@ Main class, includes all other classes.
 
 * `service_manage`: Specifies whether the state of the HAProxy service should be managed by Puppet. Valid options: 'true' and 'false'. Default: 'true'.
 
+* `service_options`: Contents for the `/etc/defaults/haproxy` file on Debian. Defaults to "ENABLED=1\n" on Debian, and is ignored on other systems.
+
 #### Define: `haproxy::balancermember`
 
 Configures a service inside a listening or backend service configuration block in haproxy.cfg.
