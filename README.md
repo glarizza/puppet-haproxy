@@ -403,7 +403,7 @@ Sets up a backend service configuration block inside haproxy.cfg. Each backend s
 
 #### Define: `haproxy::frontend`
 
-Sets up a backend service configuration block inside haproxy.cfg. Each backend service needs one or more balancermember services (declared with the [`haproxy::balancermember` define](#define-haproxybalancermember)).
+Sets up a frontend service configuration block inside haproxy.cfg. Each frontend service needs one or more balancermember services (declared with the [`haproxy::balancermember` define](#define-haproxybalancermember)).
 
 ##### Parameters
 
