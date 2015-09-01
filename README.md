@@ -209,7 +209,7 @@ haproxy::frontend { 'puppet00':
   bind_options  => 'accept-proxy',
   options       => {
     'default_backend' => 'puppet_backend00',
-    'timeout client'  => '30',
+    'timeout client'  => '30s',
     'option'          => [
       'tcplog',
       'accept-invalid-http-request',
@@ -228,7 +228,7 @@ haproxy::frontend { 'puppet00':
   bind_options  => 'accept-proxy',
   options       => [
     { 'default_backend' => 'puppet_backend00' },
-    { 'timeout client'  => '30' },
+    { 'timeout client'  => '30s' },
     { 'option'          => [
         'tcplog',
         'accept-invalid-http-request',

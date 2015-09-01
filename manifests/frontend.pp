@@ -56,7 +56,7 @@
 #        'tcplog',
 #        'accept-invalid-http-request',
 #      ],
-#      'timeout client' => '30',
+#      'timeout client' => '30s',
 #      'balance'    => 'roundrobin'
 #    },
 #  }
