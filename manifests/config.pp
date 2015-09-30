@@ -4,6 +4,15 @@ class haproxy::config inherits haproxy {
     fail("Use of private class ${name} by ${caller_module_name}")
   }
 
+  if $haproxy::merge_options {
+    $_global_options   = merge($haproxy::params::global_options, $haproxy::global_options)
+    $_defaults_options = merge($haproxy::params::defaults_options, $haproxy::defaults_options)
+  } else {
+    $_global_options   = $haproxy::global_options
+    $_defaults_options = $haproxy::defaults_options
+    warning("${module_name}: The \$merge_options parameter will default to true in the next major release. Please review the documentation regarding the implications.")
+  }
+
   concat { $haproxy::config_file:
     owner => '0',
     group => '0',
@@ -24,11 +33,11 @@ class haproxy::config inherits haproxy {
     content => template('haproxy/haproxy-base.cfg.erb'),
   }
 
-  if $haproxy::global_options['chroot'] {
-    file { $haproxy::global_options['chroot']:
+  if $_global_options['chroot'] {
+    file { $_global_options['chroot']:
       ensure => directory,
-      owner  => $haproxy::global_options['user'],
-      group  => $haproxy::global_options['group'],
+      owner  => $_global_options['user'],
+      group  => $_global_options['group'],
     }
   }
 }

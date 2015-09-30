@@ -5,6 +5,9 @@
 #  extended by changing package names and configuration file paths.
 #
 class haproxy::params {
+  # XXX: This will change to true in the next major release
+  $merge_options = false
+
   case $::osfamily {
     'Archlinux', 'Debian', 'Redhat', 'Gentoo', 'Suse' : {
       $package_name     = 'haproxy'
@@ -21,7 +24,7 @@ class haproxy::params {
       $defaults_options = {
         'log'     => 'global',
         'stats'   => 'enable',
-        'option'  => 'redispatch',
+        'option'  => [ 'redispatch' ],
         'retries' => '3',
         'timeout' => [
           'http-request 10s',

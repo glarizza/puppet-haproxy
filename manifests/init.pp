@@ -39,6 +39,12 @@
 #    options as an array and you will get a line for each of them in the
 #    resultant haproxy.cfg file.
 #
+# [*merge_options*]
+#   Whether to merge the user-supplied `global_options`/`defaults_options`
+#   hashes with their default values set in params.pp. Merging allows to change
+#   or add options without having to recreate the entire hash. Defaults to
+#   false, but will default to true in future releases.
+#
 #[*restart_command*]
 #   Command to use when restarting the on config changes.
 #    Passed directly as the <code>'restart'</code> parameter to the service resource.
@@ -89,6 +95,7 @@ class haproxy (
   $service_options  = "ENABLED=1\n",
   $global_options   = $haproxy::params::global_options,
   $defaults_options = $haproxy::params::defaults_options,
+  $merge_options    = $haproxy::params::merge_options,
   $restart_command  = undef,
   $custom_fragment  = undef,
   $config_file      = $haproxy::params::config_file,
@@ -105,6 +112,7 @@ class haproxy (
   }
   validate_string($package_name,$package_ensure)
   validate_bool($service_manage)
+  validate_bool($merge_options)
   validate_string($service_options)
 
   # To support deprecating $enable

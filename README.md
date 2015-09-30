@@ -78,7 +78,9 @@ class { 'haproxy':
   defaults_options => {
     'log'     => 'global',
     'stats'   => 'enable',
-    'option'  => 'redispatch',
+    'option'  => [
+      'redispatch',
+    ],
     'retries' => '3',
     'timeout' => [
       'http-request 10s',
@@ -89,6 +91,36 @@ class { 'haproxy':
       'check 10s',
     ],
     'maxconn' => '8000',
+  },
+}
+~~~
+
+The above shown values are the module's defaults for platforms like Debian and RedHat (see `haproxy::params` for details). If you wish to override or add to any of these defaults set `merge_options => true` (see below) and set `global_options` and/or `defaults_options` to a hash containing just the `option => value` pairs you need changed or added. In case of duplicates your supplied values will "win" over the default values (this is especially noteworthy for arrays -- they cannot be merged easily). If you want to completely remove a parameter set it to the special value `undef`:
+
+~~~puppet
+class { 'haproxy':
+  global_options   => {
+    'maxconn' => undef,
+    'user'    => 'root',
+    'group'   => 'root',
+    'stats'   => [
+      'socket /var/lib/haproxy/stats',
+      'timeout 30s'
+    ]
+  },
+  defaults_options => {
+    'retries' => '5',
+    'option'  => [
+      'redispatch',
+      'http-server-close',
+      'logasap',
+    ],
+    'timeout' => [
+      'http-request 7s',
+      'connect 3s',
+      'check 9s',
+    ],
+    'maxconn' => '15000',
   },
 }
 ~~~
@@ -314,38 +346,74 @@ Main class, includes all other classes.
 
 * `defaults_options`: Configures all the default HAProxy options at once. Valid options: a hash of `option => value` pairs. To set an option multiple times (e.g. multiple 'timeout' or 'stats' values) pass its value as an array. Each element in your array results in a separate instance of the option, on a separate line in haproxy.cfg. Default:
 
-~~~puppet
-{
-        'log'     => 'global',
-        'stats'   => 'enable',
-        'option'  => 'redispatch',
-        'retries' => '3',
-        'timeout' => [
-          'http-request 10s',
-          'queue 1m',
-          'connect 10s',
-          'client 1m',
-          'server 1m',
-          'check 10s',
-        ],
-        'maxconn' => '8000'
-}
-~~~
+  ~~~puppet
+  {
+          'log'     => 'global',
+          'stats'   => 'enable',
+          'option'  => [
+            'redispatch',
+          ],
+          'retries' => '3',
+          'timeout' => [
+            'http-request 10s',
+            'queue 1m',
+            'connect 10s',
+            'client 1m',
+            'server 1m',
+            'check 10s',
+          ],
+          'maxconn' => '8000'
+  }
+  ~~~
+
+  To override or add to any of these default values you don't have to recreate and supply the whole hash, just set `merge_options => true` (see below) and set `defaults_options` to a hash of the `option => value` pairs you'd like to override or add. But note that array values cannot be easily merged with the default values without potentially creating duplicates so you always have to supply the whole array yourself. And if you want a parameter to not appear at all in the resulting configuration set its value to `undef`. Example:
+
+  ~~~puppet
+  {
+          'retries' => '5',
+          'timeout' => [
+            'http-request 7s',
+	    'http-keep-alive 10s,
+            'queue 1m',
+            'connect 5s',
+            'client 1m',
+            'server 1m',
+            'check 10s',
+          ],
+          'maxconn' => undef,
+  }
+  ~~~
 
 * `global_options`: Configures all the global HAProxy options at once. Valid options: a hash of `option => value` pairs. To set an option multiple times (e.g. multiple 'timeout' or 'stats' values) pass its value as an array. Each element in your array results in a separate instance of the option, on a separate line in haproxy.cfg. Default:
 
-~~~puppet
-{
-        'log'     => "${::ipaddress} local0",
-        'chroot'  => '/var/lib/haproxy',
-        'pidfile' => '/var/run/haproxy.pid',
-        'maxconn' => '4000',
-        'user'    => 'haproxy',
-        'group'   => 'haproxy',
-        'daemon'  => '',
-        'stats'   => 'socket /var/lib/haproxy/stats'
-}
-~~~
+  ~~~puppet
+  {
+          'log'     => "${::ipaddress} local0",
+          'chroot'  => '/var/lib/haproxy',
+          'pidfile' => '/var/run/haproxy.pid',
+          'maxconn' => '4000',
+          'user'    => 'haproxy',
+          'group'   => 'haproxy',
+          'daemon'  => '',
+          'stats'   => 'socket /var/lib/haproxy/stats'
+  }
+  ~~~
+
+  To override or add to any of these default values you don't have to recreate and supply the whole hash, just set `merge_options => true` (see below) and set `global_options` to a hash of the `option => value` pairs you'd like to override or add. But note that array values cannot be easily merged with the default values without potentially creating duplicates so you always have to supply the whole array yourself. And if you want a parameter to not appear at all in the resulting configuration set its value to `undef`. Example:
+
+  ~~~puppet
+  {
+	  log     => undef,
+          'user'  => 'root',
+          'group' => 'root',
+          'stats' => [
+            'socket /var/lib/haproxy/admin.sock mode 660 level admin',
+            'timeout 30s',
+          ],
+  }
+  ~~~
+
+* `merge_options`: Whether to merge the user-supplied `global_options`/`defaults_options` hashes with their default values set in params.pp. Merging allows to change or add options without having to recreate the entire hash. Defaults to `false`, but will default to `true` in future releases.
 
 * `package_ensure`: Specifies whether the HAProxy package should exist. Defaults to 'present'. Valid options: 'present' and 'absent'. Default: 'present'.
 
