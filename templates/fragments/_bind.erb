@@ -12,7 +12,7 @@
   rescue ArgumentError => e
     valid_ip = false
   end
-  if ! valid_ip and ! virtual_ip.match(/^[A-Za-z][A-Za-z0-9\.-]+$/) and virtual_ip != "*"
+  if ! valid_ip and ! String(virtual_ip).match(/^[A-Za-z][A-Za-z0-9\.-]+$/) and virtual_ip != "*"
     scope.function_fail(["Invalid IP address or hostname [#{virtual_ip}]"])
   end
   scope.function_fail(["Port [#{port}] is outside of range 1-65535"]) if port.to_i < 1 or port.to_i > 65535
