@@ -33,6 +33,9 @@
 # [*service_options*]
 #   Contents for the `/etc/defaults/haproxy` file on Debian. Defaults to "ENABLED=1\n" on Debian, and is ignored on other systems.
 #
+# [*service_options*]
+#   Contents for the `/etc/defaults/haproxy` file on Debian. Defaults to "ENABLED=1\n" on Debian, and is ignored on other systems.
+#
 # [*global_options*]
 #   A hash of all the haproxy global options. If you want to specify more
 #    than one option (i.e. multiple timeout or stats options), pass those

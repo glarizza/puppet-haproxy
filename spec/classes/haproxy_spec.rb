@@ -475,4 +475,6 @@ describe 'haproxy', :type => :class do
       }.to raise_error(Puppet::Error, /operating system is not supported with the haproxy module/)
     end
   end
+
+
 end
