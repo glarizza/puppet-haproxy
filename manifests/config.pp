@@ -44,14 +44,14 @@ define haproxy::config (
 
   # Simple Header
   concat::fragment { "${instance_name}-00-header":
-    target  => $config_file,
+    target  => $_config_file,
     order   => '01',
     content => "# This file managed by Puppet\n",
   }
 
   # Template uses $_global_options, $_defaults_options, $custom_fragment
   concat::fragment { "${instance_name}-haproxy-base":
-    target  => $config_file,
+    target  => $_config_file,
     order   => '10',
     content => template("${module_name}/haproxy-base.cfg.erb"),
   }
