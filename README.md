@@ -14,6 +14,7 @@
     * [Configure a load balancer with exported resources](#configure-a-load-balancer-with-exported-resources)
     * [Set up a frontend service](#set-up-a-frontend-service)
     * [Set up a backend service](#set-up-a-backend-service)
+    * [Configure multiple haproxy instances on one machine](#configure-multiple-haproxy-instances-on-one-machine)
 5. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
 6. [Limitations - OS compatibility, etc.](#limitations)
 7. [Development - Guide for contributing to the module](#development)
@@ -304,6 +305,83 @@ haproxy::backend { 'puppet00':
 
 This adds the backend options to the configuration block in the same order as they appear within the array.
 
+###Configure multiple haproxy instances on one machine
+
+This is an advanced feature typically only used at large sites.
+
+It is possible to run multiple haproxy processes ("instances") on the
+same machine. This has the benefit that each is a distinct failure domain,
+each can be restarted independently, and each can run a different binary.
+
+In this use case, instead of using `Class['haproxy']`, each process
+is started using `haproxy::instance{'inst'}` where `inst` is the
+name of the instance.  It assumes there is a matching `Service['inst']`
+that will be used to manage service.  Different sites may have
+different requirements for how the `Service[]` is constructed.
+However, `haproxy::instance_service` exists as an example of one
+way to do this, and may be sufficient for most sites.
+
+In this example, two instances are created. The first uses the standard
+class and uses `haproxy::instance` to add an additional instance called
+`beta`.
+
+~~~puppet
+   class{ 'haproxy': }
+   haproxy::listen { 'puppet00':
+     instance         => 'haproxy',
+     collect_exported => false,
+     ipaddress        => $::ipaddress,
+     ports            => '8800',
+   }
+
+   haproxy::instance { 'beta': }
+   ->
+   haproxy::instance_service { 'beta':
+     haproxy_package     => 'custom_haproxy',
+     haproxy_init_source => "puppet:///modules/${module_name}/haproxy-beta.init",
+   }
+   ->
+   haproxy::listen { 'puppet00':
+     instance         => 'beta',
+     collect_exported => false,
+     ipaddress        => $::ipaddress,
+     ports            => '9900',
+   }
+~~~
+
+In this example, two instances are created called `group1` and `group2`.
+The second uses a custom package.
+
+~~~puppet
+   haproxy::instance { 'group1': }
+   ->
+   haproxy::instance_service { 'group1':
+     haproxy_init_source => "puppet:///modules/${module_name}/haproxy-group1.init",
+   }
+   ->
+   haproxy::listen { 'group1-puppet00':
+     section_name     => 'puppet00',
+     instance         => 'group1',
+     collect_exported => false,
+     ipaddress        => $::ipaddress,
+     ports            => '8800',
+   }
+   haproxy::instance { 'group2': }
+   ->
+   haproxy::instance_service { 'group2':
+     haproxy_package     => 'custom_haproxy',
+     haproxy_init_source => "puppet:///modules/${module_name}/haproxy-group2.init",
+   }
+   ->
+   haproxy::listen { 'group2-puppet00':
+     section_name     => 'puppet00',
+     instance         => 'group2',
+     collect_exported => false,
+     ipaddress        => $::ipaddress,
+     ports            => '9900',
+   }
+~~~
+
 ##Reference
 
 ###Classes
@@ -330,6 +408,8 @@ This adds the backend options to the configuration block in the same order as th
 * [`haproxy::userlist`](#define-haproxyuserlist): Creates a userlist entry in haproxy.cfg.
 * [`haproxy::peers`](#define-haproxypeers): Creates a peers entry in haproxy.cfg.
 * [`haproxy::peer`](#define-haproxypeer): Creates server entries within a peers entry in haproxy.cfg.
+* [`haproxy::instance`](#define-instance): Creates multiple instances of haproxy on the same machine.
+* [`haproxy::instance_service`](#define-instanceservice): Example of one way to prepare environment for haproxy::instance.
 
 ####Private defines
 
@@ -447,6 +527,8 @@ Configures a service inside a listening or backend service configuration block i
 
 * `server_names`: *Required unless `collect_exported` is set to `true`.* Sets the name of the balancermember service in the listening service's configuration block in haproxy.cfg. Valid options: a string or an array. If you pass an array, it must contain the same number of elements as the array you pass to the `ipaddresses` parameter. For each pair of entries in the `ipaddresses` and `server_names` arrays, Puppet creates server entries in haproxy.cfg targeting each port specified in the `ports` parameter. Default: the value of the `$::hostname` fact.
 
+* `instance`: *Optional.* When using `haproxy::instance` to run multiple instances of Haproxy on the same machine, this indicates which instance.  Defaults to "haproxy".
+
 #### Define: `haproxy::backend`
 
 Sets up a backend service configuration block inside haproxy.cfg. Each backend service needs one or more balancermember services (declared with the [`haproxy::balancermember` define](#define-haproxybalancermember)).
@@ -458,6 +540,8 @@ Sets up a backend service configuration block inside haproxy.cfg. Each backend s
 * `name`: *Optional.* Supplies a name for the backend service. This value appears right after the 'backend' statement in haproxy.cfg. Valid options: a string. Default: the title of your declared resource.
 
 * `options`: *Optional.* Adds one or more options to the backend service's configuration block in haproxy.cfg. Valid options: a hash or an array. To control the ordering of these options within the configuration block, supply an array of hashes where each hash contains one 'option => value' pair. Default:
+
+* `instance`: *Optional.* When using `haproxy::instance` to run multiple instances of Haproxy on the same machine, this indicates which instance.  Defaults to "haproxy".
 
 ~~~puppet
 {
@@ -497,7 +581,7 @@ For more information, see the [HAProxy Configuration Manual](http://cbonte.githu
 
 * `name`: *Optional.* Supplies a name for the frontend service. This value appears right after the 'frontend' statement in haproxy.cfg. Valid options: a string. Default: the title of your declared resource.
 
-* `options`: *Optional.* Adds one or more options to the frontend service's configuration block in haproxy.cfg. Valid options: a hash or an array. To control the ordering of these options within the configuration block, supply an array of hashes where each hash contains one 'option => value' pair. Default:
+* `options`: *Optional.* Adds one or more options to the frontend service's configuration block in haproxy.cfg. Valid options: a hash or an array. To control the ordering of these options within the configuration block, supply an array of hashes where each hash contains one 'option => value' pair.
 
 ~~~puppet
 {
@@ -508,6 +592,8 @@ For more information, see the [HAProxy Configuration Manual](http://cbonte.githu
 ~~~
 
 * `ports`: *Required unless `bind` is specified.* Specifies which ports to listen on for the address specified in `ipaddress`. Valid options: an array of port numbers and/or port ranges or a string containing a comma-delimited list of port numbers/ranges.
+
+* `instance`: *Optional.* When using `haproxy::instance` to run multiple instances of Haproxy on the same machine, this indicates which instance.  Defaults to "haproxy".
 
 #### Define: `haproxy::listen`
 
@@ -543,6 +629,7 @@ For more information, see the [HAProxy Configuration Manual](http://cbonte.githu
 
 * `ports`: *Required unless `bind` is specified.* Specifies which ports to listen on for the address specified in `ipaddress`. Valid options: a single comma-delimited string or an array of strings. Each string can contain a port number or a hyphenated range of port numbers (e.g., 8443-8450).
 
+
 #### Define: `haproxy::userlist`
 
 Sets up a [userlist configuration block](http://cbonte.github.io/haproxy-dconv/configuration-1.4.html#3.4) inside haproxy.cfg.
@@ -551,9 +638,11 @@ Sets up a [userlist configuration block](http://cbonte.github.io/haproxy-dconv/c
 
 * `groups`: *Required unless `users` is specified.* Adds groups to the userlist. For more information, see the [HAProxy Configuration Manual](http://cbonte.github.io/haproxy-dconv/configuration-1.4.html#3.4-group). Valid options: an array of groupnames. Default: undef.
 
-* `name`: *Optional.* Supplies a name for the userlist. This value appears right after the 'listen' statement in haproxy.cfg. Valid options: a string. Default: the title of your declared resource.
+* `name`: *Optional.* Supplies a name for the userlist. This value appears right after the 'userlist' statement in haproxy.cfg. Valid options: a string. Default: the title of your declared resource.
 
 * `users`: *Required unless `groups` is specified.* Adds users to the userlist. For more information, see the [HAProxy Configuration Manual](http://cbonte.github.io/haproxy-dconv/configuration-1.4.html#3.4-user). Valid options: an array of usernames. Default: undef.
+
+* `instance`: *Optional.* When using `haproxy::instance` to run multiple instances of Haproxy on the same machine, this indicates which instance.  Defaults to "haproxy".
 
 #### Define: `haproxy::peers`
 
@@ -564,6 +653,8 @@ Sets up a peers entry in haproxy.cfg on the load balancer. This entry is require
 * `collect_exported`: *Optional.* Specifies whether to collect resources exported by other nodes. This serves as a form of autodiscovery. Valid options: 'true' and 'false'. Default: 'true'.
 
 * `name`: *Optional.* Appends a name to the peers entry in haproxy.cfg. Valid options: a string. Default: the title of your declared resource.
+
+* `instance`: *Optional.* When using `haproxy::instance` to run multiple instances of Haproxy on the same machine, this indicates which instance.  Defaults to "haproxy".
 
 #### Define: `haproxy::peer`
 
@@ -580,6 +671,88 @@ Sets up a peer entry inside the peers configuration block in haproxy.cfg.
 * `ports`: *Required.* Specifies the port on which the load balancer sends connections to peers. Valid options: a string containing a port number.
 
 * `server_names`: *Required unless the `collect_exported` parameter of your `haproxy::peers` resource is set to `true`.* Sets the name of the peer server as listed in the peers configuration block. Valid options: a string or an array. If you pass an array, it must contain the same number of elements as the array you pass to `ipaddresses`. Puppet pairs up the elements from both arrays and creates a peer for each pair of values. Default: the value of the `$::hostname` fact.
+
+* `instance`: *Optional.* When using `haproxy::instance` to run multiple instances of Haproxy on the same machine, this indicates which instance.  Defaults to "haproxy".
+
+#### Define: `haproxy::instance`
+
+Runs multiple instances of haproxy on the same machine.  Normally users
+use the Class['haproxy'], which runs a single haproxy daemon on a machine.
+
+##### Parameters
+
+* `package_ensure`: Chooses whether the haproxy package should be installed or uninstalled.
+Defaults to 'present'
+
+* `package_name`:
+The package name of haproxy. Defaults to undef, and no package is installed.
+NOTE: Class['haproxy'] has a different default.
+
+* `service_ensure`:
+Chooses whether the haproxy service should be running & enabled at boot, or
+stopped and disabled at boot. Defaults to 'running'
+
+* `service_manage`:
+Chooses whether the haproxy service state should be managed by puppet at
+all. Defaults to true
+
+* `global_options`:
+A hash of all the haproxy global options. If you want to specify more
+than one option (i.e. multiple timeout or stats options), pass those
+options as an array and you will get a line for each of them in the
+resultant haproxy.cfg file.
+
+* `defaults_options`:
+A hash of all the haproxy defaults options. If you want to specify more
+than one option (i.e. multiple timeout or stats options), pass those
+options as an array and you will get a line for each of them in the
+resultant haproxy.cfg file.
+
+* `restart_command`:
+Command to use when restarting the on config changes.
+Passed directly as the <code>'restart'</code> parameter to the service
+resource.
+Defaults to undef i.e. whatever the service default is.
+
+* `custom_fragment`:
+Allows arbitrary HAProxy configuration to be passed through to support
+additional configuration not available via parameters, or to short-circuit
+the defined resources such as haproxy::listen when an operater would rather
+just write plain configuration. Accepts a string (ie, output from the
+template() function). Defaults to undef
+
+* `config_file`:
+Allows arbitrary config filename to be specified. If this is used,
+it is assumed that the directory path to the file exists and has
+owner/group/permissions as desired.  If set to undef, the name
+will be generated as follows:
+If $title is 'haproxy', the operating system default will be used.
+Otherwise, /etc/haproxy-$title/haproxy-$title.conf (Linux),
+or /usr/local/etc/haproxy-$title/haproxy-$title.conf (FreeBSD)
+The parent directory will be created automatically.
+Defaults to undef.
+
+#### Define: `haproxy::instance_service`
+
+Example manifest that shows one way to create the Service[] environment needed
+by haproxy::instance.
+
+##### Parameters
+
+* `haproxy_package`:
+The name of the package to be installed. This is useful if
+you package your own custom version of haproxy.
+Defaults to 'haproxy'
+
+* `bindir`:
+Where to put symlinks to the binary used for each instance.
+Defaults to '/opt/haproxy/bin'
+
+* `haproxy_init_source`:
+Path to the template init.d script that will start/restart/reload this instance.
+
+* `haproxy_unit_template`:
+Path to the template systemd service unit definition that will start/restart/reload this instance.
 
 ##Limitations
 
