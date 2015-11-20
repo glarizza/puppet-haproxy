@@ -160,8 +160,9 @@ define haproxy::instance (
   # Therefore, we "include haproxy::params" for any parameters we need.
   include haproxy::params
 
-  $_global_options = pick($global_options, $haproxy::params::global_options, [])
-  $_defaults_options = pick($defaults_options, $haproxy::params::defaults_options, [])
+  $_global_options = pick($global_options, $haproxy::params::global_options)
+  $_defaults_options = pick($defaults_options, $haproxy::params::defaults_options)
+  validate_hash($_global_options,$_defaults_options)
 
   # Determine instance_name based on:
   #   single-instance hosts: haproxy
