@@ -123,6 +123,7 @@ class haproxy (
   validate_bool($service_manage)
   validate_bool($merge_options)
   validate_string($service_options)
+  validate_hash($global_options, $defaults_options)
 
   # NOTE: These deprecating parameters are implemented in this class,
   # not in haproxy::instance.  haproxy::instance is new and therefore
