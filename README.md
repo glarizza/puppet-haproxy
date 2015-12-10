@@ -668,7 +668,7 @@ Sets up a peer entry inside the peers configuration block in haproxy.cfg.
 
 * `peers_name`: *Required.* Specifies the peer in which to add the load balancer. Valid options: a string containing the name of an HAProxy peer.
 
-* `ports`: *Required.* Specifies the port on which the load balancer sends connections to peers. Valid options: a string containing a port number.
+* `port`: *Required.* Specifies the port on which the load balancer sends connections to peers. Valid options: a string containing a port number.
 
 * `server_names`: *Required unless the `collect_exported` parameter of your `haproxy::peers` resource is set to `true`.* Sets the name of the peer server as listed in the peers configuration block. Valid options: a string or an array. If you pass an array, it must contain the same number of elements as the array you pass to `ipaddresses`. Puppet pairs up the elements from both arrays and creates a peer for each pair of values. Default: the value of the `$::hostname` fact.
 
