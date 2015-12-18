@@ -169,6 +169,7 @@ class haproxy (
     defaults_options => $defaults_options,
     restart_command  => $restart_command,
     custom_fragment  => $custom_fragment,
+    config_dir       => $config_dir,
     config_file      => $config_file,
     merge_options    => $merge_options,
     service_options  => $service_options,
