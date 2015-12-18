@@ -138,7 +138,6 @@ haproxy::listen { 'puppet00':
   options   => {
     'option'  => [
       'tcplog',
-      'ssl-hello-chk',
     ],
     'balance' => 'roundrobin',
   },
@@ -155,7 +154,6 @@ haproxy::listen { 'puppet00':
   options => {
     'option'  => [
       'tcplog',
-      'ssl-hello-chk',
     ],
     'balance' => 'roundrobin',
   },
@@ -280,7 +278,6 @@ haproxy::backend { 'puppet00':
   options => {
     'option'  => [
       'tcplog',
-      'ssl-hello-chk',
     ],
     'balance' => 'roundrobin',
   },
@@ -294,7 +291,6 @@ haproxy::backend { 'puppet00':
   options => [
     { 'option'  => [
         'tcplog',
-        'ssl-hello-chk',
       ]
     },
     { 'balance' => 'roundrobin' },
