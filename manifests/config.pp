@@ -8,6 +8,7 @@ define haproxy::config (
   $custom_fragment = undef,  # A default is required for Puppet 2.7 compatibility. When 2.7 is no longer supported, this parameter default should be removed.
   $merge_options = $haproxy::merge_options,
 ) {
+
   if $caller_module_name != $module_name {
     fail("Use of private class ${name} by ${caller_module_name}")
   }
@@ -21,12 +22,14 @@ define haproxy::config (
     warning("${module_name}: The \$merge_options parameter will default to true in the next major release. Please review the documentation regarding the implications.")
   }
 
-  if $config_dir != undef {
-    file { $config_dir:
-      ensure => directory,
-      owner  => 'root',
-      group  => 'root',
-      mode   => '0755',
+  if $haproxy::params::manage_config_dir {
+    if $config_dir != undef {
+      file { $config_dir:
+        ensure => directory,
+        owner  => '0',
+        group  => '0',
+        mode   => '0755',
+      }
     }
   }
 

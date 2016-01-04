@@ -12,8 +12,8 @@ class haproxy::params {
 
   case $::osfamily {
     'Archlinux', 'Debian', 'Redhat', 'Gentoo', 'Suse' : {
-      $package_name     = 'haproxy'
-      $global_options   = {
+      $package_name      = 'haproxy'
+      $global_options    = {
         'log'     => "${::ipaddress} local0",
         'chroot'  => '/var/lib/haproxy',
         'pidfile' => '/var/run/haproxy.pid',
@@ -23,7 +23,7 @@ class haproxy::params {
         'daemon'  => '',
         'stats'   => 'socket /var/lib/haproxy/stats'
       }
-      $defaults_options = {
+      $defaults_options  = {
         'log'     => 'global',
         'stats'   => 'enable',
         'option'  => [ 'redispatch' ],
@@ -39,15 +39,16 @@ class haproxy::params {
         'maxconn' => '8000'
       }
       # Single instance:
-      $config_dir       = '/etc/haproxy'
-      $config_file      = '/etc/haproxy/haproxy.cfg'
+      $config_dir        = '/etc/haproxy'
+      $config_file       = '/etc/haproxy/haproxy.cfg'
+      $manage_config_dir = true
       # Multi-instance:
-      $config_dir_tmpl  = '/etc/<%= @instance_name %>'
-      $config_file_tmpl = "${config_dir_tmpl}/<%= @instance_name %>.cfg"
+      $config_dir_tmpl   = '/etc/<%= @instance_name %>'
+      $config_file_tmpl  = "${config_dir_tmpl}/<%= @instance_name %>.cfg"
     }
     'FreeBSD': {
-      $package_name     = 'haproxy'
-      $global_options   = {
+      $package_name      = 'haproxy'
+      $global_options    = {
         'log'     => [
           '127.0.0.1 local0',
           '127.0.0.1 local1 notice',
@@ -57,7 +58,7 @@ class haproxy::params {
         'maxconn' => '4096',
         'daemon'  => '',
       }
-      $defaults_options = {
+      $defaults_options  = {
         'log'        => 'global',
         'mode'       => 'http',
         'option'     => [
@@ -72,8 +73,9 @@ class haproxy::params {
         'srvtimeout' => '50000',
       }
       # Single instance:
-      $config_dir       = '/usr/local/etc'
-      $config_file      = '/usr/local/etc/haproxy.conf'
+      $config_dir        = '/usr/local/etc'
+      $config_file       = '/usr/local/etc/haproxy.conf'
+      $manage_config_dir = false
       # Multi-instance:
       $config_dir_tmpl  = '/usr/local/etc/<%= @instance_name %>'
       $config_file_tmpl = "${config_dir_tmpl}/<%= @instance_name %>.conf"
