@@ -262,5 +262,21 @@ describe 'haproxy::frontend' do
     ) }
   end
 
+  context "when configurung custom options for stick-tables" do
+    let(:title) { 'baz' }
+    let(:buzz) { 'type string len 180 size 32m expire 5m store http_req_rate(10s)' }
+    let(:params) do
+      { :options => [
+          { 'stick-table' => buzz },
+          { 'stick' => 'on dst' }]}
+    end
+
+    it { should contain_concat__fragment('haproxy-baz_frontend_block').with(
+      'order'   => '15-baz-00',
+      'target'  => '/etc/haproxy/haproxy.cfg',
+      'content' => "\nfrontend baz\n  stick-table #{buzz}\n  stick on dst\n"                                                                                                               
+    ) }
+  end
+
   # C9950 C9951 C9952 WONTFIX
 end

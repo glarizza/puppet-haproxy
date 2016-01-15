@@ -300,6 +300,17 @@ haproxy::backend { 'puppet00':
 }
 ~~~
 
+###Set up stick-tables for a frontend (or a backend)
+
+~~~puppet
+haproxy::backend { 'backend01':
+  options => [
+    { 'stick-table' => 'type ip size 1 nopurge peers LB' },
+    { 'stick'       => 'on dst' },
+  ],
+}
+~~~
+
 This adds the backend options to the configuration block in the same order as they appear within the array.
 
 ###Configure multiple haproxy instances on one machine
