@@ -20,6 +20,22 @@ describe 'haproxy::backend' do
     ) }
   end
 
+  context "when configurung custom options for stick-tables" do
+    let(:title) { 'baz' }
+    let(:buzz) { 'type ip size 20k peers mypeers' }
+    let(:params) do
+      { :options => [
+          { 'stick-table' => buzz },
+          { 'stick' => 'on src' }]}
+    end
+
+    it { should contain_concat__fragment('haproxy-baz_backend_block').with(
+      'order'   => '20-baz-00',
+      'target'  => '/etc/haproxy/haproxy.cfg',
+      'content' => "\nbackend baz\n  stick-table #{buzz}\n  stick on src\n"
+    ) }
+  end
+
   # C9953
   context "when a listen is created with the same name" do
     let(:title) { 'apache' }
