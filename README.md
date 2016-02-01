@@ -32,11 +32,11 @@ HAProxy is a daemon for load-balancing and proxying TCP- and HTTP-based services
 
 ###Beginning with haproxy
 
-The quickest way to get up and running using the haproxy module is to install and configure a basic HAProxy server that is listening on port 8140 and balanced against two nodes:
+The simplest HAProxy configuration consists of a server that listens on a port and balances against some other nodes:
 
 ~~~puppet
 node 'haproxy-server' {
-  class { 'haproxy': }
+  include ::haproxy
   haproxy::listen { 'puppet00':
     collect_exported => false,
     ipaddress        => $::ipaddress,
@@ -209,7 +209,7 @@ Install and configure an HAProxy service listening on port 8140 and balanced aga
 
 ~~~puppet
 node 'haproxy-server' {
-  class { 'haproxy': }
+  include ::haproxy
   haproxy::listen { 'puppet00':
     ipaddress => $::ipaddress,
     ports     => '8140',
@@ -334,7 +334,7 @@ class and uses `haproxy::instance` to add an additional instance called
 `beta`.
 
 ~~~puppet
-   class{ 'haproxy': }
+   include ::haproxy
    haproxy::listen { 'puppet00':
      instance         => 'haproxy',
      collect_exported => false,
