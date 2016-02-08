@@ -388,6 +388,7 @@ The second uses a custom package.
      ipaddress        => $::ipaddress,
      ports            => '9900',
    }
+~~~
 
 ### Manage a map file
 
