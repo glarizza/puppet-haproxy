@@ -57,6 +57,33 @@ describe "configuring haproxy", :unless => UNSUPPORTED_PLATFORMS.include?(fact('
         end
       end
     end
+
+    describe "with sort_options_alphabetic false" do
+      it 'should start' do
+        pp = <<-EOS
+        class { 'haproxy::params':
+          sort_options_alphabetic => false,
+        }
+        class { 'haproxy': }
+        haproxy::listen { 'stats':
+          ipaddress => '127.0.0.1',
+          ports     => ['9090','9091'],
+          mode      => 'http',
+          options   => { 'stats' => ['uri /','auth puppet:puppet'], },
+        }
+        EOS
+        apply_manifest(pp, :catch_failures => true)
+      end
+
+      it 'should have stats listening on each port' do
+        ['9090','9091'].each do |port|
+          shell("/usr/bin/curl -u puppet:puppet localhost:#{port}") do |r|
+            r.stdout.should =~ /HAProxy/
+            r.exit_code.should == 0
+          end
+        end
+      end
+    end
   end
 
   # C9934
