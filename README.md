@@ -474,72 +474,72 @@ Main class, includes all other classes.
 
 * `defaults_options`: Configures all the default HAProxy options at once. Valid options: a hash of `option => value` pairs. To set an option multiple times (e.g. multiple 'timeout' or 'stats' values) pass its value as an array. Each element in your array results in a separate instance of the option, on a separate line in haproxy.cfg. Default:
 
-  ~~~puppet
+  ```puppet
   {
-          'log'     => 'global',
-          'stats'   => 'enable',
-          'option'  => [
-            'redispatch',
-          ],
-          'retries' => '3',
-          'timeout' => [
-            'http-request 10s',
-            'queue 1m',
-            'connect 10s',
-            'client 1m',
-            'server 1m',
-            'check 10s',
-          ],
-          'maxconn' => '8000'
+    'log'     => 'global',
+    'stats'   => 'enable',
+    'option'  => [
+      'redispatch',
+    ],
+    'retries' => '3',
+    'timeout' => [
+      'http-request 10s',
+      'queue 1m',
+      'connect 10s',
+      'client 1m',
+      'server 1m',
+      'check 10s',
+    ],
+    'maxconn' => '8000'
   }
-  ~~~
+  ```
 
   To override or add to any of these default values you don't have to recreate and supply the whole hash, just set `merge_options => true` (see below) and set `defaults_options` to a hash of the `option => value` pairs you'd like to override or add. But note that array values cannot be easily merged with the default values without potentially creating duplicates so you always have to supply the whole array yourself. And if you want a parameter to not appear at all in the resulting configuration set its value to `undef`. Example:
 
-  ~~~puppet
+  ```puppet
   {
-          'retries' => '5',
-          'timeout' => [
-            'http-request 7s',
-	    'http-keep-alive 10s,
-            'queue 1m',
-            'connect 5s',
-            'client 1m',
-            'server 1m',
-            'check 10s',
-          ],
-          'maxconn' => undef,
+    'retries' => '5',
+    'timeout' => [
+      'http-request 7s',
+      'http-keep-alive 10s,
+      'queue 1m',
+      'connect 5s',
+      'client 1m',
+      'server 1m',
+      'check 10s',
+    ],
+    'maxconn' => undef,
   }
-  ~~~
+  ```
 
 * `global_options`: Configures all the global HAProxy options at once. Valid options: a hash of `option => value` pairs. To set an option multiple times (e.g. multiple 'timeout' or 'stats' values) pass its value as an array. Each element in your array results in a separate instance of the option, on a separate line in haproxy.cfg. Default:
 
-  ~~~puppet
+  ```puppet
   {
-          'log'     => "${::ipaddress} local0",
-          'chroot'  => '/var/lib/haproxy',
-          'pidfile' => '/var/run/haproxy.pid',
-          'maxconn' => '4000',
-          'user'    => 'haproxy',
-          'group'   => 'haproxy',
-          'daemon'  => '',
-          'stats'   => 'socket /var/lib/haproxy/stats'
+    'log'     => "${::ipaddress} local0",
+    'chroot'  => '/var/lib/haproxy',
+    'pidfile' => '/var/run/haproxy.pid',
+    'maxconn' => '4000',
+    'user'    => 'haproxy',
+    'group'   => 'haproxy',
+    'daemon'  => '',
+    'stats'   => 'socket /var/lib/haproxy/stats'
   }
-  ~~~
+  ```
 
   To override or add to any of these default values you don't have to recreate and supply the whole hash, just set `merge_options => true` (see below) and set `global_options` to a hash of the `option => value` pairs you'd like to override or add. But note that array values cannot be easily merged with the default values without potentially creating duplicates so you always have to supply the whole array yourself. And if you want a parameter to not appear at all in the resulting configuration set its value to `undef`. Example:
 
-  ~~~puppet
+  ```puppet
   {
-	  log     => undef,
-          'user'  => 'root',
-          'group' => 'root',
-          'stats' => [
-            'socket /var/lib/haproxy/admin.sock mode 660 level admin',
-            'timeout 30s',
-          ],
+    'log'   => undef,
+    'user'  => 'root',
+    'group' => 'root',
+    'stats' => [
+      'socket /var/lib/haproxy/admin.sock mode 660 level admin',
+      'timeout 30s',
+    ],
   }
-  ~~~
+  ```
 
 * `merge_options`: Whether to merge the user-supplied `global_options`/`defaults_options` hashes with their default values set in params.pp. Merging allows to change or add options without having to recreate the entire hash. Defaults to `false`, but will default to `true` in future releases.
 
@@ -591,17 +591,17 @@ Sets up a backend service configuration block inside haproxy.cfg. Each backend s
 
 * `options`: *Optional.* Adds one or more options to the backend service's configuration block in haproxy.cfg. Valid options: a hash or an array. To control the ordering of these options within the configuration block, supply an array of hashes where each hash contains one 'option => value' pair. Default:
 
-* `instance`: *Optional.* When using `haproxy::instance` to run multiple instances of Haproxy on the same machine, this indicates which instance.  Defaults to "haproxy".
-
-~~~puppet
-{
+  ```puppet
+  {
     'option'  => [
       'tcplog',
       'ssl-hello-chk'
     ],
     'balance' => 'roundrobin'
-}
-~~~
+  }
+  ```
+
+* `instance`: *Optional.* When using `haproxy::instance` to run multiple instances of Haproxy on the same machine, this indicates which instance.  Defaults to "haproxy".
 
 #### Define: `haproxy::frontend`
 
@@ -611,15 +611,15 @@ Sets up a frontend service configuration block inside haproxy.cfg. Each frontend
 
 * `bind`: *Required unless `ports` and `ipaddress` are specified.* Adds one or more bind lines to the frontend service's configuration block in haproxy.cfg. Valid options: a hash of `'address:port' => [parameters]` pairs, where the key is a comma-delimited list of one or more listening addresses and ports passed as a string, and the value is an array of bind options. For example:
 
-~~~puppet
-bind => {
-  '168.12.12.12:80'                     => [],
-  '192.168.1.10:8080,192.168.1.10:8081' => [],
-  '10.0.0.1:443-453'                    => ['ssl', 'crt', 'puppetlabs.com'],
-  ':8443,:8444'                         => ['ssl', 'crt', 'internal.puppetlabs.com'],
-  '/var/run/haproxy-frontend.sock'      => [ 'user root', 'mode 600', 'accept-proxy' ],
-}
-~~~
+  ```puppet
+  bind => {
+    '168.12.12.12:80'                     => [],
+    '192.168.1.10:8080,192.168.1.10:8081' => [],
+    '10.0.0.1:443-453'                    => ['ssl', 'crt', 'puppetlabs.com'],
+    ':8443,:8444'                         => ['ssl', 'crt', 'internal.puppetlabs.com'],
+    '/var/run/haproxy-frontend.sock'      => [ 'user root', 'mode 600', 'accept-proxy' ],
+  }
+  ```
 
 For more information, see the [HAProxy Configuration Manual](http://cbonte.github.io/haproxy-dconv/configuration-1.5.html#4.2-bind).
 
@@ -633,13 +633,13 @@ For more information, see the [HAProxy Configuration Manual](http://cbonte.githu
 
 * `options`: *Optional.* Adds one or more options to the frontend service's configuration block in haproxy.cfg. Valid options: a hash or an array. To control the ordering of these options within the configuration block, supply an array of hashes where each hash contains one 'option => value' pair.
 
-~~~puppet
-{
+  ```puppet
+  {
     'option'  => [
       'tcplog',
     ],
-}
-~~~
+  }
+  ```
 
 * `ports`: *Required unless `bind` is specified.* Specifies which ports to listen on for the address specified in `ipaddress`. Valid options: an array of port numbers and/or port ranges or a string containing a comma-delimited list of port numbers/ranges.
 
@@ -653,15 +653,15 @@ Sets up a listening service configuration block inside haproxy.cfg. Each listeni
 
 * `bind`: *Required unless `ports` and `ipaddress` are specified.* Adds one or more bind options to the listening service's configuration block in haproxy.cfg. Valid options: a hash of `'address:port' => [parameters]` pairs, where the key is a comma-delimited list of one or more listening addresses and ports passed as a string, and the value is an array of bind options. For example:
 
-~~~puppet
-bind => {
-  '168.12.12.12:80'                     => [],
-  '192.168.1.10:8080,192.168.1.10:8081' => [],
-  '10.0.0.1:443-453'                    => ['ssl', 'crt', 'puppetlabs.com'],
-  ':8443,:8444'                         => ['ssl', 'crt', 'internal.puppetlabs.com'],
-  '/var/run/haproxy-frontend.sock'      => [ 'user root', 'mode 600', 'accept-proxy' ],
-}
-~~~
+  ```puppet
+  bind => {
+    '168.12.12.12:80'                     => [],
+    '192.168.1.10:8080,192.168.1.10:8081' => [],
+    '10.0.0.1:443-453'                    => ['ssl', 'crt', 'puppetlabs.com'],
+    ':8443,:8444'                         => ['ssl', 'crt', 'internal.puppetlabs.com'],
+    '/var/run/haproxy-frontend.sock'      => [ 'user root', 'mode 600', 'accept-proxy' ],
+  }
+  ```
 
 For more information, see the [HAProxy Configuration Manual](http://cbonte.github.io/haproxy-dconv/configuration-1.5.html#4.2-bind).
 
