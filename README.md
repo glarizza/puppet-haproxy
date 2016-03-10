@@ -436,6 +436,7 @@ haproxy::frontend { 'ft_allapps':
 ####Public classes
 
 * [`haproxy`](#class-haproxy): Main configuration class.
+* [`haproxy::globals`](#class-haproxy-globals): Global configuration options.
 
 ####Private classes
 
@@ -557,6 +558,14 @@ Main class, includes all other classes.
 
 * `config_dir`: Path to the directory in which the main configuration file `haproxy.cfg` resides. Will also be used for storing any managed map files (see [`haproxy::mapfile`](#define-haproxymapfile). Default depends on platform.
 
+#### Class: `haproxy::globals`
+
+For global configuration options used by all haproxy instances.
+
+##### Parameters (all optional)
+
+* `sort_options_alphabetic`: Sort options either alphabetic or custom like haproxy internal sorts them. Defaults to true.
+
 #### Define: `haproxy::balancermember`
 
 Configures a service inside a listening or backend service configuration block in haproxy.cfg.
@@ -603,6 +612,8 @@ Sets up a backend service configuration block inside haproxy.cfg. Each backend s
 
 * `instance`: *Optional.* When using `haproxy::instance` to run multiple instances of Haproxy on the same machine, this indicates which instance.  Defaults to "haproxy".
 
+* `sort_options_alphabetic`: Sort options either alphabetic or custom like haproxy internal sorts them. Defaults to `haproxy::globals::sort_options_alphabetic`.
+
 #### Define: `haproxy::frontend`
 
 Sets up a frontend service configuration block inside haproxy.cfg. Each frontend service needs one or more balancermember services (declared with the [`haproxy::balancermember` define](#define-haproxybalancermember)).
@@ -645,6 +656,8 @@ For more information, see the [HAProxy Configuration Manual](http://cbonte.githu
 
 * `instance`: *Optional.* When using `haproxy::instance` to run multiple instances of Haproxy on the same machine, this indicates which instance.  Defaults to "haproxy".
 
+* `sort_options_alphabetic`: Sort options either alphabetic or custom like haproxy internal sorts them. Defaults to `haproxy::globals::sort_options_alphabetic`.
+
 #### Define: `haproxy::listen`
 
 Sets up a listening service configuration block inside haproxy.cfg. Each listening service configuration needs one or more balancermember services (declared with the [`haproxy::balancermember` define](#define-haproxybalancermember)).
@@ -679,6 +692,7 @@ For more information, see the [HAProxy Configuration Manual](http://cbonte.githu
 
 * `ports`: *Required unless `bind` is specified.* Specifies which ports to listen on for the address specified in `ipaddress`. Valid options: a single comma-delimited string or an array of strings. Each string can contain a port number or a hyphenated range of port numbers (e.g., 8443-8450).
 
+* `sort_options_alphabetic`: Sort options either alphabetic or custom like haproxy internal sorts them. Defaults to `haproxy::globals::sort_options_alphabetic`.
 
 #### Define: `haproxy::userlist`
 

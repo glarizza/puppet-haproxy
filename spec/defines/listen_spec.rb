@@ -290,4 +290,61 @@ describe 'haproxy::listen' do
     ) }
   end
 
+  context "when listen options are specified with sort_options_alphabetic" do
+    let(:params) do
+      {
+        :name => 'apache',
+        :bind => {
+          '0.0.0.0:48001-48003' => [],
+        },
+        :mode => 'http',
+        :options => {
+          'reqadd'                 => 'X-Forwarded-Proto:\ https',
+          'reqidel'                => '^X-Forwarded-For:.*',
+          'default_backend'        => 'dev00_webapp',
+          'capture request header' => [ 'X-Forwarded-For len 50', 'Host len 15', 'Referrer len 15' ],
+          'acl'                    => [ 'dst_dev01 dst_port 48001', 'dst_dev02 dst_port 48002', 'dst_dev03 dst_port 48003' ],
+          'use_backend'            => [ 'dev01_webapp if dst_dev01', 'dev02_webapp if dst_dev02', 'dev03_webapp if dst_dev03' ],
+          'option'                 => [ 'httplog', 'http-server-close', 'forwardfor except 127.0.0.1' ],
+          'compression'            => 'algo gzip',
+          'bind-process'           => 'all',
+        },
+      }
+    end
+    it { should contain_concat__fragment('haproxy-apache_listen_block').with(
+      'order'   => '20-apache-00',
+      'target'  => '/etc/haproxy/haproxy.cfg',
+      'content' => "\nlisten apache\n  bind 0.0.0.0:48001-48003 \n  mode http\n  acl dst_dev01 dst_port 48001\n  acl dst_dev02 dst_port 48002\n  acl dst_dev03 dst_port 48003\n  bind-process all\n  capture request header X-Forwarded-For len 50\n  capture request header Host len 15\n  capture request header Referrer len 15\n  compression algo gzip\n  default_backend dev00_webapp\n  option httplog\n  option http-server-close\n  option forwardfor except 127.0.0.1\n  reqadd X-Forwarded-Proto:\\ https\n  reqidel ^X-Forwarded-For:.*\n  use_backend dev01_webapp if dst_dev01\n  use_backend dev02_webapp if dst_dev02\n  use_backend dev03_webapp if dst_dev03\n"
+    ) }
+  end
+
+  context "when listen options are specified without sort_options_alphabetic" do
+    let(:params) do
+      {
+        :name => 'apache',
+        :bind => {
+          '0.0.0.0:48001-48003' => [],
+        },
+        :mode => 'http',
+        :sort_options_alphabetic => false,
+        :options => {
+          'reqadd'                 => 'X-Forwarded-Proto:\ https',
+          'reqidel'                => '^X-Forwarded-For:.*',
+          'default_backend'        => 'dev00_webapp',
+          'capture request header' => [ 'X-Forwarded-For len 50', 'Host len 15', 'Referrer len 15' ],
+          'acl'                    => [ 'dst_dev01 dst_port 48001', 'dst_dev02 dst_port 48002', 'dst_dev03 dst_port 48003' ],
+          'use_backend'            => [ 'dev01_webapp if dst_dev01', 'dev02_webapp if dst_dev02', 'dev03_webapp if dst_dev03' ],
+          'option'                 => [ 'httplog', 'http-server-close', 'forwardfor except 127.0.0.1' ],
+          'compression'            => 'algo gzip',
+          'bind-process'           => 'all',
+        },
+      }
+    end
+    it { should contain_concat__fragment('haproxy-apache_listen_block').with(
+      'order'   => '20-apache-00',
+      'target'  => '/etc/haproxy/haproxy.cfg',
+      'content' => "\nlisten apache\n  bind 0.0.0.0:48001-48003 \n  mode http\n  acl dst_dev01 dst_port 48001\n  acl dst_dev02 dst_port 48002\n  acl dst_dev03 dst_port 48003\n  bind-process all\n  capture request header X-Forwarded-For len 50\n  capture request header Host len 15\n  capture request header Referrer len 15\n  compression algo gzip\n  default_backend dev00_webapp\n  option httplog\n  option http-server-close\n  option forwardfor except 127.0.0.1\n  reqidel ^X-Forwarded-For:.*\n  reqadd X-Forwarded-Proto:\\ https\n  use_backend dev01_webapp if dst_dev01\n  use_backend dev02_webapp if dst_dev02\n  use_backend dev03_webapp if dst_dev03\n"
+    ) }
+  end
+
 end

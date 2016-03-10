@@ -42,6 +42,10 @@
 #   A hash of options that are inserted into the frontend service
 #    configuration block.
 #
+# [*sort_options_alphabetic*]
+#   Sort options either alphabetic or custom like haproxy internal sorts them.
+#   Defaults to true.
+#
 # === Examples
 #
 #  Exporting the resource for a balancer member:
@@ -66,20 +70,21 @@
 # Gary Larizza <gary@puppetlabs.com>
 #
 define haproxy::frontend (
-  $ports            = undef,
-  $ipaddress        = undef,
-  $bind             = undef,
-  $mode             = undef,
-  $collect_exported = true,
-  $options          = {
+  $ports                   = undef,
+  $ipaddress               = undef,
+  $bind                    = undef,
+  $mode                    = undef,
+  $collect_exported        = true,
+  $options                 = {
     'option'  => [
       'tcplog',
     ],
   },
-  $instance         = 'haproxy',
-  $section_name     = $name,
+  $instance                = 'haproxy',
+  $section_name            = $name,
+  $sort_options_alphabetic = undef,
   # Deprecated
-  $bind_options     = undef,
+  $bind_options            = undef,
 ) {
   if $ports and $bind {
     fail('The use of $ports and $bind is mutually exclusive, please choose either one')
@@ -102,6 +107,8 @@ define haproxy::frontend (
     $instance_name = "haproxy-${instance}"
     $config_file = inline_template($haproxy::params::config_file_tmpl)
   }
+  include haproxy::globals
+  $_sort_options_alphabetic = pick($sort_options_alphabetic, $haproxy::globals::sort_options_alphabetic)
 
   # Template uses: $section_name, $ipaddress, $ports, $options
   concat::fragment { "${instance_name}-${section_name}_frontend_block":

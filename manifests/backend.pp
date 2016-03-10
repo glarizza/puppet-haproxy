@@ -34,6 +34,10 @@
 #    haproxy::balancermember with array arguments, which allows you to deploy
 #    everything in 1 run)
 #
+# [*sort_options_alphabetic*]
+#   Sort options either alphabetic or custom like haproxy internal sorts them.
+#   Defaults to true.
+#
 # === Examples
 #
 #  Exporting the resource for a backend member:
@@ -54,16 +58,17 @@
 # Jeremy Kitchen <jeremy@nationbuilder.com>
 #
 define haproxy::backend (
-  $mode             = undef,
-  $collect_exported = true,
-  $options          = {
+  $mode                    = undef,
+  $collect_exported        = true,
+  $options                 = {
     'option'  => [
       'tcplog',
     ],
     'balance' => 'roundrobin'
   },
-  $instance         = 'haproxy',
-  $section_name     = $name,
+  $instance                = 'haproxy',
+  $section_name            = $name,
+  $sort_options_alphabetic = undef,
 ) {
   if defined(Haproxy::Listen[$section_name]) {
     fail("An haproxy::listen resource was discovered with the same name (${section_name}) which is not supported")
@@ -77,6 +82,8 @@ define haproxy::backend (
     $instance_name = "haproxy-${instance}"
     $config_file = inline_template($haproxy::params::config_file_tmpl)
   }
+  include haproxy::globals
+  $_sort_options_alphabetic = pick($sort_options_alphabetic, $haproxy::globals::sort_options_alphabetic)
 
   # Template uses: $section_name, $ipaddress, $ports, $options
   concat::fragment { "${instance_name}-${section_name}_backend_block":

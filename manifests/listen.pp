@@ -54,6 +54,10 @@
 #    know the full set of balancermembers in advance and use haproxy::balancermember
 #    with array arguments, which allows you to deploy everything in 1 run)
 #
+# [*sort_options_alphabetic*]
+#   Sort options either alphabetic or custom like haproxy internal sorts them.
+#   Defaults to true.
+#
 # === Examples
 #
 #  Exporting the resource for a balancer member:
@@ -89,6 +93,7 @@ define haproxy::listen (
   },
   $instance                     = 'haproxy',
   $section_name                 = $name,
+  $sort_options_alphabetic      = undef,
   # Deprecated
   $bind_options                 = '',
 ) {
@@ -117,6 +122,8 @@ define haproxy::listen (
     $instance_name = "haproxy-${instance}"
     $config_file = inline_template($haproxy::params::config_file_tmpl)
   }
+  include haproxy::globals
+  $_sort_options_alphabetic = pick($sort_options_alphabetic, $haproxy::globals::sort_options_alphabetic)
 
   # Template uses: $section_name, $ipaddress, $ports, $options
   concat::fragment { "${instance_name}-${section_name}_listen_block":
