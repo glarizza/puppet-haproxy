@@ -61,7 +61,7 @@ describe "configuring haproxy", :unless => UNSUPPORTED_PLATFORMS.include?(fact('
     describe "with sort_options_alphabetic false" do
       it 'should start' do
         pp = <<-EOS
-        class { 'haproxy::params':
+        class { 'haproxy::globals':
           sort_options_alphabetic => false,
         }
         class { 'haproxy': }
