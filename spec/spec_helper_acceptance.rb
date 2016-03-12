@@ -31,14 +31,7 @@ RSpec.configure do |c|
       end
       if ! UNSUPPORTED_PLATFORMS.include?(fact('osfamily'))
         pp = <<-EOS
-          $netcat = $::osfamily ? {
-            'RedHat' => $::operatingsystemmajrelease ? {
-              '7'     => 'nmap-ncat',
-              default => 'nc',
-            },
-            'Debian' => 'netcat-openbsd',
-          }
-          package { $netcat: ensure => present, }
+          package { 'socat': ensure => present, }
           package { 'screen': ensure => present, }
           if $::osfamily == 'RedHat' {
             class { 'epel': }
@@ -56,7 +49,8 @@ RSpec.configure do |c|
         apply_manifest(pp, :catch_failures => true)
 
         ['5556','5557'].each do |port|
-          shell(%{echo 'while :; do echo "HTTP/1.1 200 OK\r\n\r\nResponse on #{port}" | nc -l #{port} ; done' > /root/script-#{port}.sh})
+          content = "socat -v tcp-l:#{port},reuseaddr,fork system:\"printf \\'HTTP/1.1 200 OK\r\n\r\nResponse on #{port}\\'\",nofork"
+          create_remote_file(host, "/root/script-#{port}.sh", content)
           shell(%{/usr/bin/screen -dmS script-#{port} sh /root/script-#{port}.sh})
           sleep 1
           shell(%{netstat -tnl|grep ':#{port}'})
