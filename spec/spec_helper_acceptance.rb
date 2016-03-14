@@ -34,7 +34,7 @@ RSpec.configure do |c|
           package { 'socat': ensure => present, }
           package { 'screen': ensure => present, }
           if $::osfamily == 'RedHat' {
-            class { 'epel': }
+            class { 'epel': before => Package['socat'], }
             service { 'iptables': ensure => stopped, }
             exec { 'setenforce Permissive':
               path   => ['/bin','/usr/bin','/sbin','/usr/sbin'],
