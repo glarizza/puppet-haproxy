@@ -20,10 +20,6 @@
 #   ipaddresses parameter's array. A peer is created for each pair
 #   of server\_names and ipaddresses in the array.
 #
-# [*ensure*]
-#  Whether to add or remove the peer. Defaults to 'present'.
-#   Valid values are 'present' and 'absent'.
-#
 # [*ipaddresses*]
 #  Specifies the IP address used to contact the peer member server.
 #   Can be an array. If this parameter is specified as an array it
@@ -36,13 +32,17 @@
 define haproxy::peer (
   $peers_name,
   $port,
-  $ensure       = 'present',
   $server_names = $::hostname,
   $ipaddresses  = $::ipaddress,
-  $instance = 'haproxy',
-) {
+  $instance     = 'haproxy',
 
-  include haproxy::params
+  #Deprecated
+  $ensure       = undef,
+) {
+  if $ensure {
+    warning('ensure is deprecated')
+  }
+  include ::haproxy::params
   if $instance == 'haproxy' {
     $instance_name = 'haproxy'
     $config_file = $::haproxy::config_file
@@ -53,7 +53,6 @@ define haproxy::peer (
 
   # Templates uses $ipaddresses, $server_name, $ports, $option
   concat::fragment { "${instance_name}-peers-${peers_name}-${name}":
-    ensure  => $ensure,
     order   => "30-peers-01-${peers_name}-${name}",
     target  => $config_file,
     content => template('haproxy/haproxy_peer.erb'),

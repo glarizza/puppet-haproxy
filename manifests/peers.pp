@@ -18,7 +18,7 @@ define haproxy::peers (
 ) {
 
   # We derive these settings so that the caller only has to specify $instance.
-  include haproxy::params
+  include ::haproxy::params
   if $instance == 'haproxy' {
     $instance_name = 'haproxy'
     $config_file = $::haproxy::config_file
@@ -27,7 +27,7 @@ define haproxy::peers (
     $config_file = inline_template($haproxy::params::config_file_tmpl)
   }
 
-  # Template uses: $name, $ipaddress, $ports, $options
+  # Template uses: $name
   concat::fragment { "${instance_name}-${name}_peers_block":
     order   => "30-peers-00-${name}",
     target  => $config_file,

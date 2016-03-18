@@ -729,8 +729,6 @@ Sets up a peer entry inside the peers configuration block in haproxy.cfg.
 
 ##### Parameters
 
-* `ensure`: Specifies whether the peer should exist in the configuration block. Valid options: 'present' or 'absent'. Default: 'present'.
-
 * `ipaddresses`: *Required unless the `collect_exported` parameter of your `haproxy::peers` resource is set to `true`.* Specifies the IP address used to contact the peer member server. Valid options: a string or an array. If you pass an array, it must contain the same number of elements as the array you pass to the `server_names` parameter. Puppet pairs up the elements from both arrays and creates a peer for each pair of values. Default: the value of the `$::ipaddress` fact.
 
 * `peers_name`: *Required.* Specifies the peer in which to add the load balancer. Valid options: a string containing the name of an HAProxy peer.
