@@ -456,6 +456,8 @@ haproxy::frontend { 'ft_allapps':
 * [`haproxy::userlist`](#define-haproxyuserlist): Creates a userlist entry in haproxy.cfg.
 * [`haproxy::peers`](#define-haproxypeers): Creates a peers entry in haproxy.cfg.
 * [`haproxy::peer`](#define-haproxypeer): Creates server entries within a peers entry in haproxy.cfg.
+* [`haproxy::mailers`](#define-haproxymailers): Creates a mailers entry in haproxy.cfg.
+* [`haproxy::mailer`](#define-haproxymailer): Creates server entries within a mailers entry in haproxy.cfg.
 * [`haproxy::instance`](#define-instance): Creates multiple instances of haproxy on the same machine.
 * [`haproxy::instance_service`](#define-instanceservice): Example of one way to prepare environment for haproxy::instance.
 * [`haproxy::mapfile`](#define-haproxymapfile): Manages an HAProxy [map file](https://cbonte.github.io/haproxy-dconv/configuration-1.5.html#7.3.1-map).
@@ -464,6 +466,7 @@ haproxy::frontend { 'ft_allapps':
 
 * `haproxy::balancermember::collect_exported`: Collects exported balancermembers.
 * `haproxy::peer::collect_exported`: Collects exported peers.
+* `haproxy::mailer::collect_exported`: Collects exported mailers.
 
 #### Class: `haproxy`
 
@@ -726,8 +729,6 @@ Sets up a peer entry inside the peers configuration block in haproxy.cfg.
 
 ##### Parameters
 
-* `ensure`: Specifies whether the peer should exist in the configuration block. Valid options: 'present' or 'absent'. Default: 'present'.
-
 * `ipaddresses`: *Required unless the `collect_exported` parameter of your `haproxy::peers` resource is set to `true`.* Specifies the IP address used to contact the peer member server. Valid options: a string or an array. If you pass an array, it must contain the same number of elements as the array you pass to the `server_names` parameter. Puppet pairs up the elements from both arrays and creates a peer for each pair of values. Default: the value of the `$::ipaddress` fact.
 
 * `peers_name`: *Required.* Specifies the peer in which to add the load balancer. Valid options: a string containing the name of an HAProxy peer.
@@ -735,6 +736,33 @@ Sets up a peer entry inside the peers configuration block in haproxy.cfg.
 * `port`: *Required.* Specifies the port on which the load balancer sends connections to peers. Valid options: a string containing a port number.
 
 * `server_names`: *Required unless the `collect_exported` parameter of your `haproxy::peers` resource is set to `true`.* Sets the name of the peer server as listed in the peers configuration block. Valid options: a string or an array. If you pass an array, it must contain the same number of elements as the array you pass to `ipaddresses`. Puppet pairs up the elements from both arrays and creates a peer for each pair of values. Default: the value of the `$::hostname` fact.
+
+* `instance`: *Optional.* When using `haproxy::instance` to run multiple instances of Haproxy on the same machine, this indicates which instance.  Defaults to "haproxy".
+
+#### Define: `haproxy::mailers`
+
+Sets up a mailers entry in haproxy.cfg on the load balancer to send email to each mailer that is configured in a mailers section alerts when the state of servers changes.
+
+##### Parameters
+
+* `collect_exported`: *Optional.* Specifies whether to collect resources exported by other nodes. This serves as a form of autodiscovery. Valid options: 'true' and 'false'. Default: 'true'.
+
+* `name`: *Optional.* Appends a name to the mailers entry in haproxy.cfg. Valid options: a string. Default: the title of your declared resource.
+
+* `instance`: *Optional.* When using `haproxy::instance` to run multiple instances of Haproxy on the same machine, this indicates which instance.  Defaults to "haproxy".
+
+#### Define: `haproxy::mailer`
+
+Sets up a mailer entry inside the mailers configuration block in haproxy.cfg.
+
+##### Parameters
+* `ipaddresses`: *Required unless the `collect_exported` parameter of your `haproxy::mailers` resource is set to `true`.* Specifies the IP address used to contact the mailer email server. Valid options: a string or an array. If you pass an array, it must contain the same number of elements as the array you pass to the `server_names` parameter. Puppet pairs up the elements from both arrays and creates a mailer for each pair of values. Default: the value of the `$::ipaddress` fact.
+
+* `mailers_name`: *Required.* Specifies the name of a valid `haproxy::mailers` resource. Valid options: a string containing the name of an HAProxy mailer.
+
+* `port`: *Required.* Specifies the port to which the load balancer makes its smtp connection. Valid options: a string containing a port number.
+
+* `server_names`: *Required unless the `collect_exported` parameter of your `haproxy::mailers` resource is set to `true`.* Sets the name of the email server as listed in the mailers configuration block. Valid options: a string or an array. If you pass an array, it must contain the same number of elements as the array you pass to `ipaddresses`. Puppet pairs up the elements from both arrays and creates a mailer for each pair of values. Default: the value of the `$::hostname` fact.
 
 * `instance`: *Optional.* When using `haproxy::instance` to run multiple instances of Haproxy on the same machine, this indicates which instance.  Defaults to "haproxy".
 

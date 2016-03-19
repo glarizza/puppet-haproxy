@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'haproxy::peer' do
+describe 'haproxy::mailer' do
   let :pre_condition do
   'class{"haproxy":
       config_file => "/tmp/haproxy.cfg"
@@ -17,18 +17,18 @@ describe 'haproxy::peer' do
     }
   end
 
-  context 'with a single peer' do
+  context 'with a single mailer' do
     let(:params) do
       {
-        :peers_name => 'tyler',
+        :mailers_name => 'tyler',
         :port       => 1024,
       }
     end
 
-    it { should contain_concat__fragment('haproxy-peers-tyler-dero').with(
-      'order'   => '30-peers-01-tyler-dero',
+    it { should contain_concat__fragment('haproxy-mailers-tyler-dero').with(
+      'order'   => '40-mailers-01-tyler-dero',
       'target'  => '/tmp/haproxy.cfg',
-      'content' => "  peer dero 1.1.1.1:1024\n"
+      'content' => "  mailer dero 1.1.1.1:1024\n"
     ) }
   end
 end
