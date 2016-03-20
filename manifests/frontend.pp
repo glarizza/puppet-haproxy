@@ -46,6 +46,16 @@
 #   Sort options either alphabetic or custom like haproxy internal sorts them.
 #   Defaults to true.
 #
+# [*defaults*]
+#   Name of the defaults section this backend will use.
+#   Defaults to undef which means the global defaults section will be used.
+#
+# [*defaults_use_backend*]
+#   If defaults are used and a default backend is configured use the backend
+#   name for ordering. This means that the frontend is placed in the 
+#   configuration file before the backend configuration.
+#   Defaults to true.
+#
 # === Examples
 #
 #  Exporting the resource for a balancer member:
@@ -83,6 +93,8 @@ define haproxy::frontend (
   $instance                = 'haproxy',
   $section_name            = $name,
   $sort_options_alphabetic = undef,
+  $defaults                = undef,
+  $defaults_use_backend    = true,
   # Deprecated
   $bind_options            = undef,
 ) {
@@ -110,9 +122,18 @@ define haproxy::frontend (
   include haproxy::globals
   $_sort_options_alphabetic = pick($sort_options_alphabetic, $haproxy::globals::sort_options_alphabetic)
 
+  if $defaults == undef {
+    $order = "15-${section_name}-00"
+  } else {
+    if $defaults_use_backend and has_key($options, 'default_backend') {
+      $order = "25-${defaults}-${options['default_backend']}-00-${section_name}"
+    } else {
+      $order = "25-${defaults}-${section_name}-00"
+    }
+  }
   # Template uses: $section_name, $ipaddress, $ports, $options
   concat::fragment { "${instance_name}-${section_name}_frontend_block":
-    order   => "15-${section_name}-00",
+    order   => $order,
     target  => $config_file,
     content => template('haproxy/haproxy_frontend_block.erb'),
   }

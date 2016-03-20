@@ -58,6 +58,10 @@
 #   Sort options either alphabetic or custom like haproxy internal sorts them.
 #   Defaults to true.
 #
+# [*defaults*]
+#   Name of the defaults section this backend will use.
+#   Defaults to undef which means the global defaults section will be used.
+#
 # === Examples
 #
 #  Exporting the resource for a balancer member:
@@ -94,6 +98,7 @@ define haproxy::listen (
   $instance                     = 'haproxy',
   $section_name                 = $name,
   $sort_options_alphabetic      = undef,
+  $defaults                     = undef,
   # Deprecated
   $bind_options                 = '',
 ) {
@@ -125,9 +130,15 @@ define haproxy::listen (
   include haproxy::globals
   $_sort_options_alphabetic = pick($sort_options_alphabetic, $haproxy::globals::sort_options_alphabetic)
 
+  if $defaults == undef {
+    $order = "20-${section_name}-00"
+  } else {
+    $order = "25-${defaults}-${section_name}-00"
+  }
+
   # Template uses: $section_name, $ipaddress, $ports, $options
   concat::fragment { "${instance_name}-${section_name}_listen_block":
-    order   => "20-${section_name}-00",
+    order   => $order,
     target  => $config_file,
     content => template('haproxy/haproxy_listen_block.erb'),
   }
