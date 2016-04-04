@@ -8,6 +8,10 @@ describe 'haproxy::instance' do
     }
   end
 
+  let(:pre_condition) do
+    'include haproxy::params'
+  end
+
   # haproxy::instance with service name "haproxy".
 
   context 'on supported platforms' do

@@ -1,10 +1,11 @@
 require 'spec_helper'
 
 describe 'haproxy::instance_service' do
-  let(:default_facts) do
+  let(:facts) do
     {
       :concat_basedir => '/dne',
-      :ipaddress      => '10.10.10.10'
+      :ipaddress      => '10.10.10.10',
+      :osfamily       => 'Debian',
     }
   end
   let(:params) do
