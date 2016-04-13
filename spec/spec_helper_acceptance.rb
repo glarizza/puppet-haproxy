@@ -35,7 +35,7 @@ RSpec.configure do |c|
           service { 'iptables': ensure => stopped, }
           exec { 'setenforce Permissive':
             path   => ['/bin','/usr/bin','/sbin','/usr/sbin'],
-            onlyif => 'getenforce | grep Enforcing',
+            onlyif => 'which getenforce && getenforce | grep Enforcing',
           }
           if $::operatingsystemmajrelease == '7' {
             # For `netstat` for serverspec
