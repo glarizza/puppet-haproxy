@@ -1,7 +1,7 @@
 require 'spec_helper_acceptance'
 
 # C9708 C9709 WONTFIX
-describe "configuring haproxy", :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
+describe "configuring haproxy" do
   # C9961
   describe 'not managing the service' do
     it 'should not listen on any ports' do
