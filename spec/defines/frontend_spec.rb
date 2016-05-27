@@ -278,5 +278,27 @@ describe 'haproxy::frontend' do
     ) }
   end
 
+  context "when a non-default config file is used" do
+    let(:pre_condition) { 'class { "haproxy": config_file => "/etc/non-default.cfg" }' }
+    let(:params) do
+      {
+        :name => 'bar',
+        :bind => {
+          '*:5000' => [],
+        },
+        :options => {
+          'option' => [
+            'tcplog',
+          ],
+        },
+      }
+    end
+    it { should contain_concat__fragment('haproxy-bar_frontend_block').with(
+      'order' => '15-bar-00',
+      'target' => '/etc/non-default.cfg',
+      'content' => "\nfrontend bar\n  bind *:5000 \n  option tcplog\n",
+    ) }
+  end
+
   # C9950 C9951 C9952 WONTFIX
 end
