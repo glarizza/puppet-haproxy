@@ -262,6 +262,22 @@ describe 'haproxy::frontend' do
     ) }
   end
 
+  context "when defaults parameter is used with option default_backend" do
+    let(:params) do
+      {
+        :name     => 'apache',
+        :bind     => {'1.1.1.1:80' => []},
+        :defaults => 'test',
+        :options  => { 'default_backend' => 'b1' },
+      }
+    end
+    it { should contain_concat__fragment('haproxy-apache_frontend_block').with(
+      'order'   => '25-test-b1-00-apache',
+      'target'  => '/etc/haproxy/haproxy.cfg',
+      'content' => "\nfrontend apache\n  bind 1.1.1.1:80 \n  default_backend b1\n"
+    ) }
+  end
+
   context "when configurung custom options for stick-tables" do
     let(:title) { 'baz' }
     let(:buzz) { 'type string len 180 size 32m expire 5m store http_req_rate(10s)' }

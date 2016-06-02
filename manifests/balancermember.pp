@@ -47,6 +47,10 @@
 #   If true, then add "cookie SERVERID" stickiness options.
 #    Default false.
 #
+# [*defaults*]
+#   Name of the defaults section the backend or listener use.
+#   Defaults to undef.
+#
 # === Examples
 #
 #  Exporting the resource for a balancer member:
@@ -86,6 +90,7 @@ define haproxy::balancermember (
   $options      = '',
   $define_cookies = false,
   $instance     = 'haproxy',
+  $defaults     = undef,
 ) {
 
   include haproxy::params
@@ -97,9 +102,14 @@ define haproxy::balancermember (
     $config_file = inline_template($haproxy::params::config_file_tmpl)
   }
 
+  if $defaults == undef {
+    $order = "20-${listening_service}-01-${name}"
+  } else {
+    $order = "25-${defaults}-${listening_service}-02-${name}"
+  }
   # Template uses $ipaddresses, $server_name, $ports, $option
   concat::fragment { "${instance_name}-${listening_service}_balancermember_${name}":
-    order   => "20-${listening_service}-01-${name}",
+    order   => $order,
     target  => $config_file,
     content => template('haproxy/haproxy_balancermember.erb'),
   }

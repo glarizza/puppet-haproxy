@@ -461,6 +461,7 @@ haproxy::frontend { 'ft_allapps':
 * [`haproxy::instance`](#define-instance): Creates multiple instances of haproxy on the same machine.
 * [`haproxy::instance_service`](#define-instanceservice): Example of one way to prepare environment for haproxy::instance.
 * [`haproxy::mapfile`](#define-haproxymapfile): Manages an HAProxy [map file](https://cbonte.github.io/haproxy-dconv/configuration-1.5.html#7.3.1-map).
+* [`haproxy::defaults`](#define-defaults): Option to use multipe defaults sections.
 
 ####Private defines
 
@@ -591,6 +592,8 @@ Configures a service inside a listening or backend service configuration block i
 
 * `instance`: *Optional.* When using `haproxy::instance` to run multiple instances of Haproxy on the same machine, this indicates which instance.  Defaults to "haproxy".
 
+* `defaults`: *Optional.* Name of the defaults section the backend or listener use. Defaults to undef.
+
 #### Define: `haproxy::backend`
 
 Sets up a backend service configuration block inside haproxy.cfg. Each backend service needs one or more balancermember services (declared with the [`haproxy::balancermember` define](#define-haproxybalancermember)).
@@ -616,6 +619,8 @@ Sets up a backend service configuration block inside haproxy.cfg. Each backend s
 * `instance`: *Optional.* When using `haproxy::instance` to run multiple instances of Haproxy on the same machine, this indicates which instance.  Defaults to "haproxy".
 
 * `sort_options_alphabetic`: Sort options either alphabetic or custom like haproxy internal sorts them. Defaults to `haproxy::globals::sort_options_alphabetic`.
+
+* `defaults`: *Optional* Name of the defaults section this backend will use. Defaults to undef which means the global defaults section will be used.
 
 #### Define: `haproxy::frontend`
 
@@ -661,6 +666,10 @@ For more information, see the [HAProxy Configuration Manual](http://cbonte.githu
 
 * `sort_options_alphabetic`: Sort options either alphabetic or custom like haproxy internal sorts them. Defaults to `haproxy::globals::sort_options_alphabetic`.
 
+* `defaults`: *Optional* Name of the defaults section this frontend will use. Defaults to undef which means the global defaults section will be used.
+
+* `defaults_use_backend`: If defaults are used and a default backend is configured use the backend name for ordering. This means that the frontend is placed in the configuration file before the backend configuration. Defaults to true.
+
 #### Define: `haproxy::listen`
 
 Sets up a listening service configuration block inside haproxy.cfg. Each listening service configuration needs one or more balancermember services (declared with the [`haproxy::balancermember` define](#define-haproxybalancermember)).
@@ -696,6 +705,8 @@ For more information, see the [HAProxy Configuration Manual](http://cbonte.githu
 * `ports`: *Required unless `bind` is specified.* Specifies which ports to listen on for the address specified in `ipaddress`. Valid options: a single comma-delimited string or an array of strings. Each string can contain a port number or a hyphenated range of port numbers (e.g., 8443-8450).
 
 * `sort_options_alphabetic`: Sort options either alphabetic or custom like haproxy internal sorts them. Defaults to `haproxy::globals::sort_options_alphabetic`.
+
+* `defaults`: *Optional* Name of the defaults section this listen section will use. Defaults to undef which means the global defaults section will be used.
 
 #### Define: `haproxy::userlist`
 
@@ -878,6 +889,18 @@ This article on the HAProxy blog gives a nice overview of the use case: http://b
 * `mode`:  The mode of the underlying file resource. Defaut: '0644'
 
 * `instances`: Array of names of managed HAproxy instances to notify (restart/reload) when the map file is updated. This is so that the same map file can be used with multiple HAproxy instances (if multiple instances are used). Default: `[ 'haproxy' ]`
+
+#### Define: `haproxy::defaults`
+
+This type will setup a additional defaults configuration block inside the haproxy.cfg file on an haproxy load balancer. A new default configuration block resets all defaults of prior defaults configuration blocks. [Further documentation](https://cbonte.github.io/haproxy-dconv/configuration-1.5.html#4) of what options are allowed in defaults sections. Listener, Backends, Frontends and Balancermember can be configured behind a default configuration block by setting the defaults parameter to the corresponding defaults name.
+
+##### Parameters (all optional)
+
+* `options`: A hash or array of hashes of options that are inserted into the defaults configuration block.
+
+* `sort_options_alphabetic`: Sort options either alphabetic or custom like haproxy internal sorts them. Defaults to true.
+
+* `instance`: When using `haproxy::instance` to run multiple instances of Haproxy on the same machine, this indicates which instance.  Defaults to "haproxy".
 
 ## Limitations
 
