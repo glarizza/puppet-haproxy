@@ -102,18 +102,19 @@
 #  }
 #
 class haproxy (
-  $package_ensure   = 'present',
-  $package_name     = $haproxy::params::package_name,
-  $service_ensure   = 'running',
-  $service_manage   = true,
-  $service_options  = $haproxy::params::service_options,
-  $global_options   = $haproxy::params::global_options,
-  $defaults_options = $haproxy::params::defaults_options,
-  $merge_options    = $haproxy::params::merge_options,
-  $restart_command  = undef,
-  $custom_fragment  = undef,
-  $config_dir       = $haproxy::params::config_dir,
-  $config_file      = $haproxy::params::config_file,
+  $package_ensure    = 'present',
+  $package_name      = $haproxy::params::package_name,
+  $service_ensure    = 'running',
+  $service_manage    = true,
+  $service_options   = $haproxy::params::service_options,
+  $global_options    = $haproxy::params::global_options,
+  $defaults_options  = $haproxy::params::defaults_options,
+  $merge_options     = $haproxy::params::merge_options,
+  $restart_command   = undef,
+  $custom_fragment   = undef,
+  $config_dir        = $haproxy::params::config_dir,
+  $config_file       = $haproxy::params::config_file,
+  $manage_config_dir = $haproxy::params::manage_config_dir,
 
   # Deprecated
   $manage_service   = undef,
