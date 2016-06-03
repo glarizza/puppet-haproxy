@@ -1,6 +1,6 @@
 require 'spec_helper_acceptance'
 
-describe "frontend backend defines with defaults", :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
+describe "frontend backend defines with defaults" do
   it 'should be able to configure defaults with puppet' do
     pp = <<-EOS
       class { 'haproxy::globals':
