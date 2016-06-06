@@ -23,7 +23,6 @@ describe "frontend backend defines with defaults" do
           'timeout http-request' => '2s',
           balance => 'roundrobin',
           'maxconn' => '8000',
-          'default-server' => 'weight 100 inter 6s fastinter 1s downinter 3s fall 2 rise 4',
 
         }
       }
@@ -81,7 +80,6 @@ describe "frontend backend defines with defaults" do
           'timeout http-request' => '2s',
           balance => 'roundrobin',
           'maxconn' => '8000',
-          'default-server' => 'weight 100 inter 6s fastinter 1s downinter 3s fall 2 rise 4',
 
         }
       }
