@@ -1,3 +1,31 @@
+## Supported Release 1.5.0
+### Summary
+
+A substantial release with many new feature additions, including added Ubuntu Xenial support. Also includes several bugfixes, including the removal of unsupported platform testing restrictions to allow for easier testing on unsupported OSes.
+
+#### Features
+- Addition of mode to the backend class.
+- Addition of Ubuntu 16.04 support.
+- Addition of docs example on how to set up stick-tables.
+- Updated to current modulesync configs.
+- Basic usage now clarified in readme.
+- Now uses concat 2.0.
+- Addition of mailers.
+- New option to use multiple defaults sections.
+- Additional option to manage config_dir.
+- Adds sysconfig_options param for /etc/sysconfig/haproxy.
+
+#### Bugfixes
+- No longer adds $ensure to balancermember concat fragments.
+- Improved the ordering of options.
+- Correct class now used for sort_options_alphabetic.
+- Netcat has now been replaced with socat.
+- Tests adjusted to work under strict_variables.
+- Config file now validated before added.
+- Removal of unsupported platforms restrictions in testing.
+- Removal of the default-server keyword from test.
+- Now uses haproxy::config_file instead of deafult config_file.
+
 ## Supported Release 1.4.0
 ###Summary
 
