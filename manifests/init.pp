@@ -30,11 +30,8 @@
 # [*service_options*]
 #   Contents for the `/etc/defaults/haproxy` file on Debian. Defaults to "ENABLED=1\n" on Debian, and is ignored on other systems.
 #
-# [*service_options*]
-#   Contents for the `/etc/defaults/haproxy` file on Debian. Defaults to "ENABLED=1\n" on Debian, and is ignored on other systems.
-#
-# [*service_options*]
-#   Contents for the `/etc/defaults/haproxy` file on Debian. Defaults to "ENABLED=1\n" on Debian, and is ignored on other systems.
+# [*sysconfig_options*]
+#   Contents for the `/etc/sysconfig/haproxy` file on RedHat(-based) systems. Defaults to OPTIONS="" on RedHat(-based) systems and is ignored on others
 #
 # [*global_options*]
 #   A hash of all the haproxy global options. If you want to specify more
@@ -107,6 +104,7 @@ class haproxy (
   $service_ensure    = 'running',
   $service_manage    = true,
   $service_options   = $haproxy::params::service_options,
+  $sysconfig_options = $haproxy::params::sysconfig_options,
   $global_options    = $haproxy::params::global_options,
   $defaults_options  = $haproxy::params::defaults_options,
   $merge_options     = $haproxy::params::merge_options,
@@ -162,18 +160,19 @@ class haproxy (
   }
 
   haproxy::instance{ $title:
-    package_ensure   => $_package_ensure,
-    package_name     => $package_name,
-    service_ensure   => $_service_ensure,
-    service_manage   => $_service_manage,
-    global_options   => $global_options,
-    defaults_options => $defaults_options,
-    restart_command  => $restart_command,
-    custom_fragment  => $custom_fragment,
-    config_dir       => $config_dir,
-    config_file      => $config_file,
-    merge_options    => $merge_options,
-    service_options  => $service_options,
+    package_ensure    => $_package_ensure,
+    package_name      => $package_name,
+    service_ensure    => $_service_ensure,
+    service_manage    => $_service_manage,
+    global_options    => $global_options,
+    defaults_options  => $defaults_options,
+    restart_command   => $restart_command,
+    custom_fragment   => $custom_fragment,
+    config_dir        => $config_dir,
+    config_file       => $config_file,
+    merge_options     => $merge_options,
+    service_options   => $service_options,
+    sysconfig_options => $sysconfig_options,
   }
 
 }
