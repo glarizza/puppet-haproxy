@@ -43,7 +43,7 @@ define haproxy::config (
     owner        => '0',
     group        => '0',
     mode         => '0644',
-    validate_cmd => '/usr/sbin/haproxy -f %',
+    validate_cmd => '/usr/sbin/haproxy -f % -c',
   }
 
   # Simple Header
