@@ -48,5 +48,22 @@ describe 'haproxy::backend' do
     end
   end
 
+  context "when a non-default config file is used" do
+    let(:pre_condition) { 'class { "haproxy": config_file => "/etc/non-default.cfg" }' }
+    let(:title) { 'baz' }
+    let(:params) do
+      {
+        :options => {
+          'balance' => 'roundrobin',
+        },
+      }
+    end
+    it { should contain_concat__fragment('haproxy-baz_backend_block').with(
+      'order' => '20-baz-00',
+      'target' => '/etc/non-default.cfg',
+      'content' => "\nbackend baz\n  balance roundrobin\n",
+    ) }
+  end
+
   # C9956 WONTFIX
 end

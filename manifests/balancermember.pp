@@ -96,7 +96,7 @@ define haproxy::balancermember (
   include haproxy::params
   if $instance == 'haproxy' {
     $instance_name = 'haproxy'
-    $config_file = $haproxy::params::config_file
+    $config_file = $haproxy::config_file
   } else {
     $instance_name = "haproxy-${instance}"
     $config_file = inline_template($haproxy::params::config_file_tmpl)

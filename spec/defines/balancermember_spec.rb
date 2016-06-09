@@ -116,4 +116,21 @@ describe 'haproxy::balancermember' do
       'content' => "  server server01 192.168.56.200 check\n  server server02 192.168.56.201 check\n"
     ) }
   end
+  context "when a non-default config file is used" do
+    let(:pre_condition) { 'class { "haproxy": config_file => "/etc/non-default.cfg" }' }
+    let(:params) do
+      {
+        :name              => 'haproxy',
+        :listening_service => 'baz',
+        :server_names      => ['server01', 'server02'],
+        :ipaddresses       => ['10.0.0.1', '10.0.0.2'],
+        :options           => ['check']
+      }
+    end
+    it { should contain_concat__fragment('haproxy-baz_balancermember_haproxy').with(
+      'order' => '20-baz-01-haproxy',
+      'target' => '/etc/non-default.cfg',
+      'content' => "  server server01 10.0.0.1 check\n  server server02 10.0.0.2 check\n",
+    ) }
+  end
 end

@@ -347,4 +347,27 @@ describe 'haproxy::listen' do
     ) }
   end
 
+  context "when a non-default config file is used" do
+    let(:pre_condition) { 'class { "haproxy": config_file => "/etc/non-default.cfg" }' }
+    let(:params) do
+      {
+        :name => 'bar',
+        :bind => {
+          '*:5000' => [],
+        },
+        :options => {
+          'option' => [
+            'tcplog',
+          ],
+          'balance' => 'roundrobin',
+        },
+      }
+    end
+    it { should contain_concat__fragment('haproxy-bar_listen_block').with(
+      'order' => '20-bar-00',
+      'target' => '/etc/non-default.cfg',
+      'content' => "\nlisten bar\n  bind *:5000 \n  balance roundrobin\n  option tcplog\n",
+    ) }
+  end
+
 end
