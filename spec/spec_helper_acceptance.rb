@@ -33,7 +33,7 @@ RSpec.configure do |c|
         if $::osfamily == 'RedHat' {
           class { 'epel': before => Package['socat'], }
           service { 'iptables': ensure => stopped, }
-          exec { 'setenforce Permissive':
+          exec { 'setenforce 0':
             path   => ['/bin','/usr/bin','/sbin','/usr/sbin'],
             onlyif => 'which getenforce && getenforce | grep Enforcing',
           }
