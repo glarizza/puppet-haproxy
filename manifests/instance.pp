@@ -206,6 +206,7 @@ define haproxy::instance (
     defaults_options => $_defaults_options,
     custom_fragment  => $custom_fragment,
     merge_options    => $merge_options,
+    package_ensure   => $package_ensure,
   }
   haproxy::install { $title:
     package_name   => $package_name,

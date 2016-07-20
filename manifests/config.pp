@@ -4,6 +4,7 @@ define haproxy::config (
   $config_file,
   $global_options,
   $defaults_options,
+  $package_ensure,
   $config_dir = undef,  # A default is required for Puppet 2.7 compatibility. When 2.7 is no longer supported, this parameter default should be removed.
   $custom_fragment = undef,  # A default is required for Puppet 2.7 compatibility. When 2.7 is no longer supported, this parameter default should be removed.
   $merge_options = $haproxy::merge_options,
@@ -39,25 +40,29 @@ define haproxy::config (
     $_config_file = $haproxy::config_file
   }
 
-  concat { $_config_file:
-    owner        => '0',
-    group        => '0',
-    mode         => '0644',
-    validate_cmd => '/usr/sbin/haproxy -f % -c',
-  }
+  if $package_ensure == 'absent' {
+    file { $_config_file: ensure => absent }
+  } else {
+    concat { $_config_file:
+      owner        => '0',
+      group        => '0',
+      mode         => '0644',
+      validate_cmd => '/usr/sbin/haproxy -f % -c',
+    }
 
-  # Simple Header
-  concat::fragment { "${instance_name}-00-header":
-    target  => $_config_file,
-    order   => '01',
-    content => "# This file managed by Puppet\n",
-  }
+    # Simple Header
+    concat::fragment { "${instance_name}-00-header":
+      target  => $_config_file,
+      order   => '01',
+      content => "# This file managed by Puppet\n",
+    }
 
-  # Template uses $_global_options, $_defaults_options, $custom_fragment
-  concat::fragment { "${instance_name}-haproxy-base":
-    target  => $_config_file,
-    order   => '10',
-    content => template("${module_name}/haproxy-base.cfg.erb"),
+    # Template uses $_global_options, $_defaults_options, $custom_fragment
+    concat::fragment { "${instance_name}-haproxy-base":
+      target  => $_config_file,
+      order   => '10',
+      content => template("${module_name}/haproxy-base.cfg.erb"),
+    }
   }
 
   if $_global_options['chroot'] {

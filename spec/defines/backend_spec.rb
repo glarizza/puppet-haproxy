@@ -40,7 +40,10 @@ describe 'haproxy::backend' do
   context "when a listen is created with the same name" do
     let(:title) { 'apache' }
     let(:pre_condition) do
-      "haproxy::listen { 'apache': ports => '443', }"
+      "haproxy::listen { 'apache':
+         ipaddress => '127.0.0.1',
+         ports     => '443',
+       }"
     end
 
     it 'should raise error' do
