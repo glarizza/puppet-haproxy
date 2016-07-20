@@ -17,7 +17,10 @@ describe "configuring haproxy" do
           'stats' => ['uri /','auth puppet:puppet'],
         },
       }
-      haproxy::listen { 'test00': ports => '80',}
+      haproxy::listen { 'test00':
+        ipaddress => '127.0.0.1',
+        ports     => '80',
+      }
       EOS
       apply_manifest(pp, :catch_failures => true)
     end
@@ -108,6 +111,10 @@ describe "configuring haproxy" do
       pp = <<-EOS
         class { 'haproxy':
           service_ensure => 'stopped',
+        }
+        haproxy::listen { 'stats':
+          ipaddress => '127.0.0.1',
+          ports     => '9090',
         }
       EOS
       apply_manifest(pp, :catch_failures => true)
