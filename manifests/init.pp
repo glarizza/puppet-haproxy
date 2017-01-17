@@ -113,4 +113,15 @@ class haproxy (
     hasstatus  => true,
     require    => Concat['/etc/haproxy/haproxy.cfg'],
   }
+
+  if $osfamily == 'Debian' {
+    file{'/etc/default/haproxy':
+      ensure  => file,
+      owner   => root,
+      group   => root,
+      mode    => 0644,
+      content => 'ENABLED=1',
+      notify  => Service['haproxy'],
+    }
+  }
 }
