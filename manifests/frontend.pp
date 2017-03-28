@@ -52,7 +52,7 @@
 #
 # [*defaults_use_backend*]
 #   If defaults are used and a default backend is configured use the backend
-#   name for ordering. This means that the frontend is placed in the 
+#   name for ordering. This means that the frontend is placed in the
 #   configuration file before the backend configuration.
 #   Defaults to true.
 #
