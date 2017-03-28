@@ -79,7 +79,7 @@ define haproxy::backend (
   $section_name            = $name,
   $sort_options_alphabetic = undef,
   $defaults                = undef,
-  $config_file             = undef,
+  Optional[Stdlib::Absolutepath] $config_file             = undef,
 ) {
 
   if defined(Haproxy::Listen[$section_name]) {
@@ -95,8 +95,6 @@ define haproxy::backend (
     $instance_name = "haproxy-${instance}"
     $_config_file = pick($config_file, inline_template($haproxy::params::config_file_tmpl))
   }
-
-  validate_absolute_path(dirname($_config_file))
 
   include ::haproxy::globals
   $_sort_options_alphabetic = pick($sort_options_alphabetic, $haproxy::globals::sort_options_alphabetic)

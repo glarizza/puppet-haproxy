@@ -105,7 +105,7 @@ define haproxy::balancermember (
   $define_cookies = false,
   $instance     = 'haproxy',
   $defaults     = undef,
-  $config_file  = undef,
+  Optional[Stdlib::Absolutepath] $config_file  = undef,
   $verifyhost   = false,
   $weight       = undef,
 ) {
@@ -119,8 +119,6 @@ define haproxy::balancermember (
     $instance_name = "haproxy-${instance}"
     $_config_file = pick($config_file, inline_template($haproxy::params::config_file_tmpl))
   }
-
-  validate_absolute_path(dirname($_config_file))
 
   if $defaults == undef {
     $order = "20-${listening_service}-01-${name}"
