@@ -61,6 +61,10 @@
 #   specific host from server_names as an argument.
 #   Default: false
 #
+# [*weight*]
+#   Optional. Will add the weight option to the server line
+#   Default: undef
+#
 # === Examples
 #
 #  Exporting the resource for a balancer member:
@@ -103,6 +107,7 @@ define haproxy::balancermember (
   $defaults     = undef,
   $config_file  = undef,
   $verifyhost   = false,
+  $weight       = undef,
 ) {
 
   include haproxy::params
