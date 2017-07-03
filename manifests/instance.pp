@@ -63,6 +63,11 @@
 #    The parent directory will be created automatically.
 #  Defaults to undef.
 #
+# [*config_validate_cmd*]
+#   Command used by concat validate_cmd to validate new
+#   config file concat is a valid haproxy config.
+#   Default /usr/sbin/haproxy -f % -c
+#
 # === Examples
 #
 # A single instance of haproxy with all defaults
@@ -148,6 +153,7 @@ define haproxy::instance (
   $merge_options     = $haproxy::params::merge_options,
   $service_options   = $haproxy::params::service_options,
   $sysconfig_options = $haproxy::params::sysconfig_options,
+  $config_validate_cmd = $haproxy::params::config_validate_cmd,
 ) {
 
   if $service_ensure != true and $service_ensure != false {
@@ -194,14 +200,15 @@ define haproxy::instance (
   }
 
   haproxy::config { $title:
-    instance_name    => $instance_name,
-    config_dir       => $_config_dir,
-    config_file      => $_config_file,
-    global_options   => $_global_options,
-    defaults_options => $_defaults_options,
-    custom_fragment  => $custom_fragment,
-    merge_options    => $merge_options,
-    package_ensure   => $package_ensure,
+    instance_name       => $instance_name,
+    config_dir          => $_config_dir,
+    config_file         => $_config_file,
+    global_options      => $_global_options,
+    defaults_options    => $_defaults_options,
+    custom_fragment     => $custom_fragment,
+    merge_options       => $merge_options,
+    package_ensure      => $package_ensure,
+    config_validate_cmd => $config_validate_cmd,
   }
   haproxy::install { $title:
     package_name   => $package_name,
