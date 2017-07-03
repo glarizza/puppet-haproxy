@@ -1,9 +1,9 @@
 <% Array(@ipaddresses).zip(Array(@server_names)).each do |ipaddress,host| -%>
 <% if @ports -%>
 <%- Array(@ports).each do |port| -%>
-  server <%= host %> <%= ipaddress %>:<%= port %><%= if @define_cookies then " cookie " + host end %> <%= Array(@options).sort.join(" ") %><% if @verifyhost == true %> verifyhost <%= host %><% end %>
+  server <%= host %> <%= ipaddress %>:<%= port %><%= if @define_cookies then " cookie " + host end %> <%= Array(@options).sort.join(" ") %><% if @verifyhost == true %> verifyhost <%= host %><% end %><% if @weight %> weight <%= @weight %><% end %>
 <%- end -%>
 <% else -%>
-  server <%= host %> <%= ipaddress %><%= if @define_cookies then " cookie " + host end %> <%= Array(@options).sort.join(" ") %><% if @verifyhost == true %> verifyhost <%= host %><% end %>
+  server <%= host %> <%= ipaddress %><%= if @define_cookies then " cookie " + host end %> <%= Array(@options).sort.join(" ") %><% if @verifyhost == true %> verifyhost <%= host %><% end %><% if @weight %> weight <%= @weight %>    <% end %>
 <%- end -%>
 <% end -%>

@@ -600,6 +600,8 @@ Configures a service inside a listening or backend service configuration block i
 
 * `verifyhost`: *Optional.* Will add the verifyhost option to the server line, using the specific host from server_names as an argument.  Defaults to false
 
+* `weight`: *Optional.* Will add the weight option to the server line. Defaults to undef
+
 #### Define: `haproxy::backend`
 
 Sets up a backend service configuration block inside haproxy.cfg. Each backend service needs one or more balancermember services (declared with the [`haproxy::balancermember` define](#define-haproxybalancermember)).

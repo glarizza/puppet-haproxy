@@ -151,4 +151,21 @@ describe 'haproxy::balancermember' do
       'content' => "  server server01 10.0.0.1 check\n  server server02 10.0.0.2 check\n",
     ) }
   end
+  context 'with weight' do
+    let(:params) do
+      {
+        :name              => 'tyler',
+        :listening_service => 'croy',
+        :ports             => '18140',
+        :options           => 'check',
+        :weight            => '100',
+      }
+    end
+
+    it { should contain_concat__fragment('haproxy-croy_balancermember_tyler').with(
+      'order'   => '20-croy-01-tyler',
+      'target'  => '/etc/haproxy/haproxy.cfg',
+      'content' => "  server dero 1.1.1.1:18140 check weight 100\n"
+    ) }
+  end
 end
