@@ -141,6 +141,12 @@ describe 'haproxy::instance_service' do
         'haproxy_unit_template' => "haproxy/instance_service_unit_example.erb"
       }
     end
+
+    let(:pre_condition) { <<-EOF
+        service {'haproxy-#{title}': }
+      EOF
+    }
+
     it 'should install the customhaproxy package' do
       subject.should contain_package('customhaproxy').with(
         'ensure' => 'present'
