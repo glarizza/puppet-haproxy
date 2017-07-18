@@ -238,7 +238,9 @@ describe 'haproxy::instance' do
             )
           end
           it 'should not install the haproxy package' do
-            subject.should_not contain_package('haproxy')
+            subject.should_not contain_package('haproxy').with(
+                                 'title' => 'haproxy'
+                               )
           end
           it 'should not install the haproxy service' do
             subject.should_not contain_service('haproxy')
