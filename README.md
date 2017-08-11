@@ -134,7 +134,7 @@ To export the resource for a balancermember and collect it on a single HAProxy l
 ~~~puppet
 haproxy::listen { 'puppet00':
   ipaddress => $::ipaddress,
-  ports     => '18140',
+  ports     => '8140',
   mode      => 'tcp',
   options   => {
     'option'  => [
@@ -236,7 +236,7 @@ This example routes traffic from port 8140 to all balancermembers added to a bac
 ~~~puppet
 haproxy::frontend { 'puppet00':
   ipaddress     => $::ipaddress,
-  ports         => '18140',
+  ports         => '8140',
   mode          => 'tcp',
   bind_options  => 'accept-proxy',
   options       => {
@@ -255,7 +255,7 @@ If option order is important, pass an array of hashes to the `options` parameter
 ~~~puppet
 haproxy::frontend { 'puppet00':
   ipaddress     => $::ipaddress,
-  ports         => '18140',
+  ports         => '8140',
   mode          => 'tcp',
   bind_options  => 'accept-proxy',
   options       => [
