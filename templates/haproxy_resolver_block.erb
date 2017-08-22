@@ -1,0 +1,12 @@
+
+resolvers <%= @section_name %>
+<% @nameservers.each do |id, nameserver| -%>
+  nameserver <%= id %> <%= nameserver %>
+<% end -%>
+  resolve_retries <%= @resolve_retries %>
+<% @timeout.each do |event, time| -%>
+  timeout <%= event %> <%= time %>
+<% end -%>
+<% @hold.each do |status, period| -%>
+  hold <%= status %> <%= period %>
+<% end -%>
