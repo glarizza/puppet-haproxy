@@ -10,7 +10,6 @@ class haproxy::params {
 
   $service_options  = "ENABLED=1\n"  # Only used by Debian.
   $sysconfig_options = 'OPTIONS=""' #Only used by Redhat/CentOS etc
-  $config_validate_cmd = '/usr/sbin/haproxy -f % -c'
 
   case $::osfamily {
     'Archlinux', 'Debian', 'Redhat', 'Gentoo', 'Suse' : {
@@ -40,6 +39,7 @@ class haproxy::params {
         ],
         'maxconn' => '8000'
       }
+      $config_validate_cmd = '/usr/sbin/haproxy -f % -c'
       # Single instance:
       $config_dir        = '/etc/haproxy'
       $config_file       = '/etc/haproxy/haproxy.cfg'
@@ -74,6 +74,7 @@ class haproxy::params {
         'clitimeout' => '50000',
         'srvtimeout' => '50000',
       }
+      $config_validate_cmd = '/usr/local/sbin/haproxy -f % -c'
       # Single instance:
       $config_dir        = '/usr/local/etc'
       $config_file       = '/usr/local/etc/haproxy.conf'
