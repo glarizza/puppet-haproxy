@@ -26,7 +26,7 @@
 #
 # [*resolve_retries*]
 #   Defines the number <nb> of queries to send to resolve a server name before
-#    giving up. Default value is 3.
+#    giving up.
 #   $resolve_retries = 3
 #
 # [*timeout*]
