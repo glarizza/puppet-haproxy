@@ -117,7 +117,7 @@ define haproxy::frontend (
     validate_hash($bind)
   }
 
-  include haproxy::params
+  include ::haproxy::params
 
   if $instance == 'haproxy' {
     $instance_name = 'haproxy'
@@ -129,7 +129,7 @@ define haproxy::frontend (
 
   validate_absolute_path(dirname($_config_file))
 
-  include haproxy::globals
+  include ::haproxy::globals
   $_sort_options_alphabetic = pick($sort_options_alphabetic, $haproxy::globals::sort_options_alphabetic)
 
   if $defaults == undef {

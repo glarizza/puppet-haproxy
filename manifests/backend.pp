@@ -86,7 +86,7 @@ define haproxy::backend (
     fail("An haproxy::listen resource was discovered with the same name (${section_name}) which is not supported")
   }
 
-  include haproxy::params
+  include ::haproxy::params
 
   if $instance == 'haproxy' {
     $instance_name = 'haproxy'

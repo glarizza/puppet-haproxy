@@ -110,7 +110,7 @@ define haproxy::balancermember (
   $weight       = undef,
 ) {
 
-  include haproxy::params
+  include ::haproxy::params
 
   if $instance == 'haproxy' {
     $instance_name = 'haproxy'

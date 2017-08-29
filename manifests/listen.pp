@@ -98,7 +98,7 @@ define haproxy::listen (
     'option'  => [
       'tcplog',
     ],
-    'balance' => 'roundrobin'
+    'balance' => 'roundrobin',
   },
   $instance                     = 'haproxy',
   $section_name                 = $name,
@@ -128,7 +128,7 @@ define haproxy::listen (
     fail("An haproxy::backend resource was discovered with the same name (${section_name}) which is not supported")
   }
 
-  include haproxy::params
+  include ::haproxy::params
 
   if $instance == 'haproxy' {
     $instance_name = 'haproxy'
@@ -140,7 +140,7 @@ define haproxy::listen (
 
   validate_absolute_path(dirname($_config_file))
 
-  include haproxy::globals
+  include ::haproxy::globals
   $_sort_options_alphabetic = pick($sort_options_alphabetic, $haproxy::globals::sort_options_alphabetic)
 
   if $defaults == undef {

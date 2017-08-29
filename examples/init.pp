@@ -1,5 +1,5 @@
 # Declare haproxy base class with configuration options
-class { 'haproxy':
+class { '::haproxy':
   enable           => true,
   global_options   => {
     'log'     => "${::ipaddress} local0",
@@ -36,7 +36,7 @@ class { 'haproxy':
   server_name            => $::hostname,
   balancer_ip            => $::ipaddress,
   balancer_port          => '8140',
-  balancermember_options => 'check'
+  balancermember_options => 'check',
 }
 
 # Declare a couple of Listening Services for haproxy.cfg
@@ -62,7 +62,7 @@ haproxy::listen { 'stats':
     'mode'  => 'http',
     'stats' => [
       'uri /',
-      'auth puppet:puppet'
+      'auth puppet:puppet',
     ],
   },
 }

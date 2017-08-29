@@ -166,7 +166,7 @@ define haproxy::instance (
 
   # Since this is a 'define', we can not use 'inherts haproxy::params'.
   # Therefore, we "include haproxy::params" for any parameters we need.
-  include haproxy::params
+  include ::haproxy::params
 
   $_global_options = pick($global_options, $haproxy::params::global_options)
   $_defaults_options = pick($defaults_options, $haproxy::params::defaults_options)
