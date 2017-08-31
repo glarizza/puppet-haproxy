@@ -1,6 +1,6 @@
-#haproxy
+# haproxy
 
-####Table of Contents
+#### Table of Contents
 
 1. [Overview](#overview)
 2. [Module Description - What the module does and why it is useful](#module-description)
@@ -20,17 +20,17 @@
 6. [Limitations - OS compatibility, etc.](#limitations)
 7. [Development - Guide for contributing to the module](#development)
 
-##Overview
+## Overview
 
 The haproxy module lets you use Puppet to install, configure, and manage HAProxy.
 
-##Module Description
+## Module Description
 
 HAProxy is a daemon for load-balancing and proxying TCP- and HTTP-based services. This module lets you use Puppet to configure HAProxy servers and backend member servers.
 
-##Setup
+## Setup
 
-###Beginning with haproxy
+### Beginning with haproxy
 
 The simplest HAProxy configuration consists of a server that listens on a port and balances against some other nodes:
 
@@ -59,9 +59,9 @@ node 'haproxy-server' {
 }
 ~~~
 
-##Usage
+## Usage
 
-###Configure HAProxy options
+### Configure HAProxy options
 
 The main [`haproxy` class](#class-haproxy) has many options for configuring your HAProxy server:
 
@@ -127,7 +127,7 @@ class { 'haproxy':
 }
 ~~~
 
-###Configure HAProxy daemon listener
+### Configure HAProxy daemon listener
 
 To export the resource for a balancermember and collect it on a single HAProxy load balancer server:
 
@@ -145,7 +145,7 @@ haproxy::listen { 'puppet00':
 }
 ~~~
 
-###Configure multi-network daemon listener
+### Configure multi-network daemon listener
 
 If you need a more complex configuration for the listen block, use the `$bind` parameter:
 
@@ -169,7 +169,7 @@ haproxy::listen { 'puppet00':
 
 **Note:** `$ports` and `$ipaddress` cannot be used in combination with `$bind`.
 
-###Configure HAProxy load-balanced member nodes
+### Configure HAProxy load-balanced member nodes
 
 First export the resource for a balancermember:
 
@@ -203,7 +203,7 @@ haproxy::balancermember { 'haproxy':
 
 This example assumes a single-pass installation of HAProxy where you know the members in advance. Otherwise, you'd need a first pass to export the resources.
 
-###Configure a load balancer with exported resources
+### Configure a load balancer with exported resources
 
 Install and configure an HAProxy service listening on port 8140 and balanced against all collected nodes:
 
@@ -229,7 +229,7 @@ node /^master\d+/ {
 
 The resulting HAProxy service uses storeconfigs to collect and realize balancermember servers, and automatically collects configurations from backend servers. The backend nodes export their HAProxy configurations to the Puppet master, which then distributes them to the HAProxy server.
 
-###Set up a frontend service
+### Set up a frontend service
 
 This example routes traffic from port 8140 to all balancermembers added to a backend with the title 'puppet_backend00':
 
@@ -272,7 +272,7 @@ haproxy::frontend { 'puppet00':
 
 This adds the frontend options to the configuration block in the same order as they appear within your array.
 
-###Set up a backend service
+### Set up a backend service
 
 ~~~puppet
 haproxy::backend { 'puppet00':
@@ -300,7 +300,7 @@ haproxy::backend { 'puppet00':
 }
 ~~~
 
-###Set up stick-tables for a frontend (or a backend)
+### Set up stick-tables for a frontend (or a backend)
 
 ~~~puppet
 haproxy::backend { 'backend01':
@@ -313,7 +313,7 @@ haproxy::backend { 'backend01':
 
 This adds the backend options to the configuration block in the same order as they appear within the array.
 
-###Configure multiple haproxy instances on one machine
+### Configure multiple haproxy instances on one machine
 
 This is an advanced feature typically only used at large sites.
 
@@ -429,25 +429,25 @@ haproxy::frontend { 'ft_allapps':
 }
 ~~~
 
-##Reference
+## Reference
 
-###Classes
+### Classes
 
-####Public classes
+#### Public classes
 
 * [`haproxy`](#class-haproxy): Main configuration class.
 * [`haproxy::globals`](#class-haproxy-globals): Global configuration options.
 
-####Private classes
+#### Private classes
 
 * `haproxy::params`: Sets parameter defaults per operating system.
 * `haproxy::install`: Installs packages.
 * `haproxy::config`: Configures haproxy.cfg.
 * `haproxy::service`: Manages the haproxy service.
 
-###Defines
+### Defines
 
-####Public defines
+#### Public defines
 
 * [`haproxy::listen`](#define-haproxylisten): Creates a listen entry in haproxy.cfg.
 * [`haproxy::frontend`](#define-haproxyfrontend): Creates a frontend entry in haproxy.cfg.
@@ -463,7 +463,7 @@ haproxy::frontend { 'ft_allapps':
 * [`haproxy::mapfile`](#define-haproxymapfile): Manages an HAProxy [map file](https://cbonte.github.io/haproxy-dconv/configuration-1.5.html#7.3.1-map).
 * [`haproxy::defaults`](#define-defaults): Option to use multipe defaults sections.
 
-####Private defines
+#### Private defines
 
 * `haproxy::balancermember::collect_exported`: Collects exported balancermembers.
 * `haproxy::peer::collect_exported`: Collects exported peers.
