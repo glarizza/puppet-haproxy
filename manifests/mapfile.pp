@@ -44,7 +44,7 @@ define haproxy::mapfile (
 ) {
   $mapfile_name = $title
 
-  validate_re($ensure, '^present|absent$', "Haproxy::Mapfile[${mapfile_name}]: '${ensure}' is not supported for ensure. Allowed values are 'present' and 'absent'.")
+  validate_re($ensure, '^present|absent$', "Haproxy::Mapfile[${mapfile_name}]: '${ensure}' is not supported for ensure. Allowed values are 'present' and 'absent'.") # lint:ignore:140chars
   validate_array($mappings)
   validate_array($instances)
 

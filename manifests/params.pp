@@ -23,7 +23,7 @@ class haproxy::params {
         'user'    => 'haproxy',
         'group'   => 'haproxy',
         'daemon'  => '',
-        'stats'   => 'socket /var/lib/haproxy/stats'
+        'stats'   => 'socket /var/lib/haproxy/stats',
       }
       $defaults_options  = {
         'log'     => 'global',
@@ -38,7 +38,7 @@ class haproxy::params {
           'server 1m',
           'check 10s',
         ],
-        'maxconn' => '8000'
+        'maxconn' => '8000',
       }
       # Single instance:
       $config_dir        = '/etc/haproxy'

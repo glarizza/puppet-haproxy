@@ -40,7 +40,7 @@ define haproxy::userlist (
   $config_file = undef,
 ) {
 
-  include haproxy::params
+  include ::haproxy::params
 
   if $instance == 'haproxy' {
     $instance_name = 'haproxy'
