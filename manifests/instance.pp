@@ -150,6 +150,7 @@ define haproxy::instance (
   $custom_fragment                                             = undef,
   $config_dir                                                  = undef,
   Optional[Stdlib::Absolutepath] $config_file                  = undef,
+  $config_validate_cmd                                         = $haproxy::params::config_validate_cmd,
   $merge_options                                               = $haproxy::params::merge_options,
   $service_options                                             = $haproxy::params::service_options,
   $sysconfig_options                                           = $haproxy::params::sysconfig_options,

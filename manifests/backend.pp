@@ -86,7 +86,7 @@ define haproxy::backend (
     fail("An haproxy::listen resource was discovered with the same name (${section_name}) which is not supported")
   }
 
-  include ::haproxy::params
+  include haproxy::params
 
   if $instance == 'haproxy' {
     $instance_name = 'haproxy'
@@ -96,7 +96,7 @@ define haproxy::backend (
     $_config_file = pick($config_file, inline_template($haproxy::params::config_file_tmpl))
   }
 
-  include ::haproxy::globals
+  include haproxy::globals
   $_sort_options_alphabetic = pick($sort_options_alphabetic, $haproxy::globals::sort_options_alphabetic)
 
   if $defaults == undef {

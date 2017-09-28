@@ -98,11 +98,7 @@ define haproxy::listen (
     'option'                                  => [
       'tcplog',
     ],
-<<<<<<< HEAD
-    'balance' => 'roundrobin',
-=======
     'balance'                                 => 'roundrobin'
->>>>>>> replace validate_* with datatypes
   },
   $instance                                    = 'haproxy',
   $section_name                                = $name,

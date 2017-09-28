@@ -123,6 +123,7 @@ class haproxy (
   Stdlib::Absolutepath $config_dir                             = $haproxy::params::config_dir,
   Optional[Stdlib::Absolutepath] $config_file                  = $haproxy::params::config_file,
   $manage_config_dir                                           = $haproxy::params::manage_config_dir,
+  $config_validate_cmd                                         = $haproxy::params::config_validate_cmd,
 
   # Deprecated
   $manage_service                                              = undef,
