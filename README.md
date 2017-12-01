@@ -14,6 +14,7 @@
     * [Configure a load balancer with exported resources](#configure-a-load-balancer-with-exported-resources)
     * [Set up a frontend service](#set-up-a-frontend-service)
     * [Set up a backend service](#set-up-a-backend-service)
+    * [Set up a resolver](#set-up-a-resolver)
     * [Configure multiple haproxy instances on one machine](#configure-multiple-haproxy-instances-on-one-machine)
     * [Manage a map file](#manage-a-map-file)
 5. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
@@ -297,6 +298,46 @@ haproxy::backend { 'puppet00':
     { 'balance' => 'roundrobin' },
     { 'cookie'  => 'C00 insert' },
   ],
+}
+~~~
+
+### Set up a resolver
+
+Note: This is only available on haproxy 1.6+
+
+~~~puppet
+# Need to start with an init-addr parameter set to none and enable runtime DNS resolution.
+class { 'haproxy':
+...
+  defaults_options => {
+    'default-server' => 'init-addr none',
+...
+  },
+}
+
+# Declare the resolver
+haproxy::resolver { 'puppet00':
+  nameservers     => {
+    'dns1' => '192.168.56.1:53',
+    'dns2' => '192.168.56.2:53'
+  },
+  hold            => {
+    'nx'    => '30s',
+    'valid' => '10s'
+  },
+  resolve_retries => 3,
+  timeout         => {
+    'retry' => '1s'
+  },
+}
+
+# Setup the balancermember to use the resolver for DNS resolution
+haproxy::balancermember { 'haproxy':
+  listening_service => 'puppet00',
+  ports             => '8140',
+  server_names      => ['server01', 'server02'],
+  ipaddresses       => ['server01', 'server02'],
+  options           => 'check resolvers puppet00 resolve-prefer ipv4',
 }
 ~~~
 
