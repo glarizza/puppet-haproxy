@@ -1,3 +1,39 @@
+## Supported Release 2.0.0
+### Summary
+
+A substantial release made to create a clean base from which Rubocop may be implemented. Notable changes include the addition of HAproxy Resolver and a Puppet 4 update.
+
+#### Added
+- fast_gettext added to gems.
+- Locales folder and config.yml added.
+- Support added for balancemember weights.
+- Concat validate_cmd can be configured.
+- Space now added to headers for formatting.
+- Haproxy Resolver added, only supported by Haproxy version 1.6+.
+- Update to match Puppet 4 datatypes.
+
+#### Changed
+- Tests updated to match ruby version 2.0.0.
+- Mocha version updated.
+- Multiple Modulesync updates.
+- A listen check was added to the code.
+- System service flap detection avoided during acceptance tests.
+- Undefined values have been dropped from config template.
+- Verifyhost parameter added to balancemember resource.
+- validate_* replaced with datatypes.
+
+#### Fixed
+- Fix to $bind_options.
+- Fix to example ports listening value.
+- Fix to lint warnings.
+
+#### Removed
+- spec.opts removed.
+- Validate_cmd no longer attempted on puppet versions below 3.5.
+- Pe requirement removed from metadata.
+- Ubuntu 10.04 and 12.04 entry in 'metadata.json'. 
+- Debian 6 entry in 'metadata.json'.
+
 ## Supported Release 1.5.0
 ### Summary
 
