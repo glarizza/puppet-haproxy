@@ -10,23 +10,25 @@ describe 'haproxy::defaults' do
   let(:title) { 'test' }
   let(:facts) do
     {
-      :ipaddress      => '1.1.1.1',
-      :osfamily       => 'RedHat',
-      :concat_basedir => '/dne',
+      ipaddress: '1.1.1.1',
+      osfamily: 'RedHat',
+      concat_basedir: '/dne',
     }
   end
 
   context 'with a single option' do
     let(:params) do
       {
-        :options => { 'balance' => 'roundrobin', }
+        options: { 'balance' => 'roundrobin' },
       }
     end
 
-    it { should contain_concat__fragment('haproxy-test_defaults_block').with(
-      'order'   => '25-test',
-      'target'  => '/tmp/haproxy.cfg',
-      'content' => "\n\ndefaults test\n  balance roundrobin\n"
-    ) }
+    it {
+      is_expected.to contain_concat__fragment('haproxy-test_defaults_block').with(
+        'order'   => '25-test',
+        'target'  => '/tmp/haproxy.cfg',
+        'content' => "\n\ndefaults test\n  balance roundrobin\n",
+      )
+    }
   end
 end

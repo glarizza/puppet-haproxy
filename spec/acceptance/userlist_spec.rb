@@ -1,10 +1,10 @@
 require 'spec_helper_acceptance'
 
 # lucid ships with haproxy 1.3 which does not have userlist support by default
-describe "userlist define", :unless => (['Darwin', 'Suse','windows','AIX','Solaris'].include?(fact('osfamily')) or (fact('lsbdistcodename') == 'lucid') or (fact('osfamily') == 'RedHat' and fact('operatingsystemmajrelease') == '5')) do
-  it 'should be able to configure the listen with puppet' do
-    # C9966 C9970
-    pp = <<-EOS
+describe 'userlist define', unless: (%w[Darwin Suse windows AIX Solaris].include?(fact('osfamily')) || (fact('lsbdistcodename') == 'lucid') ||
+                                    (fact('osfamily') == 'RedHat' && fact('operatingsystemmajrelease') == '5')) do
+
+  pp_one = <<-PUPPETCODE
       class { 'haproxy': }
       haproxy::userlist { 'users_groups':
         users  => [
@@ -47,30 +47,32 @@ describe "userlist define", :unless => (['Darwin', 'Suse','windows','AIX','Solar
         listening_service => 'app01',
         ports             => '5556',
       }
-    EOS
-    apply_manifest(pp, :catch_failures => true)
+  PUPPETCODE
+  it 'is able to configure the listen with puppet' do
+    # C9966 C9970
+    apply_manifest(pp_one, catch_failures: true)
   end
 
   # C9957
-  it "test1 should auth as user" do
+  it 'test1 should auth as user' do
     shell('curl http://test1:elgato@localhost:5555').stdout.chomp.should eq('Response on 5556')
   end
-  it "test2 should auth as user" do
+  it 'test2 should auth as user' do
     shell('curl http://test2:elgato@localhost:5555').stdout.chomp.should eq('Response on 5556')
   end
 
   # C9958
-  it "should not auth as user" do
+  it 'does not auth as user' do
     shell('curl http://test3:elgato@localhost:5555').stdout.chomp.should_not eq('Response on 5556')
   end
 
   # C9959
-  it "should auth as group" do
+  it 'auths as group' do
     shell('curl http://test1:elgato@localhost:5554').stdout.chomp.should eq('Response on 5556')
   end
 
   # C9960
-  it "should not auth as group" do
+  it 'does not auth as group' do
     shell('curl http://test2:elgato@localhost:5554').stdout.chomp.should_not eq('Response on 5556')
   end
 
