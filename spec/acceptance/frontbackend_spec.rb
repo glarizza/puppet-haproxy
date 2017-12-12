@@ -1,8 +1,7 @@
 require 'spec_helper_acceptance'
 
-describe "frontend backend defines" do
-  it 'should be able to configure the frontend/backend with puppet' do
-    pp = <<-EOS
+describe 'frontend backend defines' do
+  pp_one = <<-PUPPETCODE
       class { 'haproxy': }
       haproxy::frontend { 'app00':
         ipaddress => $::ipaddress_lo,
@@ -22,20 +21,20 @@ describe "frontend backend defines" do
         listening_service => 'app00',
         ports             => '5557',
       }
-    EOS
-    apply_manifest(pp, :catch_failures => true)
+  PUPPETCODE
+  it 'is able to configure the frontend/backend with puppet' do
+    apply_manifest(pp_one, catch_failures: true)
   end
 
   # This is not great since it depends on the ordering served by the load
   # balancer. Something with retries would be better.
   # C9945
-  it "should do a curl against the LB to make sure it gets a response from each port" do
-    shell('curl localhost:5555').stdout.chomp.should match(/Response on 555(6|7)/)
-    shell('curl localhost:5555').stdout.chomp.should match(/Response on 555(6|7)/)
+  it 'does a curl against the LB to make sure it gets a response from each port' do
+    shell('curl localhost:5555').stdout.chomp.should match(%r{Response on 555(6|7)})
+    shell('curl localhost:5555').stdout.chomp.should match(%r{Response on 555(6|7)})
   end
 
-  it 'should be able to configure the frontend/backend with one node up' do
-    pp = <<-EOS
+  pp_two = <<-PUPPETCODE
       class { 'haproxy': }
       haproxy::frontend { 'app00':
         ipaddress => $::ipaddress_lo,
@@ -55,26 +54,26 @@ describe "frontend backend defines" do
         listening_service => 'app00',
         ports             => '5558',
       }
-    EOS
-    apply_manifest(pp, :catch_failures => true)
+  PUPPETCODE
+  it 'is able to configure the frontend/backend with one node up' do
+    apply_manifest(pp_two, catch_failures: true)
   end
 
   # C9951
-  it "should do a curl against the LB to make sure it gets a response from each port" do
-    shell('curl localhost:5555').stdout.chomp.should match(/Response on 5556/)
-    shell('curl localhost:5555').stdout.chomp.should match(/Response on 5556/)
+  it 'does a curl against the LB to make sure it gets a response from each port #onenodeup' do
+    shell('curl localhost:5555').stdout.chomp.should match(%r{Response on 5556})
+    shell('curl localhost:5555').stdout.chomp.should match(%r{Response on 5556})
   end
 
-  it 'having no address set but setting bind' do
-    pp = <<-EOS
+  pp_three = <<-PUPPETCODE
       class { 'haproxy': }
         haproxy::frontend { 'app0':
         bind =>
           { '127.0.0.1:5555' => [] }
           ,
         }
-    EOS
-    apply_manifest(pp, :catch_failures => true)
+  PUPPETCODE
+  it 'having no address set but setting bind' do
+    apply_manifest(pp_three, catch_failures: true)
   end
-
 end

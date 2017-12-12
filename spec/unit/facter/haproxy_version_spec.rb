@@ -1,26 +1,26 @@
-require "spec_helper"
+require 'spec_helper'
 
-describe Facter::Util::Fact do
-  before {
+describe Facter::Util::Fact do # rubocop:disable RSpec/FilePath
+  before(:each) do
     Facter.clear
-  }
+  end
 
-  context "haproxy present" do
-    it do
-      haproxy_version_output = <<-EOS
+  context 'when haproxy is present' do
+    haproxy_version_output = <<-PUPPETCODE
       HA-Proxy version 1.5.3 2014/07/25
       Copyright 2000-2014 Willy Tarreau <w@1wt.eu>
-      EOS
-      Facter::Util::Resolution.expects(:which).at_least(1).with("haproxy").returns(true)
-      Facter::Util::Resolution.expects(:exec).at_least(1).with("haproxy -v 2>&1").returns(haproxy_version_output)
-      Facter.fact(:haproxy_version).value.should == "1.5.3"
+    PUPPETCODE
+    it do
+      Facter::Util::Resolution.expects(:which).at_least(1).with('haproxy').returns(true)
+      Facter::Util::Resolution.expects(:exec).at_least(1).with('haproxy -v 2>&1').returns(haproxy_version_output)
+      Facter.fact(:haproxy_version).value.should == '1.5.3'
     end
   end
 
-  context "haproxy not present" do
+  context 'when haproxy is not present' do
     it do
       Facter::Util::Resolution.stubs(:exec)
-      Facter::Util::Resolution.expects(:which).at_least(1).with("haproxy").returns(false)
+      Facter::Util::Resolution.expects(:which).at_least(1).with('haproxy').returns(false)
       Facter.fact(:haproxy_version).should be_nil
     end
   end

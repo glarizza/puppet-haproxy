@@ -1,11 +1,10 @@
 require 'spec_helper_acceptance'
 
 # C9708 C9709 WONTFIX
-describe "configuring haproxy" do
+describe 'configuring haproxy' do
   # C9961
   describe 'not managing the service' do
-    it 'should not listen on any ports' do
-      pp = <<-EOS
+    pp_one = <<-PUPPETCODE
       class { 'haproxy':
         service_manage => false,
       }
@@ -21,25 +20,22 @@ describe "configuring haproxy" do
         ipaddress => '127.0.0.1',
         ports     => '80',
       }
-      EOS
-      apply_manifest(pp, :catch_failures => true)
+    PUPPETCODE
+    it 'does not listen on any ports' do
+      apply_manifest(pp_one, catch_failures: true)
     end
 
     describe port('9090') do
-      it { should_not be_listening }
+      it { is_expected.not_to be_listening }
     end
     describe port('9091') do
-      it { should_not be_listening }
+      it { is_expected.not_to be_listening }
     end
   end
 
-  describe "configuring haproxy load balancing" do
-    before :all do
-    end
-
-    describe "multiple ports" do
-      it 'should be able to listen on an array of ports' do
-        pp = <<-EOS
+  describe 'configuring haproxy load balancing' do
+    describe 'multiple ports' do
+      pp_two = <<-PUPPETCODE
         class { 'haproxy': }
         haproxy::listen { 'stats':
           ipaddress => '127.0.0.1',
@@ -47,23 +43,23 @@ describe "configuring haproxy" do
           mode      => 'http',
           options   => { 'stats' => ['uri /','auth puppet:puppet'], },
         }
-        EOS
-        apply_manifest(pp, :catch_failures => true)
+      PUPPETCODE
+      it 'is able to listen on an array of ports' do
+        apply_manifest(pp_two, catch_failures: true)
       end
 
-      it 'should have stats listening on each port' do
-        ['9090','9091'].each do |port|
+      it 'has stats listening on each port' do # rubocop:disable RSpec/ExampleLength : Unable to reduce length without reducing overall quality
+        %w[9090 9091].each do |port|
           shell("/usr/bin/curl -u puppet:puppet localhost:#{port}") do |r|
-            r.stdout.should =~ /HAProxy/
+            r.stdout.should =~ %r{HAProxy}
             r.exit_code.should == 0
           end
         end
       end
     end
 
-    describe "with sort_options_alphabetic false" do
-      it 'should start' do
-        pp = <<-EOS
+    describe 'with sort_options_alphabetic false' do
+      pp_three = <<-PUPPETCODE
         class { 'haproxy::globals':
           sort_options_alphabetic => false,
         }
@@ -74,14 +70,15 @@ describe "configuring haproxy" do
           mode      => 'http',
           options   => { 'stats' => ['uri /','auth puppet:puppet'], },
         }
-        EOS
-        apply_manifest(pp, :catch_failures => true)
+      PUPPETCODE
+      it 'starts' do
+        apply_manifest(pp_three, catch_failures: true)
       end
 
-      it 'should have stats listening on each port' do
-        ['9090','9091'].each do |port|
+      it 'has stats listening on each port' do # rubocop:disable RSpec/ExampleLength : Unable to reduce length without reducing overall quality
+        %w[9090 9091].each do |port|
           shell("/usr/bin/curl -u puppet:puppet localhost:#{port}") do |r|
-            r.stdout.should =~ /HAProxy/
+            r.stdout.should =~ %r{HAProxy}
             r.exit_code.should == 0
           end
         end
@@ -90,25 +87,24 @@ describe "configuring haproxy" do
   end
 
   # C9934
-  describe "uninstalling haproxy" do
-    it 'removes it' do
-      pp = <<-EOS
+  describe 'uninstalling haproxy' do
+    pp_four = <<-PUPPETCODE
         class { 'haproxy':
           package_ensure => 'absent',
           service_ensure => 'stopped',
         }
-      EOS
-      apply_manifest(pp, :catch_failures => true)
+    PUPPETCODE
+    it 'removes it' do
+      apply_manifest(pp_four, catch_failures: true)
     end
     describe package('haproxy') do
-      it { should_not be_installed }
+      it { is_expected.not_to be_installed }
     end
   end
 
   # C9935 C9939
-  describe "disabling haproxy" do
-    it 'stops the service' do
-      pp = <<-EOS
+  describe 'disabling haproxy' do
+    pp_five = <<-PUPPETCODE
         class { 'haproxy':
           service_ensure => 'stopped',
         }
@@ -116,12 +112,13 @@ describe "configuring haproxy" do
           ipaddress => '127.0.0.1',
           ports     => '9090',
         }
-      EOS
-      apply_manifest(pp, :catch_failures => true)
+    PUPPETCODE
+    it 'stops the service' do
+      apply_manifest(pp_five, catch_failures: true)
     end
     describe service('haproxy') do
-      it { should_not be_running }
-      it { should_not be_enabled }
+      it { is_expected.not_to be_running }
+      it { is_expected.not_to be_enabled }
     end
   end
 end
