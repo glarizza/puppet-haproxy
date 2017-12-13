@@ -12,6 +12,7 @@ describe 'haproxy::instance' do
     'include haproxy::params'
   end
 
+  # rubocop:disable RSpec/NestedGroups
   # haproxy::instance with service name "haproxy".
 
   context 'when on supported platforms' do
@@ -623,4 +624,5 @@ describe 'haproxy::instance' do
       }.to raise_error(Puppet::Error, %r{operating system is not supported with the haproxy module})
     end
   end
+  # rubocop:enable RSpec/NestedGroups
 end
