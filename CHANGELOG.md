@@ -1,3 +1,11 @@
+## Supported Release 2.0.1
+### Summary
+
+A minor release made in order to implement Rubocop within the module.
+
+#### Added
+- Rubocop has been implemented in the module.
+
 ## Supported Release 2.0.0
 ### Summary
 
