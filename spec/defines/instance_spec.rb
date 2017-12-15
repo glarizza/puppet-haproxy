@@ -45,6 +45,31 @@ describe 'haproxy::instance' do
             )
           end
         end
+        context "on #{osfamily} family specifying a package version" do
+          let(:facts) do
+            { osfamily: osfamily }.merge default_facts
+          end
+          let(:params) do
+            {
+              'service_ensure' => 'running',
+              'package_ensure' => '1.7.9-1',
+              'package_name'   => 'haproxy',
+              'service_manage' => true,
+            }
+          end
+
+          it 'installs the haproxy package in a specific version' do
+            subject.should contain_package('haproxy').with(
+              'ensure' => '1.7.9-1',
+            )
+          end
+          it 'installs the haproxy service' do
+            subject.should contain_service('haproxy').with(
+              'ensure' => 'running', 'enable' => 'true',
+              'hasrestart' => 'true', 'hasstatus' => 'true'
+            )
+          end
+        end
         # C9938
         context "on #{osfamily} when specifying custom content" do
           let(:facts) do

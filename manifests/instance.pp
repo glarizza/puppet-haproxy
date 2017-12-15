@@ -13,7 +13,7 @@
 # === Parameters
 #
 # [*package_ensure*]
-#   Chooses whether the haproxy package should be installed or uninstalled.
+#   Ensure the package is present (installed), absent or a specific version.
 #   Defaults to 'present'
 #
 # [*package_name*]
@@ -141,7 +141,7 @@
 #
 define haproxy::instance (
   Optional[String] $package_name                               = undef,
-  Enum['absent', 'latest', 'present'] $package_ensure          = 'present',
+  String[1] $package_ensure                                    = 'present',
   Variant[Enum['running', 'stopped'], Boolean] $service_ensure = 'running',
   Boolean $service_manage                                      = true,
   Optional[Hash] $global_options                               = undef,
