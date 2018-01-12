@@ -589,7 +589,7 @@ Main class, includes all other classes.
 
 * `merge_options`: Whether to merge the user-supplied `global_options`/`defaults_options` hashes with their default values set in params.pp. Merging allows to change or add options without having to recreate the entire hash. Defaults to `false`, but will default to `true` in future releases.
 
-* `package_ensure`: Specifies whether the HAProxy package should exist. Defaults to 'present'. Valid options: 'present' and 'absent'. Default: 'present'.
+* `package_ensure`: Ensure the package is present (installed), absent or a specific version. Default: 'present'
 
 * `package_name`: Specifies the name of the HAProxy package. Valid options: a string. Default: 'haproxy'.
 
@@ -846,8 +846,8 @@ use the Class['haproxy'], which runs a single haproxy daemon on a machine.
 
 ##### Parameters
 
-* `package_ensure`: Chooses whether the haproxy package should be installed or uninstalled.
-Defaults to 'present'
+* `package_ensure`: Ensure the package is present (installed), absent or a
+specific version. Defaults to 'present'
 
 * `package_name`:
 The package name of haproxy. Defaults to undef, and no package is installed.
