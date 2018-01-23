@@ -12,7 +12,6 @@ describe 'haproxy::instance' do
     'include haproxy::params'
   end
 
-  # rubocop:disable RSpec/NestedGroups
   # haproxy::instance with service name "haproxy".
 
   context 'when on supported platforms' do
@@ -643,7 +642,7 @@ describe 'haproxy::instance' do
       { osfamily: 'windows' }.merge default_facts
     end
 
-    it do # rubocop:disable RSpec/MultipleExpectations
+    it do
       expect {
         is_expected.to contain_service('haproxy')
       }.to raise_error(Puppet::Error, %r{operating system is not supported with the haproxy module})
