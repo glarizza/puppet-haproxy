@@ -1,3 +1,21 @@
+# Changelog
+
+All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
+and this project adheres to [Semantic Versioning](http://semver.org).
+
+## Supported Release [2.1.0]
+### Summary
+This release uses the PDK convert functionality which in return makes the module PDK compliant. It also includes a roll up of maintenance changes.
+
+#### Added
+- PDK convert HAProxy ([MODULES-6457](https://tickets.puppet.com/browse/MODULES-6457)).
+
+#### Fixed
+- Bump allowed concat module version to 5.0.0.
+- Changes to address additional Rubocop failures.
+- Modulesync updates.
+- Re-add support for specifying package version in package_ensure.
+
 ## Supported Release 2.0.1
 ### Summary
 
@@ -39,7 +57,7 @@ A substantial release made to create a clean base from which Rubocop may be impl
 - spec.opts removed.
 - Validate_cmd no longer attempted on puppet versions below 3.5.
 - Pe requirement removed from metadata.
-- Ubuntu 10.04 and 12.04 entry in 'metadata.json'. 
+- Ubuntu 10.04 and 12.04 entry in 'metadata.json'.
 - Debian 6 entry in 'metadata.json'.
 
 ## Supported Release 1.5.0
@@ -71,18 +89,18 @@ A substantial release with many new feature additions, including added Ubuntu Xe
 - Now uses haproxy::config_file instead of deafult config_file.
 
 ## Supported Release 1.4.0
-###Summary
+### Summary
 
 This release adds the addition of the capability to create multiple instances of haproxy on a host. It also adds Debian 8 compatibility, some updates on current features and numerous bug fixes.
 
-####Features
+#### Features
 - Debian 8 compatibility added.
 - Adds haproxy::instance for the creation of multiple instances of haproxy on a host (MODULES-1783)
 - Addition of `service_options` parameter for `/etc/defaults/haproxy` file on Debian.
 - Merge of global and default options with user-supplied options - Allows the ability to override or add arbitrary keys and values to the `global_options` and `defaults_options` hashes without having to reproduce the whole hash.
 - Addition of a defined type haproxy::mapfile to manage map files.
 
-####Bugfixes
+#### Bugfixes
 - Prevents warning on puppet 4 from bind_options.
 - Value specified for timeout client now in seconds instead of milliseconds.
 - Consistent use of ::haproxy::config_file added (MODULES-2704)
@@ -92,7 +110,7 @@ This release adds the addition of the capability to create multiple instances of
 
 
 ## Supported Release 1.3.1
-###Summary
+### Summary
 
 Small release for support of newer PE versions. This increments the version of PE in the metadata.json file.
 
@@ -110,48 +128,48 @@ resources.
 - Add ability for frontend and listen to be ordered
 
 
-##2015-03-10 - Supported Release 1.2.0
-###Summary
+## 2015-03-10 - Supported Release 1.2.0
+### Summary
 This release adds flexibility for configuration of balancermembers and bind settings, and adds support for configuring peers. This release also renames the `tests` directory to `examples`
 
-####Features
+#### Features
 - Add support for loadbalancer members without ports
 - Add `haproxy_version` fact (MODULES-1619)
 - Add `haproxy::peer` and `haproxy::peers` defines
 - Make `bind` parameter processing more flexible
 
-####Bugfixes
+#### Bugfixes
 - Fix 'RedHat' name for osfamily case in `haproxy::params`
 - Fix lint warnings
 - Don't set a default for `ipaddress` so bind can be used (MODULES-1497)
 
-##2014-11-04 - Supported Release 1.1.0
-###Summary
+## 2014-11-04 - Supported Release 1.1.0
+### Summary
 
 This release primarily adds greater flexibility in the listen directive.
 
-####Features
+#### Features
 - Added `bind` parameter to `haproxy::frontend`
 
-####Deprecations
+#### Deprecations
 - `bind_options` in `haproxy::frontend` is being deprecated in favor of `bind`
 - Remove references to deprecated concat::setup class and update concat dependency
 
-##2014-07-21 - Supported Release 1.0.0
-###Summary
+## 2014-07-21 - Supported Release 1.0.0
+### Summary
 
 This supported release is the first stable release of haproxy! The updates to
 this release allow you to customize pretty much everything that HAProxy has to
 offer (that we could find at least).
 
-####Features
+#### Features
 - Brand new readme
 - Add haproxy::userlist defined resource for managing users
 - Add haproxy::frontend::bind_options parameter
 - Add haproxy::custom_fragment parameter for arbitrary configuration
 - Add compatibility with more recent operating system releases
 
-####Bugfixes
+#### Bugfixes
 - Check for listen/backend with the same names to avoid misordering
 - Removed warnings when storeconfigs is not being used
 - Passing lint
@@ -162,66 +180,68 @@ offer (that we could find at least).
 - Increase unit test coverage
 - Fix balancermember server lines with multiple ports
 
-##2014-05-28 - Version 0.5.0
-###Summary
+## 2014-05-28 - Version 0.5.0
+### Summary
 
 The primary feature of this release is a reorganization of the
 module to match best practices.  There are several new parameters
 and some bug fixes.
 
-####Features
+#### Features
 - Reorganized the module to follow install/config/service pattern
 - Added bind_options parameter to haproxy::listen
 - Updated tests
 
-####Fixes
+#### Fixes
 - Add license file
 - Whitespace cleanup
 - Use correct port in README
 - Fix order of concat fragments
 
-##2013-10-08 - Version 0.4.1
+## 2013-10-08 - Version 0.4.1
 
-###Summary
+### Summary
 
 Fix the dependency for concat.
 
-####Fixes
+#### Fixes
 - Changed the dependency to be the puppetlabs/concat version.
 
-##2013-10-03 - Version 0.4.0
+## 2013-10-03 - Version 0.4.0
 
-###Summary
+### Summary
 
 The largest feature in this release is the new haproxy::frontend
 and haproxy::backend defines.  The other changes are mostly to
 increase flexibility.
 
-####Features
+#### Features
 - Added parameters to haproxy:
  - `package_name`: Allows alternate package name.
 - Add haproxy::frontend and haproxy::backend defines.
 - Add an ensure parameter to balancermember so they can be removed.
 - Made chroot optional
 
-####Fixes
+#### Fixes
 - Remove deprecation warnings from templates.
 
-##2013-05-25 - Version 0.3.0
-####Features
+## 2013-05-25 - Version 0.3.0
+#### Features
 - Add travis testing
 - Add `haproxy::balancermember` `define_cookies` parameter
 - Add array support to `haproxy::listen` `ipaddress` parameter
 
-####Bugfixes
+#### Bugfixes
 - Documentation
 - Listen -> Balancermember dependency
 - Config line ordering
 - Whitespace
 - Add template lines for `haproxy::listen` `mode` parameter
 
-##2012-10-12 - Version 0.2.0
+## 2012-10-12 - Version 0.2.0
 - Initial public release
 - Backwards incompatible changes all around
 - No longer needs ordering passed for more than one listener
 - Accepts multiple listen ips/ports/server_names
+
+[2.1.0]:https://github.com/puppetlabs/puppetlabs-apt/compare/2.1.0...2.1.0
