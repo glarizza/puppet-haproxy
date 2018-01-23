@@ -110,7 +110,7 @@ describe 'haproxy', type: :class do
             'order'   => '10',
           )
         end
-        describe 'Base concat fragment contents' do # rubocop:disable RSpec/NestedGroups
+        describe 'Base concat fragment contents' do
           let(:contents) { param_value(catalogue, 'concat::fragment', 'haproxy-haproxy-base', 'content').split("\n") }
 
           # C9936 C9937
@@ -200,7 +200,7 @@ describe 'haproxy', type: :class do
             'order'   => '10',
           )
         end
-        describe 'Base concat fragment contents' do # rubocop:disable RSpec/NestedGroups
+        describe 'Base concat fragment contents' do
           let(:contents) { param_value(catalogue, 'concat::fragment', 'haproxy-haproxy-base', 'content').split("\n") }
 
           it 'contains global and defaults sections' do
@@ -277,7 +277,7 @@ describe 'haproxy', type: :class do
           'order'   => '10',
         )
       end
-      describe 'Base concat fragment contents' do # rubocop:disable RSpec/NestedGroups
+      describe 'Base concat fragment contents' do
         let(:contents) { param_value(catalogue, 'concat::fragment', 'haproxy-haproxy-base', 'content').split("\n") }
 
         # C9936 C9937
@@ -343,7 +343,7 @@ describe 'haproxy', type: :class do
           'order'   => '10',
         )
       end
-      describe 'Base concat fragment contents' do # rubocop:disable RSpec/NestedGroups
+      describe 'Base concat fragment contents' do
         let(:contents) { param_value(catalogue, 'concat::fragment', 'haproxy-haproxy-base', 'content').split("\n") }
 
         it 'contains global and defaults sections' do
@@ -601,7 +601,7 @@ describe 'haproxy', type: :class do
       { osfamily: 'windows' }.merge default_facts
     end
 
-    it do # rubocop:disable RSpec/MultipleExpectations : Exceptions are nested as part of test structure
+    it do
       expect {
         is_expected.to contain_service('haproxy')
       }.to raise_error(Puppet::Error, %r{operating system is not supported with the haproxy module})

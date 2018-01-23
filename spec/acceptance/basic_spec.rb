@@ -48,7 +48,7 @@ describe 'configuring haproxy' do
         apply_manifest(pp_two, catch_failures: true)
       end
 
-      it 'has stats listening on each port' do # rubocop:disable RSpec/ExampleLength : Unable to reduce length without reducing overall quality
+      it 'has stats listening on each port' do
         %w[9090 9091].each do |port|
           shell("/usr/bin/curl -u puppet:puppet localhost:#{port}") do |r|
             r.stdout.should =~ %r{HAProxy}
@@ -75,7 +75,7 @@ describe 'configuring haproxy' do
         apply_manifest(pp_three, catch_failures: true)
       end
 
-      it 'has stats listening on each port' do # rubocop:disable RSpec/ExampleLength : Unable to reduce length without reducing overall quality
+      it 'has stats listening on each port' do
         %w[9090 9091].each do |port|
           shell("/usr/bin/curl -u puppet:puppet localhost:#{port}") do |r|
             r.stdout.should =~ %r{HAProxy}
