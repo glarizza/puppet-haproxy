@@ -102,7 +102,7 @@ define haproxy::frontend (
   $defaults_use_backend                        = true,
   Optional[Stdlib::Absolutepath] $config_file  = undef,
   # Deprecated
-  $bind_options                                = undef,
+  $bind_options                                = '',
 ) {
   if $ports and $bind {
     fail('The use of $ports and $bind is mutually exclusive, please choose either one')
