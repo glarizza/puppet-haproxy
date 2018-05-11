@@ -30,10 +30,13 @@ Gemfile:
         from_env: BEAKER_HOSTGENERATOR_VERSION
       - gem: beaker-rspec
         from_env: BEAKER_RSPEC_VERSION
- 
+
 appveyor.yml:
   delete: true
 
 .rubocop.yml:
   default_configs:
     inherit_from: .rubocop_todo.yml
+
+.gitlab-ci.yml:
+  unmanaged: true
