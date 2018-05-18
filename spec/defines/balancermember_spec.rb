@@ -37,7 +37,7 @@ describe 'haproxy::balancermember' do
         name: 'tyler',
         listening_service: 'croy',
         ports: '18140',
-        options: %w[check close],
+        options: ['check', 'close'],
       }
     end
 
@@ -56,7 +56,7 @@ describe 'haproxy::balancermember' do
         name: 'tyler',
         listening_service: 'croy',
         ports: '18140',
-        options: %w[check close],
+        options: ['check', 'close'],
         define_cookies: true,
       }
     end
@@ -76,7 +76,7 @@ describe 'haproxy::balancermember' do
         name: 'tyler',
         listening_service: 'croy',
         ports: '18140',
-        options: %w[check close],
+        options: ['check', 'close'],
         verifyhost: true,
       }
     end
@@ -95,7 +95,7 @@ describe 'haproxy::balancermember' do
         name: 'tyler',
         listening_service: 'croy',
         ports: '18140',
-        server_names: %w[server01 server02],
+        server_names: ['server01', 'server02'],
         ipaddresses: ['192.168.56.200', '192.168.56.201'],
         options: ['check'],
       }
@@ -114,8 +114,8 @@ describe 'haproxy::balancermember' do
       {
         name: 'tyler',
         listening_service: 'croy',
-        ports: %w[18140 18150],
-        server_names: %w[server01 server02],
+        ports: ['18140', '18150'],
+        server_names: ['server01', 'server02'],
         ipaddresses: ['192.168.56.200', '192.168.56.201'],
         options: ['check'],
       }
@@ -134,7 +134,7 @@ describe 'haproxy::balancermember' do
       {
         name: 'tyler',
         listening_service: 'croy',
-        server_names: %w[server01 server02],
+        server_names: ['server01', 'server02'],
         ipaddresses: ['192.168.56.200', '192.168.56.201'],
         options: ['check'],
       }
@@ -154,7 +154,7 @@ describe 'haproxy::balancermember' do
       {
         name: 'haproxy',
         listening_service: 'baz',
-        server_names: %w[server01 server02],
+        server_names: ['server01', 'server02'],
         ipaddresses: ['10.0.0.1', '10.0.0.2'],
         options: ['check'],
       }
