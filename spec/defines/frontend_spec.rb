@@ -34,10 +34,7 @@ describe 'haproxy::frontend' do
       {
         name: 'apache',
         ipaddress: '23.23.23.23',
-        ports: %w[
-          80
-          443
-        ],
+        ports: ['80', '443'],
       }
     end
 
@@ -105,7 +102,7 @@ describe 'haproxy::frontend' do
       {
         name: 'apache',
         ipaddress: '23.23.23.23',
-        ports: %w[80443 80444],
+        ports: ['80443', '80444'],
       }
     end
 
@@ -163,7 +160,7 @@ describe 'haproxy::frontend' do
       {
         name: 'apache',
         ipaddress: '1.1.1.1',
-        ports: %w[80 8080],
+        ports: ['80', '8080'],
         bind_options: ['the options', 'go here'],
       }
     end

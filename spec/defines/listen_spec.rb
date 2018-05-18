@@ -34,10 +34,7 @@ describe 'haproxy::listen' do
       {
         name: 'apache',
         ipaddress: '23.23.23.23',
-        ports: %w[
-          80
-          443
-        ],
+        ports: ['80', '443'],
       }
     end
 

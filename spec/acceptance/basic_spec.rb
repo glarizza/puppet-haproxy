@@ -49,7 +49,7 @@ describe 'configuring haproxy' do
       end
 
       it 'has stats listening on each port' do
-        %w[9090 9091].each do |port|
+        ['9090', '9091'].each do |port|
           shell("/usr/bin/curl -u puppet:puppet localhost:#{port}") do |r|
             r.stdout.should =~ %r{HAProxy}
             r.exit_code.should == 0
@@ -76,7 +76,7 @@ describe 'configuring haproxy' do
       end
 
       it 'has stats listening on each port' do
-        %w[9090 9091].each do |port|
+        ['9090', '9091'].each do |port|
           shell("/usr/bin/curl -u puppet:puppet localhost:#{port}") do |r|
             r.stdout.should =~ %r{HAProxy}
             r.exit_code.should == 0

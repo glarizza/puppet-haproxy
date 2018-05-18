@@ -18,7 +18,7 @@ describe 'haproxy::instance' do
     let(:title) { 'haproxy' }
 
     describe 'for OS-agnostic configuration' do
-      %w[Debian RedHat Archlinux FreeBSD].each do |osfamily|
+      ['Debian', 'RedHat', 'Archlinux', 'FreeBSD'].each do |osfamily|
         context "on #{osfamily} family operatingsystems" do
           let(:facts) do
             { osfamily: osfamily }.merge default_facts
@@ -88,7 +88,7 @@ describe 'haproxy::instance' do
     end
 
     describe 'for linux operating systems' do
-      %w[Debian RedHat Archlinux].each do |osfamily|
+      ['Debian', 'RedHat', 'Archlinux'].each do |osfamily|
         context "on #{osfamily} family operatingsystems" do
           let(:facts) do
             { osfamily: osfamily }.merge default_facts
@@ -247,7 +247,7 @@ describe 'haproxy::instance' do
     let(:title) { 'group1' }
 
     describe 'for OS-agnostic configuration' do
-      %w[Debian RedHat Archlinux FreeBSD].each do |osfamily|
+      ['Debian', 'RedHat', 'Archlinux', 'FreeBSD'].each do |osfamily|
         context "on #{osfamily} family operatingsystems" do
           let(:facts) do
             { osfamily: osfamily }.merge default_facts
@@ -300,7 +300,7 @@ describe 'haproxy::instance' do
     end
 
     describe 'for linux operating systems' do
-      %w[Debian RedHat Archlinux].each do |osfamily|
+      ['Debian', 'RedHat', 'Archlinux'].each do |osfamily|
         context "on #{osfamily} family operatingsystems" do
           let(:facts) do
             { osfamily: osfamily }.merge default_facts

@@ -1,7 +1,7 @@
 require 'spec_helper_acceptance'
 
 # lucid ships with haproxy 1.3 which does not have userlist support by default
-describe 'userlist define', unless: (%w[Darwin Suse windows AIX Solaris].include?(fact('osfamily')) || (fact('lsbdistcodename') == 'lucid') ||
+describe 'userlist define', unless: (['Darwin', 'Suse', 'windows', 'AIX', 'Solaris'].include?(fact('osfamily')) || (fact('lsbdistcodename') == 'lucid') ||
                                     (fact('osfamily') == 'RedHat' && fact('operatingsystemmajrelease') == '5')) do
 
   pp_one = <<-PUPPETCODE

@@ -9,7 +9,7 @@ describe 'haproxy', type: :class do
   end
 
   describe 'for OS-agnostic configuration' do
-    %w[Debian RedHat Archlinux FreeBSD Gentoo].each do |osfamily|
+    ['Debian', 'RedHat', 'Archlinux', 'FreeBSD', 'Gentoo'].each do |osfamily|
       context "on #{osfamily} family operatingsystems" do
         let(:facts) do
           { osfamily: osfamily }.merge default_facts
@@ -77,7 +77,7 @@ describe 'haproxy', type: :class do
   end
 
   describe 'for linux operating systems' do
-    %w[Debian RedHat Archlinux Gentoo].each do |osfamily|
+    ['Debian', 'RedHat', 'Archlinux', 'Gentoo'].each do |osfamily|
       context "on #{osfamily} family operatingsystems" do
         let(:facts) do
           { osfamily: osfamily }.merge default_facts

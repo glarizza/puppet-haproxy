@@ -45,7 +45,7 @@ RSpec.configure do |c|
       PUPPETCODE
       apply_manifest(pp, catch_failures: true)
 
-      %w[5556 5557].each do |port|
+      ['5556', '5557'].each do |port|
         content = "socat -v tcp-l:#{port},reuseaddr,fork system:\"printf \\'HTTP/1.1 200 OK\r\n\r\nResponse on #{port}\\'\",nofork"
         create_remote_file(host, "/root/script-#{port}.sh", content)
         shell(%(/usr/bin/screen -dmS script-#{port} sh /root/script-#{port}.sh))
