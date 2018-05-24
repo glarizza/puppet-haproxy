@@ -37,10 +37,10 @@ RSpec.configure do |c|
             path   => ['/bin','/usr/bin','/sbin','/usr/sbin'],
             onlyif => 'which getenforce && getenforce | grep Enforcing',
           }
-          if $::operatingsystemmajrelease == '7' {
-            # For `netstat` for serverspec
-            package { 'net-tools': ensure => present, }
-          }
+        }
+        if ($::osfamily == 'RedHat' and $::operatingsystemmajrelease == '7') or ($::osfamily == 'Debian' and $::operatingsystemmajrelease == '9') {
+          # For `netstat` for serverspec
+          package { 'net-tools': ensure => present, }
         }
       PUPPETCODE
       apply_manifest(pp, catch_failures: true)
