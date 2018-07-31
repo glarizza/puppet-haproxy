@@ -969,9 +969,9 @@ This type will setup a additional defaults configuration block inside the haprox
 This module is tested and officially supported on the following platforms:
 
 * RHEL versions 5, 6, and 7
-* Ubuntu versions 10.04, 12.04, and 14.04
-* Debian versions 6 and 7
-* Scientific Linux versions 5, 6, and 7
+* Ubuntu versions 14.04, 16.04 and 18.04
+* Debian versions 8 and 9
+* Scientific Linux versions 6, and 7
 * CentOS versions 5, 6, and 7
 * Oracle Linux versions 5, 6, and 7
 
