@@ -38,7 +38,7 @@ RSpec.configure do |c|
             onlyif => 'which getenforce && getenforce | grep Enforcing',
           }
         }
-        if ($::osfamily == 'RedHat' and $::operatingsystemmajrelease == '7') or ($::osfamily == 'Debian' and $::operatingsystemmajrelease == '9') {
+        if ($::osfamily == 'RedHat' and $::operatingsystemmajrelease == '7') or ($::osfamily == 'Debian' and ($::operatingsystemmajrelease == '9' or $::operatingsystemmajrelease == '18.04')) {
           # For `netstat` for serverspec
           package { 'net-tools': ensure => present, }
         }
