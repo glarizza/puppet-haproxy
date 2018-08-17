@@ -102,7 +102,7 @@ define haproxy::resolver (
     $_config_file  = pick($config_file, inline_template($haproxy::params::config_file_tmpl))
   }
 
-  validate_absolute_path(dirname($_config_file))
+  assert_type(Stdlib::AbsolutePath, dirname($_config_file))
 
   include ::haproxy::globals
   $_sort_options_alphabetic = pick($sort_options_alphabetic, $haproxy::globals::sort_options_alphabetic)
