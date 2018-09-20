@@ -1,7 +1,7 @@
 {
   "name": "puppetlabs-haproxy",
   "version": "2.1.0",
-  "author": "Puppet Labs",
+  "author": "puppetlabs",
   "summary": "Configures HAProxy servers and manages the configuration of backend member servers.",
   "license": "Apache-2.0",
   "source": "https://github.com/puppetlabs/puppetlabs-haproxy",
