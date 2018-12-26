@@ -14,6 +14,7 @@ class haproxy::params {
   case $::osfamily {
     'Archlinux', 'Debian', 'Redhat', 'Gentoo', 'Suse' : {
       $package_name      = 'haproxy'
+      $service_name      = 'haproxy'
       $global_options    = {
         'log'     => "${::ipaddress} local0",
         'chroot'  => '/var/lib/haproxy',
@@ -50,6 +51,7 @@ class haproxy::params {
     }
     'FreeBSD': {
       $package_name      = 'haproxy'
+      $service_name      = 'haproxy'
       $global_options    = {
         'log'     => [
           '127.0.0.1 local0',

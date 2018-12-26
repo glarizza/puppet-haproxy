@@ -27,6 +27,10 @@
 #   Chooses whether the haproxy service state should be managed by puppet at
 #   all. Defaults to true
 #
+# [*service_name*]
+#   The service name for haproxy. Defaults to 'haproxy'
+#   NOTE: haproxy::instance has a different default.
+#
 # [*service_options*]
 #   Contents for the `/etc/defaults/haproxy` file on Debian. Defaults to "ENABLED=1\n" on Debian, and is ignored on other systems.
 #
@@ -113,6 +117,7 @@ class haproxy (
   String $package_name                                         = $haproxy::params::package_name,
   Variant[Enum['running', 'stopped'], Boolean] $service_ensure = 'running',
   Boolean $service_manage                                      = true,
+  String $service_name                                         = $haproxy::params::service_name,
   String $service_options                                      = $haproxy::params::service_options,
   $sysconfig_options                                           = $haproxy::params::sysconfig_options,
   Hash $global_options                                         = $haproxy::params::global_options,
@@ -163,6 +168,7 @@ class haproxy (
     package_name        => $package_name,
     service_ensure      => $_service_ensure,
     service_manage      => $_service_manage,
+    service_name        => $service_name,
     global_options      => $global_options,
     defaults_options    => $defaults_options,
     restart_command     => $restart_command,
