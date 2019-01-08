@@ -28,6 +28,11 @@
 #   Chooses whether the haproxy service state should be managed by puppet at
 #   all. Defaults to true
 #
+# [*service_name*]
+#   The service name for haproxy. Defaults to undef. If no name is given then
+#   the value computed for $instance_name will be used.
+#   NOTE: Class['haproxy'] has a different default.
+#
 # [*global_options*]
 #   A hash of all the haproxy global options. If you want to specify more
 #    than one option (i.e. multiple timeout or stats options), pass those
@@ -144,6 +149,7 @@ define haproxy::instance (
   String[1] $package_ensure                                    = 'present',
   Variant[Enum['running', 'stopped'], Boolean] $service_ensure = 'running',
   Boolean $service_manage                                      = true,
+  Optional[String] $service_name                               = undef,
   Optional[Hash] $global_options                               = undef,
   Optional[Hash] $defaults_options                             = undef,
   $restart_command                                             = undef,
@@ -188,6 +194,8 @@ define haproxy::instance (
     $_config_dir = pick($config_dir, inline_template($haproxy::params::config_dir_tmpl))
   }
 
+  $instance_service_name = pick($service_name, $instance_name)
+
   haproxy::config { $title:
     instance_name       => $instance_name,
     config_dir          => $_config_dir,
@@ -204,7 +212,7 @@ define haproxy::instance (
     package_ensure => $package_ensure,
   }
   haproxy::service { $title:
-    instance_name     => $instance_name,
+    instance_name     => $instance_service_name,
     service_ensure    => $service_ensure,
     service_manage    => $service_manage,
     restart_command   => $restart_command,

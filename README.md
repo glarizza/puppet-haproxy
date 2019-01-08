@@ -8,6 +8,7 @@
     * [Beginning with haproxy](#beginning-with-haproxy)
 4. [Usage - Configuration options and additional functionality](#usage)
     * [Configure HAProxy options](#configure-haproxy-options)
+    * [HAProxy and Software Collections](#haproxy-and-software-collections)
     * [Configure HAProxy daemon listener](#configure-haproxy-daemon-listener)
     * [Configure multi-network daemon listener](#configure-multi-network-daemon-listener)
     * [Configure HAProxy load-balanced member nodes](#configure-haproxy-load-balanced-member-nodes)
@@ -125,6 +126,22 @@ class { 'haproxy':
     ],
     'maxconn' => '15000',
   },
+}
+~~~
+
+### HAProxy and Software Collections
+
+To use this module with a software collection such as
+[rh-haproxy18](https://www.softwarecollections.org/en/scls/rhscl/rh-haproxy18/)
+you will need to set a few extra parameters like so:
+
+~~~puppet
+class { 'haproxy':
+  package_name        => 'rh-haproxy18',
+  config_dir          => '/etc/opt/rh/rh-haproxy18/haproxy',
+  config_file         => '/etc/opt/rh/rh-haproxy18/haproxy/haproxy.cfg',
+  config_validate_cmd => '/bin/scl enable rh-haproxy18 "haproxy -f % -c"',
+  service_name        => 'rh-haproxy18-haproxy',
 }
 ~~~
 
@@ -599,6 +616,8 @@ Main class, includes all other classes.
 
 * `service_manage`: Specifies whether the state of the HAProxy service should be managed by Puppet. Valid options: 'true' and 'false'. Default: 'true'.
 
+* `service_name`: Specifies the name of the HAProxy service. Valid options: a string. Default: 'haproxy'.
+
 * `service_options`: Contents for the `/etc/defaults/haproxy` file on Debian. Defaults to "ENABLED=1\n" on Debian, and is ignored on other systems.
 
 * `sysconfig_options`: Contents for the `/etc/sysconfig/haproxy` file on RedHat(-based) systems. Defaults to OPTIONS="" on RedHat(-based) systems and is ignored on others
@@ -860,6 +879,11 @@ stopped and disabled at boot. Defaults to 'running'
 * `service_manage`:
 Chooses whether the haproxy service state should be managed by puppet at
 all. Defaults to true
+
+* `service_name`:
+The service name for haproxy. Defaults to undef. If no name is given then
+the value computed for $instance_name will be used.
+NOTE: Class['haproxy'] has a different default.
 
 * `global_options`:
 A hash of all the haproxy global options. If you want to specify more
