@@ -334,18 +334,19 @@ class { 'haproxy':
 
 # Declare the resolver
 haproxy::resolver { 'puppet00':
-  nameservers     => {
+  nameservers           => {
     'dns1' => '192.168.56.1:53',
     'dns2' => '192.168.56.2:53'
   },
-  hold            => {
+  hold                  => {
     'nx'    => '30s',
     'valid' => '10s'
   },
-  resolve_retries => 3,
-  timeout         => {
+  resolve_retries       => 3,
+  timeout               => {
     'retry' => '1s'
   },
+  accepted_payload_size => 512,
 }
 
 # Setup the balancermember to use the resolver for DNS resolution

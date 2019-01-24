@@ -34,6 +34,13 @@
 #    configuration block.
 #   $timeout = { 'retry' => '1s' }
 #
+# [*accepted_payload_size*]
+#   Defines the maximum payload size accepted by HAProxy and announced to all the
+#   name servers configured in this resolvers section.
+#   <nb> is in bytes. If not set, HAProxy announces 512. (minimal value defined
+#   by RFC 6891)
+#   Note: the maximum allowed value is 8192.
+#
 # [*collect_exported*]
 #   Boolean, default 'true'. True means 'collect exported @@balancermember
 #    resources' (for the case when every balancermember node exports itself),
@@ -60,18 +67,19 @@
 #  Exporting the resource for a balancer member:
 #
 #  haproxy::resolver { 'puppet00':
-#    nameservers     => {
+#    nameservers           => {
 #      'dns1' => '10.0.0.1:53',
 #      'dns2' => '10.0.0.2:53'
 #    },
-#    hold            => {
+#    hold                  => {
 #      'nx'    => '30s',
 #      'valid' => '10s'
 #    },
-#    resolve_retries => 3,
-#    timeout         => {
+#    resolve_retries       => 3,
+#    timeout               => {
 #      'retry' => '1s'
 #    },
+#    accepted_payload_size => 512,
 #  }
 #
 # === Authors
@@ -84,6 +92,7 @@ define haproxy::resolver (
   $hold                    = undef,
   $resolve_retries         = undef,
   $timeout                 = undef,
+  $accepted_payload_size   = undef,
   $instance                = 'haproxy',
   $section_name            = $name,
   $sort_options_alphabetic = undef,
@@ -104,13 +113,19 @@ define haproxy::resolver (
 
   assert_type(Stdlib::AbsolutePath, dirname($_config_file))
 
-  include ::haproxy::globals
+  include haproxy::globals
   $_sort_options_alphabetic = pick($sort_options_alphabetic, $haproxy::globals::sort_options_alphabetic)
 
   if $defaults == undef {
     $order = "20-${section_name}-01"
   } else {
     $order = "25-${defaults}-${section_name}-02"
+  }
+
+  # verify accepted_payload_size is withing the allowed range per HAProxy docs
+  # https://cbonte.github.io/haproxy-dconv/1.8/configuration.html#5.3.2-accepted_payload_size
+  if ($accepted_payload_size < 512) or ($accepted_payload_size > 8192) {
+    fail('$accepted_payload_size must be atleast 512 and not more than 8192')
   }
 
   # Template uses: $section_name
