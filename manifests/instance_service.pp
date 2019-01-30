@@ -74,7 +74,7 @@ define haproxy::instance_service (
   # Create init.d or systemd files so that "service haproxy-$instance start"
   # or "systemd start haproxy-$instance" works.
   # This is not required if the standard instance is being used.
-  if ($title == 'haproxy') or ($haproxy_package == 'haproxy') {
+  if ($title == 'haproxy') and ($haproxy_package == 'haproxy') {
   } else {
     $initfile = "/etc/init.d/haproxy-${title}"
     if $::osfamily == 'RedHat' and $::operatingsystemmajrelease == '6' {
