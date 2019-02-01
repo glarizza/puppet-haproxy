@@ -3,11 +3,19 @@ resolvers <%= @section_name %>
 <% @nameservers.each do |id, nameserver| -%>
   nameserver <%= id %> <%= nameserver %>
 <% end -%>
+<% if @resolve_retries -%>
   resolve_retries <%= @resolve_retries %>
+<% end -%>
+<% if @timeout -%>
 <% @timeout.each do |event, time| -%>
   timeout <%= event %> <%= time %>
 <% end -%>
+<% end -%>
+<% if @hold -%>
 <% @hold.each do |status, period| -%>
   hold <%= status %> <%= period %>
 <% end -%>
+<% end -%>
+<% if @accepted_payload_size -%>
   accepted_payload_size <%= @accepted_payload_size %>
+<% end -%>
