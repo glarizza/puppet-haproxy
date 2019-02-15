@@ -22,7 +22,9 @@ describe 'configuring haproxy' do
       }
     PUPPETCODE
     it 'does not listen on any ports' do
-      apply_manifest(pp_one, catch_failures: true)
+      retry_on_error_matching do
+        apply_manifest(pp_one, catch_failures: true)
+      end
     end
 
     describe port('9090') do
@@ -45,7 +47,9 @@ describe 'configuring haproxy' do
         }
       PUPPETCODE
       it 'is able to listen on an array of ports' do
-        apply_manifest(pp_two, catch_failures: true)
+        retry_on_error_matching do
+          apply_manifest(pp_two, catch_failures: true)
+        end
       end
 
       it 'has stats listening on each port' do
@@ -72,7 +76,9 @@ describe 'configuring haproxy' do
         }
       PUPPETCODE
       it 'starts' do
-        apply_manifest(pp_three, catch_failures: true)
+        retry_on_error_matching do
+          apply_manifest(pp_three, catch_failures: true)
+        end
       end
 
       it 'has stats listening on each port' do
@@ -95,7 +101,9 @@ describe 'configuring haproxy' do
         }
     PUPPETCODE
     it 'removes it' do
-      apply_manifest(pp_four, catch_failures: true)
+      retry_on_error_matching do
+        apply_manifest(pp_four, catch_failures: true)
+      end
     end
     describe package('haproxy') do
       it { is_expected.not_to be_installed }
@@ -114,7 +122,9 @@ describe 'configuring haproxy' do
         }
     PUPPETCODE
     it 'stops the service' do
-      apply_manifest(pp_five, catch_failures: true)
+      retry_on_error_matching do
+        apply_manifest(pp_five, catch_failures: true)
+      end
     end
     describe service('haproxy') do
       it { is_expected.not_to be_running }

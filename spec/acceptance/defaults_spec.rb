@@ -49,7 +49,9 @@ describe 'frontend backend defines with defaults' do
       }
   PUPPETCODE
   it 'is able to configure defaults with puppet' do
-    apply_manifest(pp_one, catch_failures: true)
+    retry_on_error_matching do
+      apply_manifest(pp_one, catch_failures: true)
+    end
   end
 
   it 'does a curl against the LB to make sure it gets a response from each port' do
@@ -114,7 +116,9 @@ describe 'frontend backend defines with defaults' do
       }
   PUPPETCODE
   it 'is able to configure defaults and old style with puppet' do
-    apply_manifest(pp_two, catch_failures: true)
+    retry_on_error_matching do
+      apply_manifest(pp_two, catch_failures: true)
+    end
   end
 
   it 'does a curl against the LB to make sure it gets a response from each port #oldstyle' do
