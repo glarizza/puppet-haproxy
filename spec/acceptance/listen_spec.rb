@@ -50,8 +50,7 @@ describe 'listen define' do
       }
   PUPPETCODE
   it 'is able to configure the listen active/passive' do
-    apply_manifest(pp_two, catch_failures: true)
-    apply_manifest(pp_two, catch_changes: true)
+    idempotent_apply(default, pp_two, {})
   end
 
   it 'does a curl against the LB to make sure it only gets a response from the active port' do

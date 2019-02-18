@@ -53,7 +53,6 @@ describe 'frontend backend defines with defaults' do
   end
 
   it 'does a curl against the LB to make sure it gets a response from each port' do
-    # shell('cat /etc/haproxy/haproxy.cfg').stdout.should match(/^$/)
     shell('curl localhost:5555').stdout.chomp.should match(%r{Response on 555(6|7)})
     shell('curl localhost:5555').stdout.chomp.should match(%r{Response on 555(6|7)})
   end
@@ -119,7 +118,6 @@ describe 'frontend backend defines with defaults' do
   end
 
   it 'does a curl against the LB to make sure it gets a response from each port #oldstyle' do
-    # shell('cat /etc/haproxy/haproxy.cfg').stdout.should match(/^$/)
     shell('curl localhost:5555').stdout.chomp.should match(%r{Response on 5556})
     shell('curl localhost:6666').stdout.chomp.should match(%r{Response on 5557})
   end

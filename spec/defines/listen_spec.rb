@@ -174,6 +174,30 @@ describe 'haproxy::listen' do
       expect { catalogue }.to raise_error Puppet::Error, %r{mutually exclusive}
     end
   end
+  context 'when an ipaddress parameter and a bind parameter are passed' do
+    let(:params) do
+      {
+        name: 'apache',
+        ipaddress: '1.1.1.1',
+        bind: { '192.168.0.1:80' => ['ssl'] },
+      }
+    end
+
+    it 'raises error' do
+      expect { catalogue }.to raise_error Puppet::Error, %r{mutually exclusive}
+    end
+  end
+  context 'when no ipaddress or bind parameter are passed' do
+    let(:params) do
+      {
+        name: 'apache',
+      }
+    end
+
+    it 'raises error' do
+      expect { catalogue }.to raise_error Puppet::Error, %r{is needed}
+    end
+  end
   # C9977
   context 'when an invalid hostname is passed' do
     let(:params) do
