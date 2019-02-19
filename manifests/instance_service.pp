@@ -101,7 +101,7 @@ define haproxy::instance_service (
       $unitfile = "/usr/lib/systemd/system/haproxy-${title}.service"
       file { $unitfile:
         ensure  => file,
-        mode    => '0744',
+        mode    => '0644',
         owner   => 'root',
         group   => 'root',
         content => template($haproxy_unit_template),
