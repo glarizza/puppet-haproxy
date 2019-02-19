@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [3.0.1](https://github.com/puppetlabs/puppetlabs-haproxy/tree/3.0.1) (2019-02-19)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-haproxy/compare/3.0.0...3.0.1)
+
+### Fixed
+
+- \(MODULES-8566\) Only create entries for defined settings [\#350](https://github.com/puppetlabs/puppetlabs-haproxy/pull/350) ([genebean](https://github.com/genebean))
+
 ## [3.0.0](https://github.com/puppetlabs/puppetlabs-haproxy/tree/3.0.0) (2019-02-01)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-haproxy/compare/2.2.0...3.0.0)
