@@ -1,9 +1,7 @@
 require 'spec_helper_acceptance'
 
-# lucid ships with haproxy 1.3 which does not have userlist support by default
-describe 'userlist define' do
-  describe 'userlist define' do
-    pp_one = <<-PUPPETCODE
+describe 'userlist define', unless: (fact('osfamily') == 'RedHat' && fact('operatingsystemmajrelease') == '5') do
+  pp_one = <<-PUPPETCODE
       class { 'haproxy': }
       haproxy::userlist { 'users_groups':
         users  => [
@@ -47,36 +45,35 @@ describe 'userlist define' do
         ports             => '5556',
       }
   PUPPETCODE
-    it 'is able to configure the listen with puppet' do
-      # C9966 C9970
-      retry_on_error_matching do
-        apply_manifest(pp_one, catch_failures: true)
-      end
+  it 'is able to configure the listen with puppet' do
+    # C9966 C9970
+    retry_on_error_matching do
+      apply_manifest(pp_one, catch_failures: true)
     end
-
-    # C9957
-    it 'test1 should auth as user' do
-      shell('curl http://test1:elgato@localhost:5555').stdout.chomp.should eq('Response on 5556')
-    end
-    it 'test2 should auth as user' do
-      shell('curl http://test2:elgato@localhost:5555').stdout.chomp.should eq('Response on 5556')
-    end
-
-    # C9958
-    it 'does not auth as user' do
-      shell('curl http://test3:elgato@localhost:5555').stdout.chomp.should_not eq('Response on 5556')
-    end
-
-    # C9959
-    it 'auths as group' do
-      shell('curl http://test1:elgato@localhost:5554').stdout.chomp.should eq('Response on 5556')
-    end
-
-    # C9960
-    it 'does not auth as group' do
-      shell('curl http://test2:elgato@localhost:5554').stdout.chomp.should_not eq('Response on 5556')
-    end
-
-    # C9965 C9967 C9968 C9969 WONTFIX
   end
+
+  # C9957
+  it 'test1 should auth as user' do
+    shell('curl http://test1:elgato@localhost:5555').stdout.chomp.should eq('Response on 5556')
+  end
+  it 'test2 should auth as user' do
+    shell('curl http://test2:elgato@localhost:5555').stdout.chomp.should eq('Response on 5556')
+  end
+
+  # C9958
+  it 'does not auth as user' do
+    shell('curl http://test3:elgato@localhost:5555').stdout.chomp.should_not eq('Response on 5556')
+  end
+
+  # C9959
+  it 'auths as group' do
+    shell('curl http://test1:elgato@localhost:5554').stdout.chomp.should eq('Response on 5556')
+  end
+
+  # C9960
+  it 'does not auth as group' do
+    shell('curl http://test2:elgato@localhost:5554').stdout.chomp.should_not eq('Response on 5556')
+  end
+
+  # C9965 C9967 C9968 C9969 WONTFIX
 end
