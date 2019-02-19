@@ -1,9 +1,6 @@
 require 'spec_helper_acceptance'
 
-# lucid ships with haproxy 1.3 which does not have userlist support by default
-describe 'userlist define', unless: (['Darwin', 'Suse', 'windows', 'AIX', 'Solaris'].include?(fact('osfamily')) || (fact('lsbdistcodename') == 'lucid') ||
-                                    (fact('osfamily') == 'RedHat' && fact('operatingsystemmajrelease') == '5')) do
-
+describe 'userlist define', unless: (fact('osfamily') == 'RedHat' && fact('operatingsystemmajrelease') == '5') do
   pp_one = <<-PUPPETCODE
       class { 'haproxy': }
       haproxy::userlist { 'users_groups':
@@ -50,7 +47,9 @@ describe 'userlist define', unless: (['Darwin', 'Suse', 'windows', 'AIX', 'Solar
   PUPPETCODE
   it 'is able to configure the listen with puppet' do
     # C9966 C9970
-    apply_manifest(pp_one, catch_failures: true)
+    retry_on_error_matching do
+      apply_manifest(pp_one, catch_failures: true)
+    end
   end
 
   # C9957

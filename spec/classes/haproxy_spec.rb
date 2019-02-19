@@ -393,13 +393,7 @@ describe 'haproxy', type: :class do
         verify_contents(catalogue, '/etc/default/haproxy', ['ENABLED=1'])
       end
     end
-    context 'when only on RedHat family operatingsystems' do
-      let(:facts) do
-        { osfamily: 'RedHat' }.merge default_facts
-      end
 
-      pending('Not yet implemented')
-    end
     context 'when only on Gentoo family operatingsystems' do
       let(:facts) do
         { osfamily: 'Gentoo' }.merge default_facts

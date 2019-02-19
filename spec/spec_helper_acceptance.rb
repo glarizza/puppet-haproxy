@@ -6,6 +6,49 @@ require 'beaker/puppet_install_helper'
 run_puppet_install_helper
 configure_type_defaults_on(hosts)
 
+def idempotent_apply(hosts, manifest, opts = {}, &block)
+  block_on hosts, opts do |host|
+    file_path = host.tmpfile('apply_manifest.pp')
+    create_remote_file(host, file_path, manifest + "\n")
+
+    puppet_apply_opts = { :verbose => nil, 'detailed-exitcodes' => nil }
+    on_options = { acceptable_exit_codes: [0, 2] }
+    on host, puppet('apply', file_path, puppet_apply_opts), on_options, &block
+    puppet_apply_opts2 = { :verbose => nil, 'detailed-exitcodes' => nil }
+    on_options2 = { acceptable_exit_codes: [0] }
+    on host, puppet('apply', file_path, puppet_apply_opts2), on_options2, &block
+  end
+end
+
+UNSUPPORTED_PLATFORMS = ['RedHat', 'Suse', 'windows', 'AIX', 'Solaris'].freeze
+MAX_RETRY_COUNT       = 12
+RETRY_WAIT            = 10
+ERROR_MATCHER         = %r{(no valid OpenPGP data found|keyserver timed out|keyserver receive failed)}
+
+# This method allows a block to be passed in and if an exception is raised
+# that matches the 'error_matcher' matcher, the block will wait a set number
+# of seconds before retrying.
+# Params:
+# - max_retry_count - Max number of retries
+# - retry_wait_interval_secs - Number of seconds to wait before retry
+# - error_matcher - Matcher which the exception raised must match to allow retry
+# Example Usage:
+# retry_on_error_matching(3, 5, /OpenGPG Error/) do
+#   apply_manifest(pp, :catch_failures => true)
+# end
+def retry_on_error_matching(max_retry_count = MAX_RETRY_COUNT, retry_wait_interval_secs = RETRY_WAIT, error_matcher = ERROR_MATCHER)
+  try = 0
+  begin
+    puts "retry_on_error_matching: try #{try}" unless try.zero?
+    try += 1
+    yield
+  rescue StandardError => e
+    raise unless try < max_retry_count && (error_matcher.nil? || e.message =~ error_matcher)
+    sleep retry_wait_interval_secs
+    retry
+  end
+end
+
 RSpec.configure do |c|
   # Project root
   proj_root = File.expand_path(File.join(File.dirname(__FILE__), '..'))

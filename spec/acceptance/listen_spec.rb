@@ -18,7 +18,9 @@ describe 'listen define' do
       }
   PUPPETCODE
   it 'is able to configure the listen with puppet' do
-    apply_manifest(pp_one, catch_failures: true)
+    retry_on_error_matching do
+      apply_manifest(pp_one, catch_failures: true)
+    end
   end
 
   # This is not great since it depends on the ordering served by the load
@@ -50,8 +52,9 @@ describe 'listen define' do
       }
   PUPPETCODE
   it 'is able to configure the listen active/passive' do
-    apply_manifest(pp_two, catch_failures: true)
-    apply_manifest(pp_two, catch_changes: true)
+    retry_on_error_matching do
+      idempotent_apply(default, pp_two, {})
+    end
   end
 
   it 'does a curl against the LB to make sure it only gets a response from the active port' do
@@ -80,7 +83,9 @@ describe 'listen define' do
       }
   PUPPETCODE
   it 'is able to configure the listen with only one node up' do
-    apply_manifest(pp_three, catch_failures: true)
+    retry_on_error_matching do
+      apply_manifest(pp_three, catch_failures: true)
+    end
   end
 
   it 'does a curl against the LB to make sure it gets a response from each port #onenodeup' do
@@ -97,6 +102,8 @@ describe 'listen define' do
         }
   PUPPETCODE
   it 'having no address set but setting bind' do
-    apply_manifest(pp_four, catch_failures: true)
+    retry_on_error_matching do
+      apply_manifest(pp_four, catch_failures: true)
+    end
   end
 end
