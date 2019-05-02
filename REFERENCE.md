@@ -7,7 +7,7 @@
 
 * [`haproxy`](#haproxy): A Puppet module, using storeconfigs, to model an haproxy configuration. Currently VERY limited - assumes Redhat/CentOS setup. Pull requests a
 * [`haproxy::globals`](#haproxyglobals): For global configuration options used by all haproxy instances.
-* [`haproxy::params`](#haproxyparams): == Class: haproxy::params  This is a container class holding default parameters for for haproxy class.  currently, only the Redhat family is 
+* [`haproxy::params`](#haproxyparams): This is a container class holding default parameters for for haproxy class.
 
 **Defined types**
 
@@ -17,7 +17,6 @@ _Public Defined types_
 haproxy.cfg file on an haproxy load balancer.
 * [`haproxy::balancermember`](#haproxybalancermember): This type will setup a balancer member inside a listening service
 configuration block in /etc/haproxy/haproxy.cfg on the load balancer.
-* [`haproxy::balancermember::collect_exported`](#haproxybalancermembercollect_exported): Private define
 * [`haproxy::defaults`](#haproxydefaults): 
 * [`haproxy::frontend`](#haproxyfrontend): This type will setup a frontend service configuration block inside
 the haproxy.cfg file on an haproxy load balancer.
@@ -26,7 +25,6 @@ the haproxy.cfg file on an haproxy load balancer.
 * [`haproxy::listen`](#haproxylisten): This type will setup a listening service configuration block inside
 the haproxy.cfg file on an haproxy load balancer.
 * [`haproxy::mailer`](#haproxymailer): 
-* [`haproxy::mailer::collect_exported`](#haproxymailercollect_exported): Private define
 * [`haproxy::mailers`](#haproxymailers): 
 * [`haproxy::mapfile`](#haproxymapfile): Manage an HAProxy map file as documented in
 https://cbonte.github.io/haproxy-dconv/configuration-1.5.html#7.3.1-map
@@ -40,8 +38,10 @@ file on an haproxy load balancer.
 
 _Private Defined types_
 
+* `haproxy::balancermember::collect_exported`: 
 * `haproxy::config`: HAProxy configuration
 * `haproxy::install`: Install haproxy
+* `haproxy::mailer::collect_exported`: 
 * `haproxy::service`: HAProxy service
 
 ## Classes
@@ -282,11 +282,10 @@ Default value: `true`
 
 ### haproxy::params
 
-== Class: haproxy::params
-
 This is a container class holding default parameters for for haproxy class.
- currently, only the Redhat family is supported, but this can be easily
- extended by changing package names and configuration file paths.
+
+* **Note** Currently, only the Redhat family is supported, but this can be easily
+extended by changing package names and configuration file paths.
 
 ## Defined types
 
@@ -624,10 +623,6 @@ Data type: `Any`
 Optional. Defaults to 'server'
 
 Default value: 'server'
-
-### haproxy::balancermember::collect_exported
-
-Private define
 
 ### haproxy::defaults
 
@@ -1307,10 +1302,6 @@ Data type: `Any`
 
 
 Default value: 'haproxy'
-
-### haproxy::mailer::collect_exported
-
-Private define
 
 ### haproxy::mailers
 

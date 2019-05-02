@@ -1,8 +1,9 @@
-# == Class: haproxy::params
+# @summary
+#   This is a container class holding default parameters for for haproxy class.
 #
-# This is a container class holding default parameters for for haproxy class.
-#  currently, only the Redhat family is supported, but this can be easily
-#  extended by changing package names and configuration file paths.
+# @note 
+#   Currently, only the Redhat family is supported, but this can be easily
+#   extended by changing package names and configuration file paths.
 #
 class haproxy::params {
   # XXX: This will change to true in the next major release
