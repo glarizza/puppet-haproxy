@@ -1,4 +1,6 @@
-# Private class
+# @summary 
+#   Install haproxy
+# @api private
 define haproxy::install (
   # lint:ignore:140chars
   $package_ensure,

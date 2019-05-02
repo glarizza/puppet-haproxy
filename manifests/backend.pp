@@ -1,32 +1,30 @@
-# == Define Resource Type: haproxy::backend
+# @summary
+#   This type will setup a backend service configuration block inside the
+#   haproxy.cfg file on an haproxy load balancer. 
+# @note
+#   Each backend service needs one
+#   or more backend member servers (that can be declared with the
+#   haproxy::balancermember defined resource type).  Using storeconfigs, you can
+#   export the haproxy::balancermember resources on all load balancer member
+#   servers and then collect them on a single haproxy load balancer server.
 #
-# This type will setup a backend service configuration block inside the
-#  haproxy.cfg file on an haproxy load balancer.  Each backend service needs one
-#  or more backend member servers (that can be declared with the
-#  haproxy::balancermember defined resource type).  Using storeconfigs, you can
-#  export the haproxy::balancermember resources on all load balancer member
-#  servers and then collect them on a single haproxy load balancer server.
+# @note
+#   Currently requires the puppetlabs/concat module on the Puppet Forge and
+#   uses storeconfigs on the Puppet Master to export/collect resources
+#   from all backend members.
 #
-# === Requirement/Dependencies:
-#
-# Currently requires the puppetlabs/concat module on the Puppet Forge and
-#  uses storeconfigs on the Puppet Master to export/collect resources
-#  from all backend members.
-#
-# === Parameters
-#
-# [*section_name*]
+# @param section_name
 #    This name goes right after the 'backend' statement in haproxy.cfg
 #    Default: $name (the namevar of the resource).
 #
-# [*mode*]
+# @param mode
 #   The mode of operation for the backend service. Valid values are undef,
 #    'tcp', 'http', and 'health'.
 #
-# [*options*]
+# @param options
 #   A hash of options that are inserted into the backend configuration block.
 #
-# [*collect_exported*]
+# @param collect_exported
 #   Boolean, default 'true'. True means 'collect exported @@balancermember
 #    resources' (for the case when every balancermember node exports itself),
 #    false means 'rely on the existing declared balancermember resources' (for
@@ -34,23 +32,23 @@
 #    haproxy::balancermember with array arguments, which allows you to deploy
 #    everything in 1 run)
 #
-# [*config_file*]
+# @param config_file
 #   Optional. Path of the config file where this entry will be added.
 #   Assumes that the parent directory exists.
 #   Default: $haproxy::params::config_file
 #
-# [*sort_options_alphabetic*]
+# @param sort_options_alphabetic
 #   Sort options either alphabetic or custom like haproxy internal sorts them.
 #   Defaults to true.
 #
-# [*defaults*]
+# @param defaults
 #   Name of the defaults section this backend will use.
 #   Defaults to undef which means the global defaults section will be used.
+# 
+# @param instance
+#   Optional. Defaults to 'haproxy'
 #
-# === Examples
-#
-#  Exporting the resource for a backend member:
-#
+# @example
 #  haproxy::backend { 'puppet00':
 #    options   => {
 #      'option'  => [

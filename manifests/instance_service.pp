@@ -1,40 +1,40 @@
-# == Define: haproxy::instance_service
+# @summary
+#   Set up the environment for an haproxy service.
 #
-# Set up the environment for an haproxy service.
+# @note 
 #   * Associate an haproxy instance with the haproxy package it should use.
 #   * Create the start/restart/stop functions needed by Service[].
-# In other words: sets things up so that Service[$instance_name] will work.
+#   In other words: sets things up so that Service[$instance_name] will work.
 #
-# In particular:
-# * Create a link to the binary an instance will be using. This
-#   way each instance can link to a different binary.
-#   If you have an instance called "foo", you know "haproxy-foo"
-#   is a link to the binary it should be using.
-# * Create an init.d file named after the instance. This way
-#   Service[$instance] can start/restart the service.
+#   In particular:
+#   * Create a link to the binary an instance will be using. This
+#     way each instance can link to a different binary.
+#     If you have an instance called "foo", you know "haproxy-foo"
+#     is a link to the binary it should be using.
+#   * Create an init.d file named after the instance. This way
+#     Service[$instance] can start/restart the service.
 #
-# NOTE:
-# This manifest is just one example of how to set up Service[$instance].
-# Other sites may choose to do it very differently. In that case, do
-# not call haproxy::instance_service; write your own module.  The only
-# requirement is that before haproxy::instance{$instance:} is called,
-# Service[$instance] must be defined.
+# @note
+#  This manifest is just one example of how to set up Service[$instance].
+#  Other sites may choose to do it very differently. In that case, do
+#  not call haproxy::instance_service; write your own module.  The only
+#  requirement is that before haproxy::instance{$instance:} is called,
+#  Service[$instance] must be defined.
 #
-# FIXME: This hasn't been tested on FreeBSD.
-# FIXME: This should take advantage of systemd when available.
+#  FIXME: This hasn't been tested on FreeBSD.
+#  FIXME: This should take advantage of systemd when available.
 #
-# === Parameters
 #
-# [*haproxy_package*]
+# @param haproxy_package
 #   The name of the package to be installed. This is useful if
 #   you package your own custom version of haproxy.
 #   Defaults to 'haproxy'
 #
-# [*bindir*]
+# @param bindir
 #   Where to put symlinks to the binary used for each instance.
 #   Defaults to '/opt/haproxy'
 #
-# [*haproxy_init_source*]
+# @param haproxy_init_source
 #   The init.d script that will start/restart/reload this instance.
 #
 define haproxy::instance_service (

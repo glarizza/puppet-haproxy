@@ -1,32 +1,33 @@
-# == Define Resource Type: haproxy::userlist
+# @summary
+#   This type will set up a userlist configuration block inside the haproxy.cfg
+#   file on an haproxy load balancer.
 #
-# This type will set up a userlist configuration block inside the haproxy.cfg
-#  file on an haproxy load balancer.
+# @note
+#   See http://cbonte.github.io/haproxy-dconv/configuration-1.4.html#3.4 for more info
 #
-# See http://cbonte.github.io/haproxy-dconv/configuration-1.4.html#3.4 for more info
+# @note
+#   Currently requires the puppetlabs/concat module on the Puppet Forge
 #
-# === Requirement/Dependencies:
 #
-# Currently requires the puppetlabs/concat module on the Puppet Forge
-#
-# === Parameters
-#
-# [*section_name*]
+# @param section_name
 #    This name goes right after the 'userlist' statement in haproxy.cfg
 #    Default: $name (the namevar of the resource).
 #
-# [*users*]
+# @param users
 #   An array of users in the userlist.
 #   See http://cbonte.github.io/haproxy-dconv/configuration-1.4.html#3.4-user
 #
-# [*groups*]
+# @param groups
 #   An array of groups in the userlist.
 #   See http://cbonte.github.io/haproxy-dconv/configuration-1.4.html#3.4-group
 #
-# [*config_file*]
+# @param config_file
 #   Optional. Path of the config file where this entry will be added.
 #   Assumes that the parent directory exists.
 #   Default: $haproxy::params::config_file
+# 
+# @param instance
+#   Optional. Defaults to 'haproxy'
 #
 # === Authors
 #

@@ -1,82 +1,89 @@
-# == Define Resource Type: haproxy::instance
+# @summary
+#   Manages haproxy permitting multiple instances to run on the same machine.
+#   
+# @note
+#   Normally users use the Class['haproxy'], which runs a single haproxy
+#   daemon on a machine.
 #
-# Manages haproxy permitting multiple instances to run on the same machine.
-# Normally users use the Class['haproxy'], which runs a single haproxy
-# daemon on a machine.
+# @note
+#   Currently requires the puppetlabs/concat module on the Puppet Forge and
+#   uses storeconfigs on the Puppet Master to export/collect resources
+#   from all balancer members.
 #
-# === Requirement/Dependencies:
 #
-# Currently requires the puppetlabs/concat module on the Puppet Forge and
-#  uses storeconfigs on the Puppet Master to export/collect resources
-#  from all balancer members.
-#
-# === Parameters
-#
-# [*package_ensure*]
+# @param package_ensure
 #   Ensure the package is present (installed), absent or a specific version.
 #   Defaults to 'present'
 #
-# [*package_name*]
+# @param package_name
 #   The package name of haproxy. Defaults to undef, and no package is installed.
 #   NOTE: Class['haproxy'] has a different default.
 #
-# [*service_ensure*]
+# @param service_ensure
 #   Chooses whether the haproxy service should be running & enabled at boot, or
 #   stopped and disabled at boot. Defaults to 'running'
 #
-# [*service_manage*]
+# @param service_manage
 #   Chooses whether the haproxy service state should be managed by puppet at
 #   all. Defaults to true
 #
-# [*service_name*]
+# @param service_name
 #   The service name for haproxy. Defaults to undef. If no name is given then
 #   the value computed for $instance_name will be used.
 #   NOTE: Class['haproxy'] has a different default.
 #
-# [*global_options*]
+# @param global_options
 #   A hash of all the haproxy global options. If you want to specify more
 #    than one option (i.e. multiple timeout or stats options), pass those
 #    options as an array and you will get a line for each of them in the
 #    resultant haproxy.cfg file.
 #
-# [*defaults_options*]
+# @param defaults_options
 #   A hash of all the haproxy defaults options. If you want to specify more
 #    than one option (i.e. multiple timeout or stats options), pass those
 #    options as an array and you will get a line for each of them in the
 #    resultant haproxy.cfg file.
 #
-#[*restart_command*]
+# @param restart_command
 #   Command to use when restarting the on config changes.
 #    Passed directly as the <code>'restart'</code> parameter to the service
 #    resource.  #    Defaults to undef i.e. whatever the service default is.
 #
-#[*custom_fragment*]
-#  Allows arbitrary HAProxy configuration to be passed through to support
-#  additional configuration not available via parameters, or to short-circuit
-#  the defined resources such as haproxy::listen when an operater would rather
-#  just write plain configuration. Accepts a string (ie, output from the
+# @param custom_fragment
+#   Allows arbitrary HAProxy configuration to be passed through to support
+#   additional configuration not available via parameters, or to short-circuit
+#   the defined resources such as haproxy::listen when an operater would rather
+#   just write plain configuration. Accepts a string (ie, output from the
 #  template() function). Defaults to undef
 #
-#[*config_file*]
-#  Allows arbitrary config filename to be specified. If this is used,
-#  it is assumed that the directory path to the file exists and has
-#  owner/group/permissions as desired.  If set to undef, the name
-#  will be generated as follows:
-#    If $title is 'haproxy', the operating system default will be used.
-#    Otherwise, /etc/haproxy-$title/haproxy-$title.conf (Linux),
-#    or /usr/local/etc/haproxy-$title/haproxy-$title.conf (FreeBSD)
-#    The parent directory will be created automatically.
-#  Defaults to undef.
+# @param config_file
+#   Allows arbitrary config filename to be specified. If this is used,
+#   it is assumed that the directory path to the file exists and has
+#   owner/group/permissions as desired.  If set to undef, the name
+#   will be generated as follows:
+#     If $title is 'haproxy', the operating system default will be used.
+#     Otherwise, /etc/haproxy-$title/haproxy-$title.conf (Linux),
+#     or /usr/local/etc/haproxy-$title/haproxy-$title.conf (FreeBSD)
+#     The parent directory will be created automatically.
+#   Defaults to undef.
 #
-# [*config_validate_cmd*]
+# @param config_validate_cmd
 #   Command used by concat validate_cmd to validate new
 #   config file concat is a valid haproxy config.
 #   Default /usr/sbin/haproxy -f % -c
 #
-# === Examples
+# @param config_dir
+#   Optional. Default undef.
 #
-# A single instance of haproxy with all defaults
-# i.e. emulate Class['haproxy']
+# @param merge_options
+#
+# @param service_options
+#
+# @param sysconfig_options
+#
+# @example
+#  A single instance of haproxy with all defaults
+#  i.e. emulate Class['haproxy']
 #   package{ 'haproxy': ensure => present }->haproxy::instance { 'haproxy': }->
 #   haproxy::listen { 'puppet00':
 #     instance         => 'haproxy',
@@ -85,7 +92,8 @@
 #     ports            => '8140',
 #   }
 #
-# Multiple instances of haproxy:
+# @example
+#  Multiple instances of haproxy:
 #   haproxy::instance { 'group1': }
 #   haproxy::instance_service { 'group1':
 #     haproxy_init_source => "puppet:///modules/${module_name}/haproxy-group1.init",
@@ -109,7 +117,8 @@
 #     requires         => Package['haproxy'],
 #   }
 #
-# Multiple instances of haproxy, one with a custom haproxy package:
+# @example
+#  Multiple instances of haproxy, one with a custom haproxy package:
 #   haproxy::instance { 'group1': }
 #   haproxy::instance_service { 'group1':
 #     haproxy_init_source => "puppet:///modules/${module_name}/haproxy-group1.init",
@@ -134,15 +143,16 @@
 #     requires         => Package['haproxy'],
 #   }
 #
-#  When running multiple instances on one host, there must be a Service[] for
-#  each instance.  One way to create the situation where Service[] works is
-#  using haproxy::instance_service.
-#  However you may want to do it some other way. For example, you may
-#  not have packages for your custom haproxy binary. Or, you may wish
-#  to use the standard haproxy package but not create links to it, or
-#  you may have different init.d scripts.  In these cases, write your own
-#  puppet code that will result in Service[] working for you and do not
-#  call haproxy::instance_service.
+# @note
+#   When running multiple instances on one host, there must be a Service[] for
+#   each instance.  One way to create the situation where Service[] works is
+#   using haproxy::instance_service.
+#   However you may want to do it some other way. For example, you may
+#   not have packages for your custom haproxy binary. Or, you may wish
+#   to use the standard haproxy package but not create links to it, or
+#   you may have different init.d scripts.  In these cases, write your own
+#   puppet code that will result in Service[] working for you and do not
+#   call haproxy::instance_service.
 #
 define haproxy::instance (
   Optional[String] $package_name                               = undef,
