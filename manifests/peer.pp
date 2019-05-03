@@ -1,13 +1,8 @@
-# @summary
-#   This type will set up a peer entry inside the peers configuration block in
-#   haproxy.cfg on the load balancer. 
+# @summary This type will set up a peer entry inside the peers configuration block in haproxy.cfg on the load balancer. 
 #
 # @note
 #   Currently, it has the ability to
 #   specify the instance name, ip address, ports and server_names.
-#   Automatic discovery of peer nodes may be implemented by exporting the peer resource
-#   for all HAProxy balancer servers that are configured in the same HA block and
-#   then collecting them on all load balancers.
 #
 #
 # @param peers_name
@@ -26,14 +21,19 @@
 #   must be the same length as the server\_names parameter's array.
 #   A peer is created for each pair of address and server_name.
 #
-# @param ports
+# @param port
 #   Sets the port on which the peer is going to share the state.
 #
 # @param config_file
 #   Optional. Path of the config file where this entry will be added.
 #   Assumes that the parent directory exists.
 #   Default: $haproxy::params::config_file
-
+# 
+# @note
+#   Automatic discovery of peer nodes may be implemented by exporting the peer resource
+#   for all HAProxy balancer servers that are configured in the same HA block and
+#   then collecting them on all load balancers.
+#
 define haproxy::peer (
   $peers_name,
   $port,

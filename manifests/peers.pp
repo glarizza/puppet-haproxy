@@ -14,7 +14,13 @@
 #   Optional. Path of the config file where this entry will be added.
 #   Assumes that the parent directory exists.
 #   Default: $haproxy::params::config_file
-
+#
+# @param instance
+#   Optional. Defaults to 'haproxy'
+# 
+# @param collect_exported
+#   Boolean. Defaults to true
+#
 define haproxy::peers (
   Boolean $collect_exported = true,
   String $instance = 'haproxy',

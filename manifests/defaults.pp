@@ -15,7 +15,10 @@
 # @param sort_options_alphabetic
 #   Sort options either alphabetic or custom like haproxy internal sorts them.
 #   Defaults to true.
-
+#
+# @param instance
+#   Optional. Defaults to 'haproxy'.
+#
 define haproxy::defaults (
   $options                 = {},
   $sort_options_alphabetic = undef,

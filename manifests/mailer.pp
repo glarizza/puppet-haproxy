@@ -26,14 +26,10 @@
 #   must be the same length as the server\_names parameter's array.
 #   A mailer is created for each pair of address and server_name.
 #
-# @param ports
+# @param port
 #  Sets the port on which the mailer is going to share the state.
 #
-# @param config_file
-#   Optional. Path of the config file where this entry will be added.
-#   Assumes that the parent directory exists.
-#   Default: $haproxy::params::config_file
-
+#
 define haproxy::mailer (
   $mailers_name,
   $port,

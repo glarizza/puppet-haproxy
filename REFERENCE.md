@@ -17,20 +17,22 @@ _Public Defined types_
 haproxy.cfg file on an haproxy load balancer.
 * [`haproxy::balancermember`](#haproxybalancermember): This type will setup a balancer member inside a listening service
 configuration block in /etc/haproxy/haproxy.cfg on the load balancer.
-* [`haproxy::defaults`](#haproxydefaults): 
+* [`haproxy::defaults`](#haproxydefaults): This type will setup a additional defaults configuration block inside the
+haproxy.cfg file on an haproxy load balancer.
 * [`haproxy::frontend`](#haproxyfrontend): This type will setup a frontend service configuration block inside
 the haproxy.cfg file on an haproxy load balancer.
 * [`haproxy::instance`](#haproxyinstance): Manages haproxy permitting multiple instances to run on the same machine.
 * [`haproxy::instance_service`](#haproxyinstance_service): Set up the environment for an haproxy service.
 * [`haproxy::listen`](#haproxylisten): This type will setup a listening service configuration block inside
 the haproxy.cfg file on an haproxy load balancer.
-* [`haproxy::mailer`](#haproxymailer): 
-* [`haproxy::mailers`](#haproxymailers): 
+* [`haproxy::mailer`](#haproxymailer): This type will set up a mailer entry inside the mailers configuration block in
+haproxy.cfg on the load balancer.
+* [`haproxy::mailers`](#haproxymailers): This type will set up a mailers entry in haproxy.cfg on the load balancer.
 * [`haproxy::mapfile`](#haproxymapfile): Manage an HAProxy map file as documented in
 https://cbonte.github.io/haproxy-dconv/configuration-1.5.html#7.3.1-map
-* [`haproxy::peer`](#haproxypeer): 
+* [`haproxy::peer`](#haproxypeer): This type will set up a peer entry inside the peers configuration block in haproxy.cfg on the load balancer.
 * [`haproxy::peer::collect_exported`](#haproxypeercollect_exported): Private define
-* [`haproxy::peers`](#haproxypeers): 
+* [`haproxy::peers`](#haproxypeers): This type will set up a peers entry in haproxy.cfg
 * [`haproxy::resolver`](#haproxyresolver): This type will setup resolvers configuration block inside
 the haproxy.cfg file on an haproxy load balancer.
 * [`haproxy::userlist`](#haproxyuserlist): This type will set up a userlist configuration block inside the haproxy.cfg
@@ -626,7 +628,13 @@ Default value: 'server'
 
 ### haproxy::defaults
 
-The haproxy::defaults class.
+This type will setup a additional defaults configuration block inside the
+haproxy.cfg file on an haproxy load balancer.
+
+* **Note** A new default configuration block resets all defaults of prior defaults configuration blocks.
+Listener, Backends, Frontends and Balancermember can be configured behind a default
+configuration block by setting the defaults parameter to the corresponding
+defaults name.
 
 #### Parameters
 
@@ -636,7 +644,7 @@ The following parameters are available in the `haproxy::defaults` defined type.
 
 Data type: `Any`
 
-
+A hash of options that are inserted into the defaults configuration block.
 
 Default value: {}
 
@@ -644,7 +652,8 @@ Default value: {}
 
 Data type: `Any`
 
-
+Sort options either alphabetic or custom like haproxy internal sorts them.
+Defaults to true.
 
 Default value: `undef`
 
@@ -652,7 +661,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Optional. Defaults to 'haproxy'.
 
 Default value: 'haproxy'
 
@@ -1261,7 +1270,14 @@ Default value: 'haproxy'
 
 ### haproxy::mailer
 
-The haproxy::mailer class.
+This type will set up a mailer entry inside the mailers configuration block in
+haproxy.cfg on the load balancer.
+
+* **Note** Currently, it has the ability to
+specify the instance name, ip address, ports and server_names.
+Automatic discovery of mailer nodes may be implemented by exporting the mailer
+resource for all HAProxy balancer servers that are configured in the same HA
+block and then collecting them on all load balancers.
 
 #### Parameters
 
@@ -1271,19 +1287,17 @@ The following parameters are available in the `haproxy::mailer` defined type.
 
 Data type: `Any`
 
-
-
-##### `port`
-
-Data type: `Any`
-
-
+Specifies the mailer in which this load balancer needs to be added.
 
 ##### `server_names`
 
 Data type: `Any`
 
-
+Sets the name of the mailer server in the mailers configuration block.
+ Defaults to the hostname. Can be an array. If this parameter is
+ specified as an array, it must be the same length as the
+ ipaddresses parameter's array. A mailer is created for each pair
+ of server\_names and ipaddresses in the array.
 
 Default value: $::hostname
 
@@ -1291,9 +1305,18 @@ Default value: $::hostname
 
 Data type: `Any`
 
-
+Specifies the IP address used to contact the mailer member server.
+ Can be an array. If this parameter is specified as an array it
+ must be the same length as the server\_names parameter's array.
+ A mailer is created for each pair of address and server_name.
 
 Default value: $::ipaddress
+
+##### `port`
+
+Data type: `Any`
+
+Sets the port on which the mailer is going to share the state.
 
 ##### `instance`
 
@@ -1305,27 +1328,29 @@ Default value: 'haproxy'
 
 ### haproxy::mailers
 
-The haproxy::mailers class.
+This type will set up a mailers entry in haproxy.cfg on the load balancer.
+
+* **Note** This setting makes it possible to send emails during state changes.
 
 #### Parameters
 
 The following parameters are available in the `haproxy::mailers` defined type.
 
-##### `collect_exported`
-
-Data type: `Any`
-
-
-
-Default value: `true`
-
 ##### `instance`
 
 Data type: `Any`
 
-
+Optional. Defaults to 'haproxy'.
 
 Default value: 'haproxy'
+
+##### `collect_exported`
+
+Data type: `Any`
+
+Boolean. Defaults to true.
+
+Default value: `true`
 
 ### haproxy::mapfile
 
@@ -1399,7 +1424,10 @@ Default value: [ 'haproxy' ]
 
 ### haproxy::peer
 
-The haproxy::peer class.
+This type will set up a peer entry inside the peers configuration block in haproxy.cfg on the load balancer.
+
+* **Note** Currently, it has the ability to
+specify the instance name, ip address, ports and server_names.
 
 #### Parameters
 
@@ -1409,19 +1437,17 @@ The following parameters are available in the `haproxy::peer` defined type.
 
 Data type: `Any`
 
-
-
-##### `port`
-
-Data type: `Any`
-
-
+Specifies the peer in which this load balancer needs to be added.
 
 ##### `server_names`
 
 Data type: `Any`
 
-
+Sets the name of the peer server in the peers configuration block.
+Defaults to the hostname. Can be an array. If this parameter is
+specified as an array, it must be the same length as the
+ipaddresses parameter's array. A peer is created for each pair
+of server\_names and ipaddresses in the array.
 
 Default value: $::hostname
 
@@ -1429,9 +1455,28 @@ Default value: $::hostname
 
 Data type: `Any`
 
-
+Specifies the IP address used to contact the peer member server.
+Can be an array. If this parameter is specified as an array it
+must be the same length as the server\_names parameter's array.
+A peer is created for each pair of address and server_name.
 
 Default value: $::ipaddress
+
+##### `port`
+
+Data type: `Any`
+
+Sets the port on which the peer is going to share the state.
+
+##### `config_file`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+Optional. Path of the config file where this entry will be added.
+Assumes that the parent directory exists.
+Default: $haproxy::params::config_file
+
+Default value: `undef`
 
 ##### `instance`
 
@@ -1441,49 +1486,51 @@ Data type: `Any`
 
 Default value: 'haproxy'
 
-##### `config_file`
-
-Data type: `Optional[Stdlib::Absolutepath]`
-
-
-
-Default value: `undef`
-
 ### haproxy::peer::collect_exported
 
 Private define
 
 ### haproxy::peers
 
-The haproxy::peers class.
+on the load balancer. This setting is required to share the
+current state of HAproxy with other HAproxy in High available
+configurations.
 
 #### Parameters
 
 The following parameters are available in the `haproxy::peers` defined type.
 
-##### `collect_exported`
+##### `name`
 
-Data type: `Boolean`
-
-
-
-Default value: `true`
-
-##### `instance`
-
-Data type: `String`
-
-
-
-Default value: 'haproxy'
+Sets the peers' name. Generally it will be the namevar of the
+ defined resource type. This value appears right after the
+ 'peers' statement in haproxy.cfg
 
 ##### `config_file`
 
 Data type: `Optional[Stdlib::Absolutepath]`
 
-
+Optional. Path of the config file where this entry will be added.
+Assumes that the parent directory exists.
+Default: $haproxy::params::config_file
 
 Default value: `undef`
+
+##### `instance`
+
+Data type: `String`
+
+Optional. Defaults to 'haproxy'
+
+Default value: 'haproxy'
+
+##### `collect_exported`
+
+Data type: `Boolean`
+
+Boolean. Defaults to true
+
+Default value: `true`
 
 ### haproxy::resolver
 
