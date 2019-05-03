@@ -1,89 +1,92 @@
-# == Class: haproxy
-#
+# @summary
 # A Puppet module, using storeconfigs, to model an haproxy configuration.
 # Currently VERY limited - assumes Redhat/CentOS setup. Pull requests accepted!
 #
-# === Requirement/Dependencies:
+# @note
 #
 # Currently requires the puppetlabs/concat module on the Puppet Forge and
 #  uses storeconfigs on the Puppet Master to export/collect resources
 #  from all balancer members.
 #
-# === Parameters
 #
-# [*package_ensure*]
+# @param package_ensure
 #   Ensure the package is present (installed), absent or a specific version.
 #   Defaults to 'present'
 #
-# [*package_name*]
+# @param package_name
 #   The package name of haproxy. Defaults to 'haproxy'
 #   NOTE: haproxy::instance has a different default.
 #
-# [*service_ensure*]
+# @param service_ensure
 #   Chooses whether the haproxy service should be running & enabled at boot, or
 #   stopped and disabled at boot. Defaults to 'running'
 #
-# [*service_manage*]
+# @param service_manage
 #   Chooses whether the haproxy service state should be managed by puppet at
 #   all. Defaults to true
 #
-# [*service_name*]
+# @param service_name
 #   The service name for haproxy. Defaults to 'haproxy'
 #   NOTE: haproxy::instance has a different default.
 #
-# [*service_options*]
+# @param service_options
 #   Contents for the `/etc/defaults/haproxy` file on Debian. Defaults to "ENABLED=1\n" on Debian, and is ignored on other systems.
 #
-# [*sysconfig_options*]
+# @param sysconfig_options
 #   Contents for the `/etc/sysconfig/haproxy` file on RedHat(-based) systems.
 #   Defaults to OPTIONS="" on RedHat(-based) systems and is ignored on others
 #
-# [*global_options*]
+# @param global_options
 #   A hash of all the haproxy global options. If you want to specify more
 #    than one option (i.e. multiple timeout or stats options), pass those
 #    options as an array and you will get a line for each of them in the
 #    resultant haproxy.cfg file.
 #
-# [*defaults_options*]
+# @param defaults_options
 #   A hash of all the haproxy defaults options. If you want to specify more
 #    than one option (i.e. multiple timeout or stats options), pass those
 #    options as an array and you will get a line for each of them in the
 #    resultant haproxy.cfg file.
 #
-# [*merge_options*]
+# @param merge_options
 #   Whether to merge the user-supplied `global_options`/`defaults_options`
 #   hashes with their default values set in params.pp. Merging allows to change
 #   or add options without having to recreate the entire hash. Defaults to
 #   false, but will default to true in future releases.
 #
-# [*restart_command*]
+# @param restart_command
 #   Command to use when restarting the on config changes.
 #    Passed directly as the <code>'restart'</code> parameter to the service resource.
 #    Defaults to undef i.e. whatever the service default is.
 #
-# [*custom_fragment*]
+# @param custom_fragment
 #   Allows arbitrary HAProxy configuration to be passed through to support
 #   additional configuration not available via parameters, or to short-circute
 #   the defined resources such as haproxy::listen when an operater would rather
 #   just write plain configuration. Accepts a string (ie, output from the
 #   template() function). Defaults to undef
 #
-# [*config_dir*]
+# @param config_dir
 #   Path to the directory in which the main configuration file `haproxy.cfg`
 #   resides. Will also be used for storing any managed map files (see
 #   `haproxy::mapfile`). Default depends on platform.
 #
-# [*config_file*]
+# @param config_file
 #   Optional. Path to the haproxy config file.
 #   Default depends on platform.
 #
-# [*config_validate_cmd*]
+# @param config_validate_cmd
 #   Optional. Command used by concat validate_cmd to validate new
 #   config file concat is a valid haproxy config.
 #   Default /usr/sbin/haproxy -f % -c
 #
-# === Examples
-#
+# @param manage_config_dir
+#   Optional. 
+# @param manage_service
+#   Deprecated
+# @param enable
+#   Deprecated
+# @example
 #  class { 'haproxy':
 #    global_options   => {
 #      'log'     => "${::ipaddress} local0",

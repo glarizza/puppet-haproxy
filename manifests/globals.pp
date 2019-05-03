@@ -1,10 +1,7 @@
-# == Class: haproxy::globals
+# @summary
+#   For global configuration options used by all haproxy instances.
 #
-# For global configuration options used by all haproxy instances.
-#
-# === Parameters
-#
-# [*sort_options_alphabetic*]
+# @param sort_options_alphabetic
 #   Sort options either alphabetic or custom like haproxy internal sorts them.
 #   Defaults to true.
 #

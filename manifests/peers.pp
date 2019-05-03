@@ -1,22 +1,26 @@
-# == Defined Type: haproxy::peers
+# @summary
+#   This type will set up a peers entry in haproxy.cfg
+# on the load balancer. This setting is required to share the
+# current state of HAproxy with other HAproxy in High available
+# configurations.
 #
-#  This type will set up a peers entry in haproxy.cfg
-#   on the load balancer. This setting is required to share the
-#   current state of HAproxy with other HAproxy in High available
-#   configurations.
 #
-# === Parameters
-#
-# [*name*]
+# @param name
 #  Sets the peers' name. Generally it will be the namevar of the
 #   defined resource type. This value appears right after the
 #   'peers' statement in haproxy.cfg
 #
-# [*config_file*]
+# @param config_file
 #   Optional. Path of the config file where this entry will be added.
 #   Assumes that the parent directory exists.
 #   Default: $haproxy::params::config_file
-
+#
+# @param instance
+#   Optional. Defaults to 'haproxy'
+# 
+# @param collect_exported
+#   Boolean. Defaults to true
+#
 define haproxy::peers (
   Boolean $collect_exported = true,
   String $instance = 'haproxy',

@@ -1,68 +1,69 @@
-# == Define Resource Type: haproxy::frontend
+# @summary
+#   This type will setup a frontend service configuration block inside
+#   the haproxy.cfg file on an haproxy load balancer.
 #
-# This type will setup a frontend service configuration block inside
-#  the haproxy.cfg file on an haproxy load balancer.
+# @note
+#   Currently requires the puppetlabs/concat module on the Puppet Forge and
+#   uses storeconfigs on the Puppet Master to export/collect resources
+#   from all balancer members.
 #
-# === Requirement/Dependencies:
-#
-# Currently requires the puppetlabs/concat module on the Puppet Forge and
-#  uses storeconfigs on the Puppet Master to export/collect resources
-#  from all balancer members.
-#
-# === Parameters
-#
-# [*section_name*]
+# @param section_name
 #    This name goes right after the 'frontend' statement in haproxy.cfg
 #    Default: $name (the namevar of the resource).
 #
-# [*ports*]
+# @param ports
 #   Ports on which the proxy will listen for connections on the ip address
 #    specified in the ipaddress parameter. Accepts either a single
 #    comma-separated string or an array of strings which may be ports or
 #    hyphenated port ranges.
 #
-# [*bind*]
+# @param bind
 #   Set of ip addresses, port and bind options
 #   $bind = { '10.0.0.1:80' => ['ssl', 'crt', '/path/to/my/crt.pem'] }
 #
-# [*ipaddress*]
+# @param ipaddress
 #   The ip address the proxy binds to.
 #    Empty addresses, '*', and '0.0.0.0' mean that the proxy listens
 #    to all valid addresses on the system.
 #
-# [*mode*]
+# @param mode
 #   The mode of operation for the frontend service. Valid values are undef,
 #    'tcp', 'http', and 'health'.
 #
-# [*bind_options*]
+# @param bind_options
 #   (Deprecated) An array of options to be specified after the bind declaration
 #    in the listening serivce's configuration block.
 #
-# [*options*]
+# @param options
 #   A hash of options that are inserted into the frontend service
 #    configuration block.
 #
-# [*sort_options_alphabetic*]
+# @param sort_options_alphabetic
 #   Sort options either alphabetic or custom like haproxy internal sorts them.
 #   Defaults to true.
 #
-# [*defaults*]
+# @param defaults
 #   Name of the defaults section this backend will use.
 #   Defaults to undef which means the global defaults section will be used.
 #
-# [*defaults_use_backend*]
+# @param defaults_use_backend
 #   If defaults are used and a default backend is configured use the backend
 #   name for ordering. This means that the frontend is placed in the
 #   configuration file before the backend configuration.
 #   Defaults to true.
 #
-# [*config_file*]
+# @param config_file
 #   Optional. Path of the config file where this entry will be added.
 #   Assumes that the parent directory exists.
 #   Default: $haproxy::params::config_file
 #
-# === Examples
+# @param collect_exported
+#   Boolean. Default true
 #
+# @param instance
+#   Optional. Defaults to 'haproxy'
+#
+# @example
 #  Exporting the resource for a balancer member:
 #
 #  haproxy::frontend { 'puppet00':

@@ -1,21 +1,24 @@
-# == Define Resource Type: haproxy::defaults
+# @summary
+#  This type will setup a additional defaults configuration block inside the
+#  haproxy.cfg file on an haproxy load balancer. 
 #
-# This type will setup a additional defaults configuration block inside the
-#  haproxy.cfg file on an haproxy load balancer. A new default configuration
-#  block resets all defaults of prior defaults configuration blocks. Listener,
-#  Backends, Frontends and Balancermember can be configured behind a default
+# @note
+#  A new default configuration block resets all defaults of prior defaults configuration blocks.
+#  Listener, Backends, Frontends and Balancermember can be configured behind a default
 #  configuration block by setting the defaults parameter to the corresponding
 #  defaults name.
 #
-# === Parameters:
 #
-# [*options*]
+# @param options
 #   A hash of options that are inserted into the defaults configuration block.
 #
-# [*sort_options_alphabetic*]
+# @param sort_options_alphabetic
 #   Sort options either alphabetic or custom like haproxy internal sorts them.
 #   Defaults to true.
-
+#
+# @param instance
+#   Optional. Defaults to 'haproxy'.
+#
 define haproxy::defaults (
   $options                 = {},
   $sort_options_alphabetic = undef,

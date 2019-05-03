@@ -1,39 +1,35 @@
-# == Define Resource Type: haproxy::mailer
+# @summary
+#   This type will set up a mailer entry inside the mailers configuration block in
+#   haproxy.cfg on the load balancer. 
 #
-# This type will set up a mailer entry inside the mailers configuration block in
-# haproxy.cfg on the load balancer. Currently, it has the ability to
-# specify the instance name, ip address, ports and server_names.
+# @note
+#   Currently, it has the ability to
+#   specify the instance name, ip address, ports and server_names.
+#   Automatic discovery of mailer nodes may be implemented by exporting the mailer
+#   resource for all HAProxy balancer servers that are configured in the same HA
+#   block and then collecting them on all load balancers.
 #
-# Automatic discovery of mailer nodes may be implemented by exporting the mailer
-# resource for all HAProxy balancer servers that are configured in the same HA
-# block and then collecting them on all load balancers.
 #
-# === Parameters:
-#
-# [*mailers_name*]
+# @param mailers_name
 #  Specifies the mailer in which this load balancer needs to be added.
 #
-# [*server_names*]
+# @param server_names
 #  Sets the name of the mailer server in the mailers configuration block.
 #   Defaults to the hostname. Can be an array. If this parameter is
 #   specified as an array, it must be the same length as the
 #   ipaddresses parameter's array. A mailer is created for each pair
 #   of server\_names and ipaddresses in the array.
 #
-# [*ipaddresses*]
+# @param ipaddresses
 #  Specifies the IP address used to contact the mailer member server.
 #   Can be an array. If this parameter is specified as an array it
 #   must be the same length as the server\_names parameter's array.
 #   A mailer is created for each pair of address and server_name.
 #
-# [*ports*]
+# @param port
 #  Sets the port on which the mailer is going to share the state.
 #
-# [*config_file*]
-#   Optional. Path of the config file where this entry will be added.
-#   Assumes that the parent directory exists.
-#   Default: $haproxy::params::config_file
-
+#
 define haproxy::mailer (
   $mailers_name,
   $port,

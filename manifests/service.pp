@@ -1,4 +1,6 @@
-# Private class
+# @summary
+#   HAProxy service
+# @api private
 define haproxy::service (
   # lint:ignore:140chars
   $instance_name,

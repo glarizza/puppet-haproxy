@@ -1,20 +1,15 @@
-# == Defined Type: haproxy::mailers
-#
+# @summary
 #  This type will set up a mailers entry in haproxy.cfg on the load balancer.
+# @note
 #  This setting makes it possible to send emails during state changes.
 #
-# === Parameters
 #
-# [*name*]
-#  Sets the mailers' name. Generally it will be the namevar of the
-#   defined resource type. This value appears right after the
-#   'mailers' statement in haproxy.cfg
+# @param instance
+#   Optional. Defaults to 'haproxy'.
 #
-# [*config_file*]
-#   Optional. Path of the config file where this entry will be added.
-#   Assumes that the parent directory exists.
-#   Default: $haproxy::params::config_file
-
+# @param collect_exported
+#   Boolean. Defaults to true.
+#
 define haproxy::mailers (
   $collect_exported = true,
   $instance = 'haproxy',

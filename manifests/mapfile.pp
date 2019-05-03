@@ -1,35 +1,35 @@
-# == Define Resource Type: haproxy::mapfile
+# @summary
+#   Manage an HAProxy map file as documented in
+#   https://cbonte.github.io/haproxy-dconv/configuration-1.5.html#7.3.1-map
 #
-# Manage an HAProxy map file as documented in
-# https://cbonte.github.io/haproxy-dconv/configuration-1.5.html#7.3.1-map
-# A map file contains one key + value per line. These key-value pairs are
-# specified in the `mappings` array.
+# @note
+#   A map file contains one key + value per line. These key-value pairs are
+#   specified in the `mappings` array.
 #
-# === Parameters
 #
-# [*name*]
+# @param name
 #   The namevar of the defined resource type is the filename of the map file
 #   (without any extension), relative to the `haproxy::config_dir` directory.
 #   A '.map' extension will be added automatically.
 #
-# [*mappings*]
+# @param mappings
 #   An array of mappings for this map file. Array elements may be Hashes with a
 #   single key-value pair each (preferably) or simple Strings. Default: `[]`
 #
-# [*ensure*]
+# @param ensure
 #   The state of the underlying file resource, either 'present' or 'absent'.
 #   Default: 'present'
 #
-# [*owner*]
+# @param owner
 #   The owner of the underlying file resource. Defaut: 'root'
 #
-# [*group*]
+# @param group
 #   The group of the underlying file resource. Defaut: 'root'
 #
-# [*mode*]
+# @param mode
 #   The mode of the underlying file resource. Defaut: '0644'
 #
-# [*instances*]
+# @param instances
 #   Array of managed HAproxy instance names to notify (restart/reload) when the
 #   map file is updated. This is so that the same map file can be used with
 #   multiple HAproxy instances. Default: `[ 'haproxy' ]`
