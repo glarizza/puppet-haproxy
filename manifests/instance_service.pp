@@ -99,7 +99,7 @@ define haproxy::instance_service (
       }
 
       if $::osfamily == 'RedHat' {
-        $unitfile = "/usr/lib/systemd/system/haproxy-${title}.service" 
+        $unitfile = "/usr/lib/systemd/system/haproxy-${title}.service"
       } else {
         $unitfile = "/lib/systemd/system/haproxy-${title}.service"
       }
