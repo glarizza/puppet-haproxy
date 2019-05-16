@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v4.0.0](https://github.com/puppetlabs/puppetlabs-haproxy/tree/v4.0.0) (2019-05-16)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-haproxy/compare/3.0.1...v4.0.0)
+
+### Changed
+
+- pdksync - \(MODULES-8444\) - Raise lower Puppet bound [\#362](https://github.com/puppetlabs/puppetlabs-haproxy/pull/362) ([david22swan](https://github.com/david22swan))
+
+### Added
+
+- \[FM-7934\] - Puppet Strings [\#365](https://github.com/puppetlabs/puppetlabs-haproxy/pull/365) ([carabasdaniel](https://github.com/carabasdaniel))
+
+### Fixed
+
+- \(MODULES-8930\) Fix stahnma/epel dependency failures [\#364](https://github.com/puppetlabs/puppetlabs-haproxy/pull/364) ([eimlav](https://github.com/eimlav))
+- Remove execute bit on systemd unit file [\#354](https://github.com/puppetlabs/puppetlabs-haproxy/pull/354) ([shanemadden](https://github.com/shanemadden))
+
 ## [3.0.1](https://github.com/puppetlabs/puppetlabs-haproxy/tree/3.0.1) (2019-02-19)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-haproxy/compare/3.0.0...3.0.1)
@@ -10,7 +27,7 @@ All notable changes to this project will be documented in this file. The format 
 
 - \(MODULES-8566\) Only create entries for defined settings [\#350](https://github.com/puppetlabs/puppetlabs-haproxy/pull/350) ([genebean](https://github.com/genebean))
 
-## [3.0.0](https://github.com/puppetlabs/puppetlabs-haproxy/tree/3.0.0) (2019-02-01)
+## [3.0.0](https://github.com/puppetlabs/puppetlabs-haproxy/tree/3.0.0) (2019-02-04)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-haproxy/compare/2.2.0...3.0.0)
 
