@@ -499,6 +499,6 @@ For an extensive list of supported operating systems, see [metadata.json](https:
 ## Development
 Puppet Labs modules on the Puppet Forge are open projects, and community contributions are essential for keeping them great. We can't access the huge number of platforms and myriad hardware, software, and deployment configurations that Puppet is intended to serve. We want to keep it as easy as possible to contribute changes so that our modules work in your environment. There are a few guidelines that we need contributors to follow so that we can have a chance of keeping on top of things.
 
-For more information, see our [module contribution guide.](https://docs.puppetlabs.com/forge/contributing.html)
+For more information, see our [module contribution guide.](https://puppet.com/docs/puppet/latest/contributing.html)
 
 To see who's already involved, see the [list of contributors.](https://github.com/puppetlabs/puppetlabs-haproxy/graphs/contributors)
