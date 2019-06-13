@@ -98,7 +98,12 @@ define haproxy::instance_service (
         $wrapper = "/opt/${haproxy_package}/sbin/haproxy-systemd-wrapper"
       }
 
-      $unitfile = "/usr/lib/systemd/system/haproxy-${title}.service"
+      if $::osfamily == 'RedHat' {
+        $unitfile = "/usr/lib/systemd/system/haproxy-${title}.service"
+      } else {
+        $unitfile = "/lib/systemd/system/haproxy-${title}.service"
+      }
+
       file { $unitfile:
         ensure  => file,
         mode    => '0644',
