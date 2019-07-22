@@ -3,6 +3,9 @@
   required:
     - ---.project
 
+.gitlab-ci.yml:
+  unmanaged: true
+
 .travis.yml:
   docker_sets:
     - set: docker/centos-7
@@ -13,16 +16,17 @@
   branches:
     - release
 
+.rubocop.yml:
+   default_configs:
+    inherit_from: .rubocop_todo.yml
+    require:
+      - rubocop-i18n
+      - rubocop-rspec
+
+appveyor.yml:
+  delete: true
+
 Gemfile:
-  required:
-    ':system_tests':
-      - gem: 'puppet-module-posix-system-r#{minor_version}'
-        platforms: ruby
-      - gem: 'puppet-module-win-system-r#{minor_version}'
-        platforms:
-          - mswin
-          - mingw
-          - x64_mingw
   optional:
    ':development':
      - gem: 'github_changelog_generator'
@@ -30,15 +34,9 @@ Gemfile:
        ref: '20ee04ba1234e9e83eb2ffb5056e23d641c7a018'
        condition: "Gem::Version.new(RUBY_VERSION.dup) >= Gem::Version.new('2.2.2')"
 
-appveyor.yml:
-  delete: true
-
-.rubocop.yml:
-  default_configs:
-    inherit_from: .rubocop_todo.yml
-
-.gitlab-ci.yml:
-  unmanaged: true
-
 Rakefile:
   changelog_user: puppetlabs
+
+spec/spec_helper.rb:
+  mock_with: ':rspec'
+  coverage_report: true

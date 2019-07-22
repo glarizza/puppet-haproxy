@@ -55,8 +55,8 @@ describe 'frontend backend defines with defaults' do
   end
 
   it 'does a curl against the LB to make sure it gets a response from each port' do
-    shell('curl localhost:5555').stdout.chomp.should match(%r{Response on 555(6|7)})
-    shell('curl localhost:5555').stdout.chomp.should match(%r{Response on 555(6|7)})
+    expect(run_shell('curl localhost:5555').stdout.chomp).to match(%r{Response on 555(6|7)})
+    expect(run_shell('curl localhost:5555').stdout.chomp).to match(%r{Response on 555(6|7)})
   end
 
   pp_two = <<-PUPPETCODE
@@ -122,7 +122,7 @@ describe 'frontend backend defines with defaults' do
   end
 
   it 'does a curl against the LB to make sure it gets a response from each port #oldstyle' do
-    shell('curl localhost:5555').stdout.chomp.should match(%r{Response on 5556})
-    shell('curl localhost:6666').stdout.chomp.should match(%r{Response on 5557})
+    expect(run_shell('curl localhost:5555').stdout.chomp).to match(%r{Response on 5556})
+    expect(run_shell('curl localhost:6666').stdout.chomp).to match(%r{Response on 5557})
   end
 end

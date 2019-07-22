@@ -32,12 +32,12 @@ describe 'frontend backend defines' do
   # balancer. Something with retries would be better.
   # C9945
   it 'does a curl against the LB to make sure it gets a response from each port' do
-    response_connection = shell('curl localhost:5555').stdout.chomp
-    response_connection.should match(%r{Response on 555(6|7)})
+    response_connection = run_shell('curl localhost:5555').stdout.chomp
+    expect(response_connection).to match(%r{Response on 555(6|7)})
     if response_connection == 'Response on 5556'
-      shell('curl localhost:5555').stdout.chomp.should match(%r{Response on 5557})
+      expect(run_shell('curl localhost:5555').stdout.chomp).to match(%r{Response on 5557})
     else
-      shell('curl localhost:5555').stdout.chomp.should match(%r{Response on 5556})
+      expect(run_shell('curl localhost:5555').stdout.chomp).to match(%r{Response on 5556})
     end
   end
 
@@ -70,8 +70,8 @@ describe 'frontend backend defines' do
 
   # C9951
   it 'does a curl against the LB to make sure it gets a response from each port #onenodeup' do
-    shell('curl localhost:5555').stdout.chomp.should match(%r{Response on 5556})
-    shell('curl localhost:5555').stdout.chomp.should match(%r{Response on 5556})
+    expect(run_shell('curl localhost:5555').stdout.chomp).to match(%r{Response on 5556})
+    expect(run_shell('curl localhost:5555').stdout.chomp).to match(%r{Response on 5556})
   end
 
   pp_three = <<-PUPPETCODE
