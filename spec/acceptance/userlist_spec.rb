@@ -1,6 +1,6 @@
 require 'spec_helper_acceptance'
 
-describe 'userlist define', unless: (fact('osfamily') == 'RedHat' && fact('operatingsystemmajrelease') == '5') do
+describe 'userlist define', unless: (os[:family] == 'redhat' && os[:release][0] == '5') do
   pp_one = <<-PUPPETCODE
       class { 'haproxy': }
       haproxy::userlist { 'users_groups':
@@ -54,25 +54,25 @@ describe 'userlist define', unless: (fact('osfamily') == 'RedHat' && fact('opera
 
   # C9957
   it 'test1 should auth as user' do
-    shell('curl http://test1:elgato@localhost:5555').stdout.chomp.should eq('Response on 5556')
+    expect(run_shell('curl http://test1:elgato@localhost:5555').stdout.chomp).to eq('Response on 5556')
   end
   it 'test2 should auth as user' do
-    shell('curl http://test2:elgato@localhost:5555').stdout.chomp.should eq('Response on 5556')
+    expect(run_shell('curl http://test2:elgato@localhost:5555').stdout.chomp).to eq('Response on 5556')
   end
 
   # C9958
   it 'does not auth as user' do
-    shell('curl http://test3:elgato@localhost:5555').stdout.chomp.should_not eq('Response on 5556')
+    expect(run_shell('curl http://test3:elgato@localhost:5555').stdout.chomp).not_to eq('Response on 5556')
   end
 
   # C9959
   it 'auths as group' do
-    shell('curl http://test1:elgato@localhost:5554').stdout.chomp.should eq('Response on 5556')
+    expect(run_shell('curl http://test1:elgato@localhost:5554').stdout.chomp).to eq('Response on 5556')
   end
 
   # C9960
   it 'does not auth as group' do
-    shell('curl http://test2:elgato@localhost:5554').stdout.chomp.should_not eq('Response on 5556')
+    expect(run_shell('curl http://test2:elgato@localhost:5554').stdout.chomp).not_to eq('Response on 5556')
   end
 
   # C9965 C9967 C9968 C9969 WONTFIX

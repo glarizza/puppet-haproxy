@@ -27,8 +27,8 @@ describe 'listen define' do
   # balancer. Something with retries would be better.
   # C9876 C9877 C9941 C9954
   it 'does a curl against the LB to make sure it gets a response from each port' do
-    shell('curl localhost:5555').stdout.chomp.should match(%r{Response on 555(6|7)})
-    shell('curl localhost:5555').stdout.chomp.should match(%r{Response on 555(6|7)})
+    expect(run_shell('curl localhost:5555').stdout.chomp).to match(%r{Response on 555(6|7)})
+    expect(run_shell('curl localhost:5555').stdout.chomp).to match(%r{Response on 555(6|7)})
   end
 
   # C9955
@@ -53,14 +53,14 @@ describe 'listen define' do
   PUPPETCODE
   it 'is able to configure the listen active/passive' do
     retry_on_error_matching do
-      idempotent_apply(default, pp_two, {})
+      idempotent_apply(pp_two)
     end
   end
 
   it 'does a curl against the LB to make sure it only gets a response from the active port' do
     sleep(10)
-    shell('curl localhost:5555').stdout.chomp.should match(%r{Response on 5556})
-    shell('curl localhost:5555').stdout.chomp.should match(%r{Response on 5556})
+    expect(run_shell('curl localhost:5555').stdout.chomp).to match(%r{Response on 5556})
+    expect(run_shell('curl localhost:5555').stdout.chomp).to match(%r{Response on 5556})
   end
 
   # C9942 C9944 WONTFIX
@@ -89,8 +89,8 @@ describe 'listen define' do
   end
 
   it 'does a curl against the LB to make sure it gets a response from each port #onenodeup' do
-    shell('curl localhost:5555').stdout.chomp.should match(%r{Response on 5556})
-    shell('curl localhost:5555').stdout.chomp.should match(%r{Response on 5556})
+    expect(run_shell('curl localhost:5555').stdout.chomp).to match(%r{Response on 5556})
+    expect(run_shell('curl localhost:5555').stdout.chomp).to match(%r{Response on 5556})
   end
 
   pp_four = <<-PUPPETCODE
