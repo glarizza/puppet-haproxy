@@ -29,7 +29,7 @@ end
 
 RSpec.configure do |c|
   c.before :suite do
-    if os[:family] == 'redhat'
+    if os[:family] == 'redhat' && os[:release].to_i != 8
       run_shell('puppet module install stahnma/epel')
       if os[:release][0] =~ %r{5|6}
         pp = <<-PP
@@ -48,13 +48,13 @@ RSpec.configure do |c|
     pp = <<-PP
     package { 'curl': ensure => present, }
     package { 'net-tools': ensure => present, }
-    package { 'screen': ensure => present, }
+    package { 'tmux': ensure => present, }
     package { 'socat': ensure => present, }
     PP
     apply_manifest(pp)
     ['5556', '5557'].each do |port|
       bolt_upload_file("spec/support/script-#{port}.sh", "/root/script-#{port}.sh")
-      run_shell(%(screen -dmS script-#{port} sh /root/script-#{port}.sh))
+      run_shell(%(tmux new -d -s script-#{port}  "sh /root/script-#{port}.sh"), expect_failures: true)
       sleep 1
       run_shell(%(netstat -tnl|grep ':#{port}'))
     end
