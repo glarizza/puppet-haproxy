@@ -68,9 +68,6 @@ define haproxy::backend (
   $mode                    = undef,
   $collect_exported        = true,
   $options                 = {
-    'option'  => [
-      'tcplog',
-    ],
     'balance' => 'roundrobin',
   },
   $instance                = 'haproxy',
