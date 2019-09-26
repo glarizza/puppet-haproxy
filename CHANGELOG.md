@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v4.1.0](https://github.com/puppetlabs/puppetlabs-haproxy/tree/v4.1.0) (2019-09-26)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-haproxy/compare/v4.0.0...v4.1.0)
+
+### Added
+
+- pdksync - Add support on Debian10 [\#380](https://github.com/puppetlabs/puppetlabs-haproxy/pull/380) ([lionce](https://github.com/lionce))
+- FM-8140 Add redhat8 support [\#374](https://github.com/puppetlabs/puppetlabs-haproxy/pull/374) ([sheenaajay](https://github.com/sheenaajay))
+- \(FM-8220\) convert to use litmus [\#373](https://github.com/puppetlabs/puppetlabs-haproxy/pull/373) ([tphoney](https://github.com/tphoney))
+
+### Fixed
+
+- MODULES-9783 - Removed option tcplog [\#376](https://github.com/puppetlabs/puppetlabs-haproxy/pull/376) ([uberjew666](https://github.com/uberjew666))
+- Add check of OS for the systemd unitfile [\#347](https://github.com/puppetlabs/puppetlabs-haproxy/pull/347) ([surprisingb](https://github.com/surprisingb))
+
 ## [v4.0.0](https://github.com/puppetlabs/puppetlabs-haproxy/tree/v4.0.0) (2019-05-16)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-haproxy/compare/3.0.1...v4.0.0)
