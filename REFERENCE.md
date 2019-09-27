@@ -349,9 +349,6 @@ Data type: `Any`
 A hash of options that are inserted into the backend configuration block.
 
 Default value: {
-    'option'  => [
-      'tcplog',
-    ],
     'balance' => 'roundrobin',
   }
 
