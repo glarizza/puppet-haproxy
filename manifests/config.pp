@@ -66,7 +66,7 @@ define haproxy::config (
     concat::fragment { "${instance_name}-00-header":
       target  => $_config_file,
       order   => '01',
-      content => "# This file managed by Puppet\n",
+      content => "# This file is managed by Puppet\n",
     }
 
     # Template uses $_global_options, $_defaults_options, $custom_fragment
