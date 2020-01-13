@@ -53,6 +53,11 @@ describe 'haproxy::instance_service' do
 
     context 'with title group1 and custom settings' do
       let(:title) { 'haproxy' }
+      let(:pre_condition) do
+        <<-PUPPETCODE
+        service {'haproxy-#{title}': }
+      PUPPETCODE
+      end
       let(:params) do
         {
           'haproxy_package'     => 'customhaproxy',
