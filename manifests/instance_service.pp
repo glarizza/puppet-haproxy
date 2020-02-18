@@ -39,7 +39,7 @@
 #
 define haproxy::instance_service (
   Optional[String] $haproxy_init_source  = undef,
-  Optional[String]$haproxy_unit_template = undef,
+  Optional[String]$haproxy_unit_template = 'haproxy/instance_service_unit.erb',
   String $haproxy_package                = 'haproxy',
   Stdlib::Absolutepath $bindir           = '/opt/haproxy/bin',
 ) {
@@ -74,7 +74,7 @@ define haproxy::instance_service (
   # Create init.d or systemd files so that "service haproxy-$instance start"
   # or "systemd start haproxy-$instance" works.
   # This is not required if the standard instance is being used.
-  if ($title == 'haproxy') or ($haproxy_package == 'haproxy') {
+  if ($title == 'haproxy') and ($haproxy_package == 'haproxy') {
   } else {
     $initfile = "/etc/init.d/haproxy-${title}"
     if $::osfamily == 'RedHat' and $::operatingsystemmajrelease == '6' {

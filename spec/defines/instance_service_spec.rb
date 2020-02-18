@@ -53,6 +53,11 @@ describe 'haproxy::instance_service' do
 
     context 'with title group1 and custom settings' do
       let(:title) { 'haproxy' }
+      let(:pre_condition) do
+        <<-PUPPETCODE
+        service {'haproxy-#{title}': }
+      PUPPETCODE
+      end
       let(:params) do
         {
           'haproxy_package'     => 'customhaproxy',
@@ -94,6 +99,11 @@ describe 'haproxy::instance_service' do
 
     context 'with title group1 and defaults params' do
       let(:title) { 'group1' }
+      let(:pre_condition) do
+        <<-PUPPETCODE
+        service {'haproxy-#{title}': }
+      PUPPETCODE
+      end
       let(:params) do
         {
           'haproxy_init_source' => '/foo/bar',
@@ -139,7 +149,6 @@ describe 'haproxy::instance_service' do
         'haproxy_package'     => 'customhaproxy',
         'bindir'              => '/weird/place',
         'haproxy_init_source' => '/init/source/haproxy',
-        'haproxy_unit_template' => 'haproxy/instance_service_unit_example.erb',
       }
     end
 
