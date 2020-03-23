@@ -28,7 +28,6 @@ describe 'listen define' do
   # C9876 C9877 C9941 C9954
   it 'does a curl against the LB to make sure it gets a response from each port' do
     expect(run_shell('curl localhost:5555').stdout.chomp).to match(%r{Response on 555(6|7)})
-    expect(run_shell('curl localhost:5555').stdout.chomp).to match(%r{Response on 555(6|7)})
   end
 
   # C9955
@@ -59,7 +58,6 @@ describe 'listen define' do
 
   it 'does a curl against the LB to make sure it only gets a response from the active port' do
     expect(run_shell('curl localhost:5555').stdout.chomp).to match(%r{Response on 555(6|7)})
-    expect(run_shell('curl localhost:5555').stdout.chomp).to match(%r{Response on 555(6|7)})
   end
 
   # C9942 C9944 WONTFIX
@@ -88,7 +86,6 @@ describe 'listen define' do
   end
 
   it 'does a curl against the LB to make sure it gets a response from each port #onenodeup' do
-    expect(run_shell('curl localhost:5555').stdout.chomp).to match(%r{Response on 555(6|7)})
     expect(run_shell('curl localhost:5555').stdout.chomp).to match(%r{Response on 555(6|7)})
   end
 
