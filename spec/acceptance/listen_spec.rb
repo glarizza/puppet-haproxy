@@ -1,7 +1,7 @@
 require 'spec_helper_acceptance'
 
 describe 'listen define' do
-  context 'pp_one' do  
+  context 'pp_one' do
     pp_one = <<-PUPPETCODE
         class { 'haproxy': }
         haproxy::listen { 'app00':
@@ -23,7 +23,7 @@ describe 'listen define' do
         apply_manifest(pp_one, catch_failures: true)
       end
     end
-  
+
     # This is not great since it depends on the ordering served by the load
     # balancer. Something with retries would be better.
     # C9876 C9877 C9941 C9954
@@ -32,8 +32,7 @@ describe 'listen define' do
     end
   end
 
-
-  context 'pp_two' do  
+  context 'pp_two' do
     # C9955
     pp_two = <<-PUPPETCODE
         class { 'haproxy': }
@@ -59,7 +58,7 @@ describe 'listen define' do
         idempotent_apply(pp_two)
       end
     end
-  
+
     it 'does a curl against the LB to make sure it only gets a response from the active port' do
       expect(run_shell('curl localhost:5555').stdout.chomp).to match(%r{Response on 555(6|7)})
     end
@@ -89,7 +88,7 @@ describe 'listen define' do
         apply_manifest(pp_three, catch_failures: true)
       end
     end
-  
+
     it 'does a curl against the LB to make sure it gets a response from each port #onenodeup' do
       expect(run_shell('curl localhost:5555').stdout.chomp).to match(%r{Response on 555(6|7)})
     end
