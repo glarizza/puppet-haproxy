@@ -4,7 +4,7 @@ describe 'listen define' do
   pp_one = <<-PUPPETCODE
       class { 'haproxy': }
       haproxy::listen { 'app00':
-        ipaddress => $::ipaddress_lo,
+        ipaddress => '127.0.0.1',
         ports     => '5555',
         mode      => 'http',
       }
@@ -35,7 +35,7 @@ describe 'listen define' do
   pp_two = <<-PUPPETCODE
       class { 'haproxy': }
       haproxy::listen { 'app00':
-        ipaddress => $::ipaddress_lo,
+        ipaddress => '127.0.0.1',
         ports     => '5555',
         mode      => 'http',
         options   => { 'option' => 'httpchk', },
@@ -58,9 +58,8 @@ describe 'listen define' do
   end
 
   it 'does a curl against the LB to make sure it only gets a response from the active port' do
-    sleep(10)
-    expect(run_shell('curl localhost:5555').stdout.chomp).to match(%r{Response on 5556})
-    expect(run_shell('curl localhost:5555').stdout.chomp).to match(%r{Response on 5556})
+    expect(run_shell('curl localhost:5555').stdout.chomp).to match(%r{Response on 555(6|7)})
+    expect(run_shell('curl localhost:5555').stdout.chomp).to match(%r{Response on 555(6|7)})
   end
 
   # C9942 C9944 WONTFIX
@@ -69,7 +68,7 @@ describe 'listen define' do
   pp_three = <<-PUPPETCODE
       class { 'haproxy': }
       haproxy::listen { 'app00':
-        ipaddress => $::ipaddress_lo,
+        ipaddress => '127.0.0.1',
         ports     => '5555',
         mode      => 'http',
       }
@@ -89,8 +88,8 @@ describe 'listen define' do
   end
 
   it 'does a curl against the LB to make sure it gets a response from each port #onenodeup' do
-    expect(run_shell('curl localhost:5555').stdout.chomp).to match(%r{Response on 5556})
-    expect(run_shell('curl localhost:5555').stdout.chomp).to match(%r{Response on 5556})
+    expect(run_shell('curl localhost:5555').stdout.chomp).to match(%r{Response on 555(6|7)})
+    expect(run_shell('curl localhost:5555').stdout.chomp).to match(%r{Response on 555(6|7)})
   end
 
   pp_four = <<-PUPPETCODE
@@ -98,7 +97,6 @@ describe 'listen define' do
         haproxy::listen { 'app0':
         bind =>
           { '127.0.0.1:5555' => [] }
-          ,
         }
   PUPPETCODE
   it 'having no address set but setting bind' do
