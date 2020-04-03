@@ -26,7 +26,7 @@ describe 'haproxy::resolver' do
       is_expected.to contain_concat__fragment('haproxy-bar_resolver_block').with(
         'order'   => '20-bar-01',
         'target'  => '/etc/haproxy/haproxy.cfg',
-        'content' => "\nresolvers bar\n  nameserver dns1 1.1.1.1:53\n  nameserver dns2 1.1.1.2:53\n  resolve_retries 3\n  timeout retry 1s\n  hold other 30s\n  hold refused 30s\n  hold nx 30s\n  hold timeout 30s\n  hold valid 10s\n  accepted_payload_size 512\n", # rubocop:disable Metrics/LineLength
+        'content' => "\nresolvers bar\n  nameserver dns1 1.1.1.1:53\n  nameserver dns2 1.1.1.2:53\n  resolve_retries 3\n  timeout retry 1s\n  hold other 30s\n  hold refused 30s\n  hold nx 30s\n  hold timeout 30s\n  hold valid 10s\n  accepted_payload_size 512\n", # rubocop:disable Layout/LineLength
       )
     }
   end
