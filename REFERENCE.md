@@ -1108,7 +1108,7 @@ Data type: `Optional[String]`
 
 
 
-Default value: `undef`
+Default value: 'haproxy/instance_service_unit.erb'
 
 ### haproxy::listen
 
