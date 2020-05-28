@@ -55,7 +55,7 @@ RSpec.configure do |c|
         LitmusHelper.instance.run_shell("puppet apply -e 'include epel'")
       end
     end
-    if os[:family] == 'oracle' && os[:release].to_i == 6
+    if os[:family] == 'redhat' && os[:release].to_i == 6
       LitmusHelper.instance.run_shell('yum clean all')
       LitmusHelper.instance.run_shell('yum --disablerepo="epel" update nss -y')
     end
