@@ -27,6 +27,7 @@ describe 'userlist define', unless: (os[:family] == 'redhat' && os[:release][0] 
       }
       haproxy::balancermember { 'app00 port 5556':
         listening_service => 'app00',
+        server_names      => 'test00.example.com',
         ports             => '5556',
       }
 
