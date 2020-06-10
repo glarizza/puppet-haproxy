@@ -11,10 +11,12 @@ describe 'listen define' do
         }
         haproxy::balancermember { 'port 5556':
           listening_service => 'app00',
+          server_names      => 'test00.example.com',
           ports             => '5556',
         }
         haproxy::balancermember { 'port 5557':
           listening_service => 'app00',
+          server_names      => 'test01.example.com',
           ports             => '5557',
         }
     PUPPETCODE
@@ -44,11 +46,13 @@ describe 'listen define' do
         }
         haproxy::balancermember { 'port 5556':
           listening_service => 'app00',
+          server_names      => 'test00.example.com',
           ports             => '5556',
           options           => 'check',
         }
         haproxy::balancermember { 'port 5557':
           listening_service => 'app00',
+          server_names      => 'test01.example.com',
           ports             => '5557',
           options           => ['check','backup'],
         }
@@ -76,10 +80,12 @@ describe 'listen define' do
         }
         haproxy::balancermember { 'port 5556':
           listening_service => 'app00',
+          server_names      => 'test00.example.com',
           ports             => '5556',
         }
         haproxy::balancermember { 'port 5557':
           listening_service => 'app00',
+          server_names      => 'test01.example.com',
           ports             => '5558',
         }
     PUPPETCODE
