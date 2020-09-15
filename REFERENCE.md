@@ -54,7 +54,7 @@ A Puppet module, using storeconfigs, to model an haproxy configuration.
 Currently VERY limited - assumes Redhat/CentOS setup. Pull requests accepted!
 
 Currently requires the puppetlabs/concat module on the Puppet Forge and
- uses storeconfigs on the Puppet Master to export/collect resources
+ uses storeconfigs on the Puppet Server to export/collect resources
  from all balancer members.
 
 #### Examples
@@ -669,7 +669,7 @@ Default value: 'haproxy'
 Gary Larizza <gary@puppetlabs.com>
 
 * **Note** Currently requires the puppetlabs/concat module on the Puppet Forge and
-uses storeconfigs on the Puppet Master to export/collect resources
+uses storeconfigs on the Puppet Server to export/collect resources
 from all balancer members.
 
 #### Examples
@@ -1537,7 +1537,7 @@ Gary Larizza <gary@puppetlabs.com>
 Ricardo Rosales <missingcharacter@gmail.com>
 
 * **Note** Currently requires the puppetlabs/concat module on the Puppet Forge and
-uses storeconfigs on the Puppet Master to export/collect resources
+uses storeconfigs on the Puppet Server to export/collect resources
 from all balancer members.
 
 #### Examples
