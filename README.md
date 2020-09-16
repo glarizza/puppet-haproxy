@@ -44,16 +44,16 @@ node 'haproxy-server' {
     ipaddress        => $::ipaddress,
     ports            => '8140',
   }
-  haproxy::balancermember { 'master00':
+  haproxy::balancermember { 'server00':
     listening_service => 'puppet00',
-    server_names      => 'master00.example.com',
+    server_names      => 'server00.example.com',
     ipaddresses       => '10.0.0.10',
     ports             => '8140',
     options           => 'check',
   }
-  haproxy::balancermember { 'master01':
+  haproxy::balancermember { 'server01':
     listening_service => 'puppet00',
-    server_names      => 'master01.example.com',
+    server_names      => 'server01.example.com',
     ipaddresses       => '10.0.0.11',
     ports             => '8140',
     options           => 'check',
@@ -234,7 +234,7 @@ node 'haproxy-server' {
   }
 }
 
-node /^master\d+/ {
+node /^server\d+/ {
   @@haproxy::balancermember { $::fqdn:
     listening_service => 'puppet00',
     server_names      => $::hostname,
@@ -245,7 +245,7 @@ node /^master\d+/ {
 }
 ~~~
 
-The resulting HAProxy service uses storeconfigs to collect and realize balancermember servers, and automatically collects configurations from backend servers. The backend nodes export their HAProxy configurations to the Puppet master, which then distributes them to the HAProxy server.
+The resulting HAProxy service uses storeconfigs to collect and realize balancermember servers, and automatically collects configurations from backend servers. The backend nodes export their HAProxy configurations to the Puppet Server, which then distributes them to the HAProxy server.
 
 ### Set up a frontend service
 
@@ -490,11 +490,11 @@ haproxy::frontend { 'ft_allapps':
 
 ## Reference
 
-For information on the classes and types, see the [REFERENCE.md](https://github.com/puppetlabs/puppetlabs-haproxy/blob/master/REFERENCE.md)
+For information on the classes and types, see the [REFERENCE.md](https://github.com/puppetlabs/puppetlabs-haproxy/blob/main/REFERENCE.md)
 
 ## Limitations
 
-For an extensive list of supported operating systems, see [metadata.json](https://github.com/puppetlabs/puppetlabs-haproxy/blob/master/metadata.json)
+For an extensive list of supported operating systems, see [metadata.json](https://github.com/puppetlabs/puppetlabs-haproxy/blob/main/metadata.json)
 
 ## Development
 
