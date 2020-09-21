@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v4.3.0](https://github.com/puppetlabs/puppetlabs-haproxy/tree/v4.3.0) (2020-09-18)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-haproxy/compare/v4.2.1...v4.3.0)
+
+### Added
+
+- pdksync - \(IAC-973\) - Update travis/appveyor to run on new default branch main [\#437](https://github.com/puppetlabs/puppetlabs-haproxy/pull/437) ([david22swan](https://github.com/david22swan))
+- \(IAC-746\) - Add ubuntu 20.04 support [\#430](https://github.com/puppetlabs/puppetlabs-haproxy/pull/430) ([david22swan](https://github.com/david22swan))
+
+### Fixed
+
+- \(IAC-988\) - Removal of inappropriate terminology [\#443](https://github.com/puppetlabs/puppetlabs-haproxy/pull/443) ([david22swan](https://github.com/david22swan))
+- MODULES-9783 - Removed option tcplog [\#376](https://github.com/puppetlabs/puppetlabs-haproxy/pull/376) ([uberjew666](https://github.com/uberjew666))
+
 ## [v4.2.1](https://github.com/puppetlabs/puppetlabs-haproxy/tree/v4.2.1) (2020-05-19)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-haproxy/compare/v4.2.0...v4.2.1)
@@ -30,7 +44,6 @@ All notable changes to this project will be documented in this file. The format 
 
 ### Fixed
 
-- MODULES-9783 - Removed option tcplog [\#376](https://github.com/puppetlabs/puppetlabs-haproxy/pull/376) ([uberjew666](https://github.com/uberjew666))
 - Add check of OS for the systemd unitfile [\#347](https://github.com/puppetlabs/puppetlabs-haproxy/pull/347) ([surprisingb](https://github.com/surprisingb))
 
 ## [v4.0.0](https://github.com/puppetlabs/puppetlabs-haproxy/tree/v4.0.0) (2019-05-16)
