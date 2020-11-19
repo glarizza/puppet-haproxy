@@ -95,13 +95,23 @@ define haproxy::backend (
 
   # See https://github.com/puppetlabs/puppetlabs-haproxy/pull/442 - when using the option 'httpchk', it must be positioned
   # before the 'http-check' directive in haproxy.cfg otherwise it will be ignored
-  if $options.is_hash and has_key($options, 'option') {
-    if ('httpchk' in $options['option']) {
-      warning('Overriding the value of $sort_options_alphabetic to "false" due to "httpchk" option defined')
-      $_sort_options_alphabetic = false
-    }
+  #
+  # logic:
+  # 1) if alphabetic sorting is explicitly disabled, accept that
+  # 2) if the options hash contains httpchk, disable alphabetic sorting *and* log a warning
+  # 3) use whats provides to this module and if that's undef, use the module default
+  $picked_sort_options_alphabetic = pick($sort_options_alphabetic, $haproxy::globals::sort_options_alphabetic)
+  if $picked_sort_options_alphabetic == false {
+    $_sort_options_alphabetic = $picked_sort_options_alphabetic
   } else {
-    $_sort_options_alphabetic = pick($sort_options_alphabetic, $haproxy::globals::sort_options_alphabetic)
+    if $options.is_hash and has_key($options, 'option') {
+      if ('httpchk' in $options['option']) {
+        warning('Overriding the value of $sort_options_alphabetic to "false" due to "httpchk" option defined')
+        $_sort_options_alphabetic = false
+      }
+    } else {
+      $_sort_options_alphabetic = $picked_sort_options_alphabetic
+    }
   }
 
   if $defaults == undef {
