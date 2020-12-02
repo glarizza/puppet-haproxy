@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Fact: haproxy_version
 #
 # Purpose: get haproxy's current version
