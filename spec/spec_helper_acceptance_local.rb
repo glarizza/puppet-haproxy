@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 UNSUPPORTED_PLATFORMS = ['Suse', 'windows', 'AIX', 'Solaris'].freeze
 MAX_RETRY_COUNT       = 12
 RETRY_WAIT            = 10
@@ -37,11 +39,11 @@ end
 RSpec.configure do |c|
   c.before :suite do
     # Make sure selinux is disabled so the tests work.
-    LitmusHelper.instance.run_shell('setenforce 0', expect_failures: true) if os[:family] =~ %r{redhat|oracle}
+    LitmusHelper.instance.run_shell('setenforce 0', expect_failures: true) if os[:family].match?(%r{redhat|oracle})
 
     if os[:family] == 'redhat' && os[:release].to_i != 8
       LitmusHelper.instance.run_shell('puppet module install stahnma/epel')
-      if os[:release][0] =~ %r{5|6}
+      if os[:release][0].match?(%r{5|6})
         pp = <<-PP
         class { 'epel':
 

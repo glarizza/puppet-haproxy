@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper_acceptance'
 
 describe 'userlist define', unless: (os[:family] == 'redhat' && os[:release][0] == '5') do
