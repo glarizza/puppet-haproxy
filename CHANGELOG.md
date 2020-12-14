@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v4.5.0](https://github.com/puppetlabs/puppetlabs-haproxy/tree/v4.5.0) (2020-12-14)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-haproxy/compare/v4.4.0...v4.5.0)
+
+### Added
+
+- pdksync - \(feat\) Add support for Puppet 7 [\#456](https://github.com/puppetlabs/puppetlabs-haproxy/pull/456) ([daianamezdrea](https://github.com/daianamezdrea))
+
 ## [v4.4.0](https://github.com/puppetlabs/puppetlabs-haproxy/tree/v4.4.0) (2020-11-23)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-haproxy/compare/v4.3.0...v4.4.0)
