@@ -281,7 +281,7 @@ describe 'haproxy::listen' do
       is_expected.to contain_concat__fragment('haproxy-apache_listen_block').with(
         'order'   => '20-apache-00',
         'target'  => '/etc/haproxy/haproxy.cfg',
-        'content' => "\nlisten apache\n  bind /var/run/ssl-frontend.sock user root mode 600 accept-proxy\n  bind :443,:8443 ssl crt public.puppetlabs.com no-sslv3\n  bind fd@${FD_APP1} \n  bind 1.1.1.1:80 \n  bind 2.2.2.2:8000-8010 ssl crt public.puppetlabs.com\n  balance roundrobin\n  option tcplog\n", # rubocop:disable Metrics/LineLength
+        'content' => "\nlisten apache\n  bind /var/run/ssl-frontend.sock user root mode 600 accept-proxy\n  bind :443,:8443 ssl crt public.puppetlabs.com no-sslv3\n  bind fd@${FD_APP1} \n  bind 1.1.1.1:80 \n  bind 2.2.2.2:8000-8010 ssl crt public.puppetlabs.com\n  balance roundrobin\n  option tcplog\n", # rubocop:disable Layout/LineLength
       )
     }
   end
@@ -306,7 +306,7 @@ describe 'haproxy::listen' do
       is_expected.to contain_concat__fragment('haproxy-apache_listen_block').with(
         'order'   => '20-apache-00',
         'target'  => '/etc/haproxy/haproxy.cfg',
-        'content' => "\nlisten apache\n  bind :443,:8443 ssl crt public.puppetlabs.com no-sslv3\n  bind fd@${FD_APP1} \n  bind 1.1.1.1:80 \n  bind 2.2.2.2:8000-8010 ssl crt public.puppetlabs.com\n  bind 8.252.206.99:80 name input99\n  bind 8.252.206.100:80 name input100\n  bind 8.252.206.101:80 name input101\n  bind 10.1.3.21:80 name input21\n  balance roundrobin\n  option tcplog\n", # rubocop:disable Metrics/LineLength
+        'content' => "\nlisten apache\n  bind :443,:8443 ssl crt public.puppetlabs.com no-sslv3\n  bind fd@${FD_APP1} \n  bind 1.1.1.1:80 \n  bind 2.2.2.2:8000-8010 ssl crt public.puppetlabs.com\n  bind 8.252.206.99:80 name input99\n  bind 8.252.206.100:80 name input100\n  bind 8.252.206.101:80 name input101\n  bind 10.1.3.21:80 name input21\n  balance roundrobin\n  option tcplog\n", # rubocop:disable Layout/LineLength
       )
     }
   end
@@ -336,7 +336,7 @@ describe 'haproxy::listen' do
       is_expected.to contain_concat__fragment('haproxy-apache_listen_block').with(
         'order'   => '20-apache-00',
         'target'  => '/etc/haproxy/haproxy.cfg',
-        'content' => "\nlisten apache\n  bind 0.0.0.0:48001-48003 \n  mode http\n  reqadd X-Forwarded-Proto:\\ https\n  default_backend dev00_webapp\n  capture request header X-Forwarded-For len 50\n  capture request header Host len 15\n  capture request header Referrer len 15\n  acl dst_dev01 dst_port 48001\n  acl dst_dev02 dst_port 48002\n  acl dst_dev03 dst_port 48003\n  use_backend dev01_webapp if dst_dev01\n  use_backend dev02_webapp if dst_dev02\n  use_backend dev03_webapp if dst_dev03\n  option httplog\n  option http-server-close\n  option forwardfor except 127.0.0.1\n  bind-process all\n  compression algo gzip\n", # rubocop:disable Metrics/LineLength
+        'content' => "\nlisten apache\n  bind 0.0.0.0:48001-48003 \n  mode http\n  reqadd X-Forwarded-Proto:\\ https\n  default_backend dev00_webapp\n  capture request header X-Forwarded-For len 50\n  capture request header Host len 15\n  capture request header Referrer len 15\n  acl dst_dev01 dst_port 48001\n  acl dst_dev02 dst_port 48002\n  acl dst_dev03 dst_port 48003\n  use_backend dev01_webapp if dst_dev01\n  use_backend dev02_webapp if dst_dev02\n  use_backend dev03_webapp if dst_dev03\n  option httplog\n  option http-server-close\n  option forwardfor except 127.0.0.1\n  bind-process all\n  compression algo gzip\n", # rubocop:disable Layout/LineLength
       )
     }
   end
@@ -367,7 +367,7 @@ describe 'haproxy::listen' do
       is_expected.to contain_concat__fragment('haproxy-apache_listen_block').with(
         'order'   => '20-apache-00',
         'target'  => '/etc/haproxy/haproxy.cfg',
-        'content' => "\nlisten apache\n  bind 0.0.0.0:48001-48003 \n  mode http\n  acl dst_dev01 dst_port 48001\n  acl dst_dev02 dst_port 48002\n  acl dst_dev03 dst_port 48003\n  bind-process all\n  capture request header X-Forwarded-For len 50\n  capture request header Host len 15\n  capture request header Referrer len 15\n  compression algo gzip\n  default_backend dev00_webapp\n  option httplog\n  option http-server-close\n  option forwardfor except 127.0.0.1\n  reqadd X-Forwarded-Proto:\\ https\n  reqidel ^X-Forwarded-For:.*\n  use_backend dev01_webapp if dst_dev01\n  use_backend dev02_webapp if dst_dev02\n  use_backend dev03_webapp if dst_dev03\n", # rubocop:disable Metrics/LineLength
+        'content' => "\nlisten apache\n  bind 0.0.0.0:48001-48003 \n  mode http\n  acl dst_dev01 dst_port 48001\n  acl dst_dev02 dst_port 48002\n  acl dst_dev03 dst_port 48003\n  bind-process all\n  capture request header X-Forwarded-For len 50\n  capture request header Host len 15\n  capture request header Referrer len 15\n  compression algo gzip\n  default_backend dev00_webapp\n  option httplog\n  option http-server-close\n  option forwardfor except 127.0.0.1\n  reqadd X-Forwarded-Proto:\\ https\n  reqidel ^X-Forwarded-For:.*\n  use_backend dev01_webapp if dst_dev01\n  use_backend dev02_webapp if dst_dev02\n  use_backend dev03_webapp if dst_dev03\n", # rubocop:disable Layout/LineLength
       )
     }
   end
@@ -399,7 +399,7 @@ describe 'haproxy::listen' do
       is_expected.to contain_concat__fragment('haproxy-apache_listen_block').with(
         'order'   => '20-apache-00',
         'target'  => '/etc/haproxy/haproxy.cfg',
-        'content' => "\nlisten apache\n  bind 0.0.0.0:48001-48003 \n  mode http\n  acl dst_dev01 dst_port 48001\n  acl dst_dev02 dst_port 48002\n  acl dst_dev03 dst_port 48003\n  bind-process all\n  capture request header X-Forwarded-For len 50\n  capture request header Host len 15\n  capture request header Referrer len 15\n  compression algo gzip\n  option httplog\n  option http-server-close\n  option forwardfor except 127.0.0.1\n  reqidel ^X-Forwarded-For:.*\n  reqadd X-Forwarded-Proto:\\ https\n  use_backend dev01_webapp if dst_dev01\n  use_backend dev02_webapp if dst_dev02\n  use_backend dev03_webapp if dst_dev03\n  default_backend dev00_webapp\n", # rubocop:disable Metrics/LineLength
+        'content' => "\nlisten apache\n  bind 0.0.0.0:48001-48003 \n  mode http\n  acl dst_dev01 dst_port 48001\n  acl dst_dev02 dst_port 48002\n  acl dst_dev03 dst_port 48003\n  bind-process all\n  capture request header X-Forwarded-For len 50\n  capture request header Host len 15\n  capture request header Referrer len 15\n  compression algo gzip\n  option httplog\n  option http-server-close\n  option forwardfor except 127.0.0.1\n  reqidel ^X-Forwarded-For:.*\n  reqadd X-Forwarded-Proto:\\ https\n  use_backend dev01_webapp if dst_dev01\n  use_backend dev02_webapp if dst_dev02\n  use_backend dev03_webapp if dst_dev03\n  default_backend dev00_webapp\n", # rubocop:disable Layout/LineLength
       )
     }
   end
