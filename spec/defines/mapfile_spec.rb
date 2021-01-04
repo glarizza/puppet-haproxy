@@ -35,7 +35,7 @@ describe 'haproxy::mapfile' do
       is_expected.to contain_file('haproxy_mapfile_domains-to-backends').with(
         'path'    => '/etc/haproxy/domains-to-backends.map',
         'ensure'  => 'present',
-        'content' => "# HAProxy map file \"domains-to-backends\"\n# Managed by Puppet\n\napp01.example.com bk_app01\napp02.example.com bk_app02\napp03.example.com bk_app03\napp04.example.com bk_app04\napp05.example.com bk_app05\napp06.example.com bk_app06\n", # rubocop:disable Metrics/LineLength
+        'content' => "# HAProxy map file \"domains-to-backends\"\n# Managed by Puppet\n\napp01.example.com bk_app01\napp02.example.com bk_app02\napp03.example.com bk_app03\napp04.example.com bk_app04\napp05.example.com bk_app05\napp06.example.com bk_app06\n", # rubocop:disable Layout/LineLength
       )
     }
   end
