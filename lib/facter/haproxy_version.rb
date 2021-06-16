@@ -17,8 +17,9 @@ if defined?(Facter::Util::Resolution.which) && Facter::Util::Resolution.which('h
   Facter.add('haproxy_version') do
     haproxy_version_cmd = 'haproxy -v 2>&1'
     haproxy_version_result = Facter::Util::Resolution.exec(haproxy_version_cmd)
+    
     setcode do
-      haproxy_version_result.to_s.lines.first.strip.split(%r{HA-Proxy})[1].strip.split(%r{version})[1].strip.split(%r{((\d+\.){2,}\d+).*})[1]
+      haproxy_version_result.to_s.lines.first.strip.split(%r{HA?.Proxy})[1].strip.split(%r{version})[1].strip.split(%r{((\d+\.){2,}\d+).*})[1]
     end
   end
 end
