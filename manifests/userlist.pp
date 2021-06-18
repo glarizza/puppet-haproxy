@@ -25,7 +25,7 @@
 #   Optional. Path of the config file where this entry will be added.
 #   Assumes that the parent directory exists.
 #   Default: $haproxy::params::config_file
-# 
+#
 # @param instance
 #   Optional. Defaults to 'haproxy'
 #
@@ -34,14 +34,25 @@
 # Jeremy Kitchen <jeremy@nationbuilder.com>
 #
 define haproxy::userlist (
-  $users = undef,
-  $groups = undef,
-  String $instance = 'haproxy',
-  String $section_name = $name,
-  Optional[Stdlib::Absolutepath] $config_file = undef,
+  Optional[Array[Variant[String, Sensitive[String]]]] $users        = undef,
+  Optional[Array[String]]                             $groups       = undef,
+  String                                              $instance     = 'haproxy',
+  String                                              $section_name = $name,
+  Optional[Stdlib::Absolutepath]                      $config_file  = undef,
 ) {
 
   include ::haproxy::params
+
+  $content = epp(
+    'haproxy/haproxy_userlist_block.epp',
+    {
+      epp_users        => $users,
+      epp_groups       => $groups,
+      epp_section_name => $section_name,
+    },
+  )
+  # we have to unwrap here, as "concat" cannot handle Sensitive Data
+  $_content = if $content =~ Sensitive { $content.unwrap } else { $content }
 
   if $instance == 'haproxy' {
     $instance_name = 'haproxy'
@@ -51,10 +62,9 @@ define haproxy::userlist (
     $_config_file = pick($config_file, inline_template($haproxy::params::config_file_tmpl))
   }
 
-  # Template uses $section_name, $users, $groups
   concat::fragment { "${instance_name}-${section_name}_userlist_block":
     order   => "12-${section_name}-00",
     target  => $_config_file,
-    content => template('haproxy/haproxy_userlist_block.erb'),
+    content => $_content,
   }
 }
