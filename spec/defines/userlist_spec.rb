@@ -19,7 +19,7 @@ describe 'haproxy::userlist' do
         name: 'admins',
         users: [
           'scott insecure-password elgato',
-          'kitchen insecure-password foobar',
+          sensitive('kitchen insecure-password foobar'),
         ],
         groups: [
           'superadmins users kitchen scott',
