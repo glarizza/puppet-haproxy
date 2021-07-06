@@ -665,7 +665,7 @@ Default value: `'haproxy'`
 
 ##### <a name="type"></a>`type`
 
-Data type: `Any`
+Data type: `Enum['server', 'default-server', 'server-template']`
 
 Optional. Defaults to 'server'
 
@@ -1847,7 +1847,7 @@ Default value: `$name`
 
 ##### <a name="users"></a>`users`
 
-Data type: `Any`
+Data type: `Optional[Array[Variant[String, Sensitive[String]]]]`
 
 An array of users in the userlist.
 See http://cbonte.github.io/haproxy-dconv/configuration-1.4.html#3.4-user
@@ -1856,7 +1856,7 @@ Default value: ``undef``
 
 ##### <a name="groups"></a>`groups`
 
-Data type: `Any`
+Data type: `Optional[Array[String]]`
 
 An array of groups in the userlist.
 See http://cbonte.github.io/haproxy-dconv/configuration-1.4.html#3.4-group

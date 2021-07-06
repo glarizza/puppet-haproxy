@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v6.1.0](https://github.com/puppetlabs/puppetlabs-haproxy/tree/v6.1.0) (2021-07-06)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-haproxy/compare/v6.0.2...v6.1.0)
+
+### Added
+
+- allow type 'default-server' for balancermember [\#489](https://github.com/puppetlabs/puppetlabs-haproxy/pull/489) ([trefzer](https://github.com/trefzer))
+- Use Puppet-Datatype Sensitive [\#487](https://github.com/puppetlabs/puppetlabs-haproxy/pull/487) ([cocker-cc](https://github.com/cocker-cc))
+
 ## [v6.0.2](https://github.com/puppetlabs/puppetlabs-haproxy/tree/v6.0.2) (2021-06-21)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-haproxy/compare/v6.0.1...v6.0.2)
