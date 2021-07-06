@@ -136,7 +136,7 @@
 #
 define haproxy::balancermember (
   $listening_service,
-  $type         = 'server',
+  Enum['server', 'default-server', 'server-template'] $type         = 'server',
   $ports        = undef,
   $port         = undef,
   $server_names = $::hostname,
