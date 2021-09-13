@@ -32,6 +32,10 @@
 # @param service_options
 #   Contents for the `/etc/defaults/haproxy` file on Debian. Defaults to "ENABLED=1\n" on Debian, and is ignored on other systems.
 #
+# @param chroot_dir_manage
+#   Chooses whether the haproxy chroot directory should be managed by puppet
+#   at all. Defaults to true
+#
 # @param sysconfig_options
 #   Contents for the `/etc/sysconfig/haproxy` file on RedHat(-based) systems.
 #   Defaults to OPTIONS="" on RedHat(-based) systems and is ignored on others
@@ -120,6 +124,7 @@ class haproxy (
   String $package_name                                         = $haproxy::params::package_name,
   Variant[Enum['running', 'stopped'], Boolean] $service_ensure = 'running',
   Boolean $service_manage                                      = true,
+  Boolean $chroot_dir_manage                                   = true,
   String $service_name                                         = $haproxy::params::service_name,
   String $service_options                                      = $haproxy::params::service_options,
   $sysconfig_options                                           = $haproxy::params::sysconfig_options,
@@ -172,6 +177,7 @@ class haproxy (
     service_ensure      => $_service_ensure,
     service_manage      => $_service_manage,
     service_name        => $service_name,
+    chroot_dir_manage   => $chroot_dir_manage,
     global_options      => $global_options,
     defaults_options    => $defaults_options,
     restart_command     => $restart_command,

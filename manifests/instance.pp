@@ -27,6 +27,10 @@
 #   Chooses whether the haproxy service state should be managed by puppet at
 #   all. Defaults to true
 #
+# @param chroot_dir_manage
+#   Chooses whether the haproxy chroot directory should be managed by puppet
+#   at all. Defaults to true
+#
 # @param service_name
 #   The service name for haproxy. Defaults to undef. If no name is given then
 #   the value computed for $instance_name will be used.
@@ -159,6 +163,7 @@ define haproxy::instance (
   String[1] $package_ensure                                    = 'present',
   Variant[Enum['running', 'stopped'], Boolean] $service_ensure = 'running',
   Boolean $service_manage                                      = true,
+  Boolean $chroot_dir_manage                                   = true,
   Optional[String] $service_name                               = undef,
   Optional[Hash] $global_options                               = undef,
   Optional[Hash] $defaults_options                             = undef,
@@ -215,6 +220,7 @@ define haproxy::instance (
     custom_fragment     => $custom_fragment,
     merge_options       => $merge_options,
     package_ensure      => $package_ensure,
+    chroot_dir_manage   => $chroot_dir_manage,
     config_validate_cmd => $config_validate_cmd,
   }
   haproxy::install { $title:
