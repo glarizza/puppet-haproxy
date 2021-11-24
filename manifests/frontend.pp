@@ -30,6 +30,11 @@
 #   The mode of operation for the frontend service. Valid values are undef,
 #    'tcp', 'http', and 'health'.
 #
+# @param description
+#   Allows to add a sentence to describe the related object in the HAProxy HTML
+#   stats page. The description will be printed on the right of the object name
+#   it describes. Usefull in huge environments
+#
 # @param bind_options
 #   (Deprecated) An array of options to be specified after the bind declaration
 #    in the listening serivce's configuration block.
@@ -99,6 +104,7 @@ define haproxy::frontend (
   $instance                                    = 'haproxy',
   $section_name                                = $name,
   $sort_options_alphabetic                     = undef,
+  $description                                 = undef,
   $defaults                                    = undef,
   $defaults_use_backend                        = true,
   Optional[Stdlib::Absolutepath] $config_file  = undef,
