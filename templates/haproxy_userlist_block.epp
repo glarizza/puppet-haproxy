@@ -1,7 +1,7 @@
 <%- |
-  Optional[Array[Variant[String, Sensitive[String]]]] $epp_users,
-  Optional[Array[String]]                             $epp_groups,
-  String                                              $epp_section_name,
+  Array[Variant[String, Sensitive[String]]] $epp_users = [],
+  Array[String]                             $epp_groups = [],
+  String                                    $epp_section_name,
 | -%>
 
 userlist <%= $epp_section_name %>
