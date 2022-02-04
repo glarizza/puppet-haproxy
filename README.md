@@ -41,7 +41,7 @@ node 'haproxy-server' {
   include ::haproxy
   haproxy::listen { 'puppet00':
     collect_exported => false,
-    ipaddress        => $::ipaddress,
+    ipaddress        => $facts['networking']['ip'],
     ports            => '8140',
   }
   haproxy::balancermember { 'server00':
@@ -70,7 +70,7 @@ The main [`haproxy` class](#class-haproxy) has many options for configuring your
 ~~~puppet
 class { 'haproxy':
   global_options   => {
-    'log'     => "${::ipaddress} local0",
+    'log'     => "${facts['networking']['ip']} local0",
     'chroot'  => '/var/lib/haproxy',
     'pidfile' => '/var/run/haproxy.pid',
     'maxconn' => '4000',
@@ -151,7 +151,7 @@ To export the resource for a balancermember and collect it on a single HAProxy l
 
 ~~~puppet
 haproxy::listen { 'puppet00':
-  ipaddress => $::ipaddress,
+  ipaddress => $facts['networking']['ip'],
   ports     => '8140',
   mode      => 'tcp',
   options   => {
@@ -195,8 +195,8 @@ First export the resource for a balancermember:
 @@haproxy::balancermember { 'haproxy':
   listening_service => 'puppet00',
   ports             => '8140',
-  server_names      => $::hostname,
-  ipaddresses       => $::ipaddress,
+  server_names      => $facts['networking']['hostname'],
+  ipaddresses       => $facts['networking']['ip'],
   options           => 'check',
 }
 ~~~
@@ -229,16 +229,16 @@ Install and configure an HAProxy service listening on port 8140 and balanced aga
 node 'haproxy-server' {
   include ::haproxy
   haproxy::listen { 'puppet00':
-    ipaddress => $::ipaddress,
+    ipaddress => $facts['networking']['ip'],
     ports     => '8140',
   }
 }
 
 node /^server\d+/ {
-  @@haproxy::balancermember { $::fqdn:
+  @@haproxy::balancermember { $facts['networking']['fqdn']:
     listening_service => 'puppet00',
-    server_names      => $::hostname,
-    ipaddresses       => $::ipaddress,
+    server_names      => $facts['networking']['hostname'],
+    ipaddresses       => $facts['networking']['ip'],
     ports             => '8140',
     options           => 'check',
   }
@@ -253,7 +253,7 @@ This example routes traffic from port 8140 to all balancermembers added to a bac
 
 ~~~puppet
 haproxy::frontend { 'puppet00':
-  ipaddress     => $::ipaddress,
+  ipaddress     => $facts['networking']['ip'],
   ports         => '8140',
   mode          => 'tcp',
   bind_options  => 'accept-proxy',
@@ -272,7 +272,7 @@ If option order is important, pass an array of hashes to the `options` parameter
 
 ~~~puppet
 haproxy::frontend { 'puppet00':
-  ipaddress     => $::ipaddress,
+  ipaddress     => $facts['networking']['ip'],
   ports         => '8140',
   mode          => 'tcp',
   bind_options  => 'accept-proxy',
@@ -397,7 +397,7 @@ class and uses `haproxy::instance` to add an additional instance called
    haproxy::listen { 'puppet00':
      instance         => 'haproxy',
      collect_exported => false,
-     ipaddress        => $::ipaddress,
+     ipaddress        => $facts['networking']['ip'],
      ports            => '8800',
    }
 
@@ -411,7 +411,7 @@ class and uses `haproxy::instance` to add an additional instance called
    haproxy::listen { 'puppet00':
      instance         => 'beta',
      collect_exported => false,
-     ipaddress        => $::ipaddress,
+     ipaddress        => $facts['networking']['ip'],
      ports            => '9900',
    }
 ~~~
@@ -430,7 +430,7 @@ The second uses a custom package.
      section_name     => 'puppet00',
      instance         => 'group1',
      collect_exported => false,
-     ipaddress        => $::ipaddress,
+     ipaddress        => $facts['networking']['ip'],
      ports            => '8800',
    }
    haproxy::instance { 'group2': }
@@ -444,7 +444,7 @@ The second uses a custom package.
      section_name     => 'puppet00',
      instance         => 'group2',
      collect_exported => false,
-     ipaddress        => $::ipaddress,
+     ipaddress        => $facts['networking']['ip'],
      ports            => '9900',
    }
 ~~~
