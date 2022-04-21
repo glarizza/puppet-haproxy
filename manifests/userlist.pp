@@ -40,7 +40,6 @@ define haproxy::userlist (
   String                                              $section_name = $name,
   Optional[Stdlib::Absolutepath]                      $config_file  = undef,
 ) {
-
   include ::haproxy::params
 
   $content = epp(

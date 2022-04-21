@@ -17,5 +17,4 @@ define haproxy::install (
       alias  => 'haproxy',
     }
   }
-
 }

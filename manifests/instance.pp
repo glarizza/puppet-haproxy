@@ -176,7 +176,6 @@ define haproxy::instance (
   $service_options                                             = $haproxy::params::service_options,
   $sysconfig_options                                           = $haproxy::params::sysconfig_options,
 ) {
-
   # Since this is a 'define', we can not use 'inherts haproxy::params'.
   # Therefore, we "include haproxy::params" for any parameters we need.
   include ::haproxy::params

@@ -103,7 +103,7 @@ define haproxy::listen (
     'option'                                  => [
       'tcplog',
     ],
-    'balance'                                 => 'roundrobin'
+    'balance'                                 => 'roundrobin',
   },
   $instance                                    = 'haproxy',
   $section_name                                = $name,

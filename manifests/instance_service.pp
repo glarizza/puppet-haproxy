@@ -38,22 +38,21 @@
 #   The init.d script that will start/restart/reload this instance.
 #
 define haproxy::instance_service (
-  Optional[String] $haproxy_init_source  = undef,
-  Optional[String]$haproxy_unit_template = 'haproxy/instance_service_unit.erb',
-  String $haproxy_package                = 'haproxy',
-  Stdlib::Absolutepath $bindir           = '/opt/haproxy/bin',
+  Optional[String] $haproxy_init_source = undef,
+  String $haproxy_unit_template         = 'haproxy/instance_service_unit.erb',
+  String $haproxy_package               = 'haproxy',
+  Stdlib::Absolutepath $bindir          = '/opt/haproxy/bin',
 ) {
-
   ensure_resource('package', $haproxy_package, {
-    'ensure' => 'present',
+      'ensure' => 'present',
   })
 
   # Manage the parent directory.
   ensure_resource('file', $bindir, {
-    ensure => directory,
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0744',
+      ensure => directory,
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0744',
   })
 
   # Create a link named after the instance. This just makes it easier
@@ -78,7 +77,6 @@ define haproxy::instance_service (
   } else {
     $initfile = "/etc/init.d/haproxy-${title}"
     if $::osfamily == 'RedHat' and $::operatingsystemmajrelease == '6' {
-
       # init.d:
       file { $initfile:
         ensure => file,
@@ -88,9 +86,7 @@ define haproxy::instance_service (
         source => $haproxy_init_source,
       }
       File[$haproxy_link] -> File[$initfile]
-
     } else {
-
       # systemd:
       if $haproxy_package == 'haproxy' {
         $wrapper = '/usr/sbin/haproxy-systemd-wrapper'
@@ -126,7 +122,6 @@ define haproxy::instance_service (
         ensure => absent,
         before => Service["haproxy-${title}"],
       }
-
     }
   }
 

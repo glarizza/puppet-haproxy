@@ -142,7 +142,6 @@ class haproxy (
   $manage_service                                              = undef,
   $enable                                                      = undef,
 ) inherits haproxy::params {
-
   # NOTE: These deprecating parameters are implemented in this class,
   # not in haproxy::instance.  haproxy::instance is new and therefore
   # there should be no legacy code that uses these deprecated
@@ -171,7 +170,7 @@ class haproxy (
     $_service_manage = $service_manage
   }
 
-  haproxy::instance{ $title:
+  haproxy::instance { $title:
     package_ensure      => $_package_ensure,
     package_name        => $package_name,
     service_ensure      => $_service_ensure,
@@ -189,5 +188,4 @@ class haproxy (
     sysconfig_options   => $sysconfig_options,
     config_validate_cmd => $config_validate_cmd,
   }
-
 }

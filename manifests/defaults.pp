@@ -24,7 +24,6 @@ define haproxy::defaults (
   $sort_options_alphabetic = undef,
   $instance                = 'haproxy',
 ) {
-
   if $instance == 'haproxy' {
     include ::haproxy
     $instance_name = 'haproxy'

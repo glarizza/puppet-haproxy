@@ -15,7 +15,6 @@ define haproxy::config (
   $config_validate_cmd = $haproxy::config_validate_cmd
   # lint:endignore
 ) {
-
   if $caller_module_name != $module_name {
     fail("Use of private class ${name} by ${caller_module_name}")
   }
@@ -57,7 +56,7 @@ define haproxy::config (
 
     # validate_cmd introduced in Puppet 3.5
     if ((!defined('$::puppetversion') or (versioncmp($::puppetversion, '3.5') >= 0)) and
-        (!defined('$::serverversion') or versioncmp($::serverversion, '3.5') >= 0)) {
+    (!defined('$::serverversion') or versioncmp($::serverversion, '3.5') >= 0)) {
       Concat[$_config_file] {
         validate_cmd => $config_validate_cmd,
       }
