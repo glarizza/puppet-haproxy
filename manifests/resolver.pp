@@ -99,7 +99,6 @@ define haproxy::resolver (
   $config_file             = undef,
   $defaults                = undef,
 ) {
-
   include haproxy::params
 
   if $instance == 'haproxy' {

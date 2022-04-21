@@ -12,9 +12,8 @@
 #
 define haproxy::mailers (
   $collect_exported = true,
-  $instance = 'haproxy',
+  $instance         = 'haproxy',
 ) {
-
   # We derive these settings so that the caller only has to specify $instance.
   include ::haproxy::params
   if $instance == 'haproxy' {

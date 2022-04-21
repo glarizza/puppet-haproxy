@@ -82,7 +82,6 @@ define haproxy::backend (
   $defaults                = undef,
   Optional[Stdlib::Absolutepath] $config_file             = undef,
 ) {
-
   if defined(Haproxy::Listen[$section_name]) {
     fail("An haproxy::listen resource was discovered with the same name (${section_name}) which is not supported")
   }
