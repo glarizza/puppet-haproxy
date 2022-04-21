@@ -10,7 +10,7 @@ require 'puppet-strings/tasks' if Bundler.rubygems.find_name('puppet-strings').a
 
 def changelog_user
   return unless Rake.application.top_level_tasks.include? "changelog"
-  returnVal = "puppetlabs" || JSON.load(File.read('metadata.json'))['author']
+  returnVal = nil || JSON.load(File.read('metadata.json'))['author']
   raise "unable to find the changelog_user in .sync.yml, or the author in metadata.json" if returnVal.nil?
   puts "GitHubChangelogGenerator user:#{returnVal}"
   returnVal
@@ -42,6 +42,13 @@ def changelog_future_release
 end
 
 PuppetLint.configuration.send('disable_relative')
+PuppetLint.configuration.send('disable_top_scope_facts')
+PuppetLint.configuration.send('disable_parameter_types')
+PuppetLint.configuration.send('disable_relative_classname_inclusion')
+PuppetLint.configuration.send('disable_parameter_documentation')
+PuppetLint.configuration.send('disable_legacy_facts')
+PuppetLint.configuration.send('disable_anchor_resource')
+PuppetLint.configuration.send('disable_topscope_variable')
 
 
 if Bundler.rubygems.find_name('github_changelog_generator').any?
